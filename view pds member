@@ -1,0 +1,26 @@
+/********************REXX***********************/
+PDSNAME = 'PDS.DATASET'
+ARG MEMBR
+/**********************************************************/
+/* GET DATAID FOR DATA SET AND ISSUE LMOPEN */
+/**********************************************************/
+ADDRESS ISPEXEC
+ISPEXEC "LMINIT DATAID("DATID") DATASET('"PDSNAME"') ENQ(SHR)"
+ISPEXEC "LMOPEN DATAID("DATID") OPTION(INPUT)"
+IF RC <> 0 THEN
+CALL EXIT8 'ERROR OPENING PDS' PDSNAME 'RC='RC
+/**********************************************************/
+ISPEXEC "VIEW DATAID("DATID") MEMBER("MEMBR")"
+IF RC <> 0 THEN
+CALL EXIT8 'ERROR VIEWING MEM' PDSNAME 'RC='RC
+/**********************************************************/
+/* FREE THE MEMBER LIST AND CLOSE THE DATAID FOR THE PDS. */
+/**********************************************************/
+ISPEXEC "LMMLIST DATAID(DATID) OPTION(FREE)"
+ISPEXEC "LMCLOSE DATAID(DATID)"
+RETURN(0)
+EXIT8:
+ARG ERRMSG
+SAY ERRMSG
+EXIT 08
+/* */
