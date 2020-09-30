@@ -1,0 +1,175 @@
+ DATA SET: E070397.REXX.EXEC                             MEMBER: JCLCHK
+ DATE: 2020/09/30              TIME: 12:44                         PAGE:      1
+
+/* REXX */
+UTILLIB = ''USERID()'.REXX.EXEC'
+ISPEXEC "LIBDEF ISPPLIB DATASET ID ('"UTILLIB"') UNCOND"
+ARG JOB INFLE OUTFL prd
+
+/*job name */
+E=SUBSTR(JOB,1,1)
+U=SUBSTR(JOB,8,1)
+B=SUBSTR(JOB,2,6)
+IF E = '@' THEN
+ DO
+   P = 'S'
+   K = 'N'
+   D = 'T'
+   M = 'X'
+   I = 'Y'
+   F = 'Z'
+   J = 'J'
+ END
+IF U = '@' THEN
+ C = 'D'
+ELSE
+ C = U
+
+ PRD = P || B || C
+ KSC = K || B || C
+ DTF = D || B || C
+ MTF = M || B || C
+ ITF = I || B || C
+ FTF = F || B || C
+ PTF = J || B || C
+/* job name end */
+ID=SUBSTR(USERID(),2)
+queue "//"USERID()"J JOB ("ID",SI,5316),'JCL PREP',"
+queue "//            CLASS=A,MSGCLASS=S,"
+queue "//            NOTIFY="USERID()""
+queue "/*JOBPARM  SYSAFF=ANY "
+queue "//* "
+queue "//PROCLIB JCLLIB ORDER=TEST.SI.E100669.REX "
+queue "//* "
+queue "// SET MEM="JOB" "
+queue "// SET INLIB="INFLE" "
+queue "// SET OUTLIB="OUTFL" "
+queue "//* "
+queue "//* THIS JOB IS TO CONVERT THE @IP JCL TO PROD VERSION BY "
+queue "//* SUBSTITUTING SYMBOLIC VARIABLES, "
+queue "//* AND EXECUTE THE JCLPLUS ON THE JCL TO CHECK "
+queue "//* SYNTAX ERRORS IN THE JCL/PROCS. "
+queue "//* "
+queue "//* "
+queue "//********************************************************** "
+queue "//* PROD "
+queue "//********************************************************** "
+queue "//* "
+queue "//PROCPREP EXEC PROCPREP, "
+queue "//         JOB="PRD", "
+queue "//         PARM1='ISPSTART CMD(%JCLPREPP)' "
+ DATA SET: E070397.REXX.EXEC                             MEMBER: JCLCHK
+ DATE: 2020/09/30              TIME: 12:44                         PAGE:      2
+
+queue "//* "
+queue "//********************************************************** "
+queue "//* PROD KSC "
+queue "//********************************************************** "
+queue "//* "
+queue "//PROCPREP EXEC PROCPREP, "
+queue "//         JOB="KSC", "
+queue "//         PARM1='ISPSTART CMD(%JCLPREPN)' "
+queue "//* "
+queue "//*********************************************************** "
+queue "//* DTF "
+queue "//*********************************************************** "
+queue "//* "
+queue "//PROCPREP EXEC PROCPREP, "
+queue "//         JOB="DTF", "
+queue "//         PARM1='ISPSTART CMD(%JCLPREPD)' "
+queue "//* "
+queue "//*********************************************************** "
+queue "//* MTF "
+queue "//*********************************************************** "
+queue "//* "
+queue "//PROCPREP EXEC PROCPREP, "
+queue "//         JOB="MTF", "
+queue "//         PARM1='ISPSTART CMD(%JCLPREPM)' "
+queue "//* "
+queue "//*********************************************************** "
+queue "//* ITF "
+queue "//*********************************************************** "
+queue "//* "
+queue "//PROCPREP EXEC PROCPREP, "
+queue "//         JOB="ITF", "
+queue "//         PARM1='ISPSTART CMD(%JCLPREPI)' "
+queue "//* "
+queue "//*********************************************************** "
+queue "//* FTF "
+queue "//*********************************************************** "
+queue "//* "
+queue "//PROCPREP EXEC PROCPREP, "
+queue "//         JOB="FTF", "
+queue "//         PARM1='ISPSTART CMD(%JCLPREPF)' "
+queue "//* "
+queue "//*********************************************************** "
+queue "//* PTF "
+queue "//*********************************************************** "
+queue "//* "
+queue "//PROCPREP EXEC PROCPREP, "
+queue "//         JOB="PTF", "
+queue "//         PARM1='ISPSTART CMD(%JCLPREPJ)' "
+queue "//* "
+queue "ZZ"
+'SUBMIT * END(ZZ)'
+/*
+ "ALLOC DA('TEST.SI.QUEUE.JCLDATA') F(OUTDD) SHR REUSE"
+ DO QUEUED()
+    PULL stackitem
+    queue stackitem
+ END
+ DATA SET: E070397.REXX.EXEC                             MEMBER: JCLCHK
+ DATE: 2020/09/30              TIME: 12:44                         PAGE:      3
+
+ "EXECIO" queued() "DISKW OUTDD (FINIS"
+TEMP = 'TEST.SI.QUEUE.JCLDATA'
+ADDRESS TSO
+/* SUBMIT */
+X = OUTTRAP('LOG.')
+  "SUBMIT" "'"TEMP"'"
+X = OUTTRAP('OFF')
+PARSE VAR LOG.1 "JOB" JOBNAME "("JOBID")" MESSAGE
+SAY "JOB "JOBNAME"("JOBID") "MESSAGE
+DO FOREVER
+X = OUTTRAP('LOG.')
+"STATUS "JOBNAME"("JOBID")"
+X = OUTTRAP('OFF')
+PARSE VAR LOG.1 "JOB" JOBNAME "("JOBID")" STATUS
+IF STATUS = 'ON OUTPUT QUEUE' THEN
+DO
+/*"CANCEL "JOBNAME"("JOBID") PURGE" */
+IF RC = 4 THEN SAY "JOB "JOBNAME"("JOBID") " COMPLETED
+LEAVE
+END
+END */
+SAY '                                                   '
+SAY '-----------------OUTPUT FILES----------------------'
+SAY '                                                   '
+SAY OUTFL || "(" || PRD || ")"
+SAY OUTFL || "(" || KSC || ")"
+SAY OUTFL || "(" || DTF || ")"
+SAY OUTFL || "(" || MTF || ")"
+SAY OUTFL || "(" || ITF || ")"
+SAY OUTFL || "(" || FTF || ")"
+SAY OUTFL || "(" || PTF || ")"
+SAY '                                                   '
+SAY '-----------------JCLPLUS REPORTS-------------------'
+SAY '                                                   '
+SAY 'TEST.SI.JCLPLUS.REPORT1.' || PRD
+SAY 'TEST.SI.JCLPLUS.REPORT1.' || KSC
+SAY 'TEST.SI.JCLPLUS.REPORT1.' || DTF
+SAY 'TEST.SI.JCLPLUS.REPORT1.' || MTF
+SAY 'TEST.SI.JCLPLUS.REPORT1.' || ITF
+SAY 'TEST.SI.JCLPLUS.REPORT1.' || FTF
+SAY 'TEST.SI.JCLPLUS.REPORT1.' || PTF
+SAY '                                                   '
+SAY '-----------------ERROR REPORTS---------------------'
+SAY '                                                   '
+SAY 'TEST.SI.JCLPLUS.ERR.MSGS.' || PRD
+SAY 'TEST.SI.JCLPLUS.ERR.MSGS.' || KSC
+SAY 'TEST.SI.JCLPLUS.ERR.MSGS.' || DTF
+SAY 'TEST.SI.JCLPLUS.ERR.MSGS.' || MTF
+SAY 'TEST.SI.JCLPLUS.ERR.MSGS.' || ITF
+SAY 'TEST.SI.JCLPLUS.ERR.MSGS.' || FTF
+SAY 'TEST.SI.JCLPLUS.ERR.MSGS.' || PTF
+RETURN
