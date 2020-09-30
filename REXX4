@@ -1,0 +1,219 @@
+ DATA SET: E070397.REXX.EXEC                             MEMBER: LIST
+ DATE: 2020/09/30              TIME: 12:44                         PAGE:      1
+
+/*REXX*/
+PARSE UPPER ARG TAG
+WNIGS.5='NO WARNING !!!'
+SEVS.3='NO SEVERE COMPLIANCE ERROR !!!'
+COMS.3='NO COMPLIANCE ERROR !!!'
+W=1
+S=1
+C=1
+
+CALL USECOUNT
+
+ADDRESS TSO
+"ALLOC F(INFILE) DSN('TEST.SI."USERID()".TERML') SHR REU"
+"EXECIO * DISKR INFILE(FINIS STEM TERM."
+"FREE F(INFILE)"
+
+DO P=1 TO 20
+   IF INDEX(TERM.P,'PROGRAM-ID') > 0 THEN DO
+      PGMID=INDEX(TERM.P,'PROGRAM-ID')
+      WNIGS.W=SUBSTR(TERM.P,PGMID)
+      W=W+1
+      P=20
+      END
+END
+WNIGS.W='TAG NAME ----------------->>> '||TAG
+W=W+1
+WNIGS.W=' '
+W=W+1
+WNIGS.W='***************WARNING********************'
+W=W+1
+SEVS.S=' '
+S=S+1
+SEVS.S='***************SEVERE COMPLIANCE ERROR********************'
+S=S+1
+COMS.C=' '
+C=C+1
+COMS.C='***************COMPLIANCE ERROR********************'
+C=C+1
+I=1
+DO WHILE  I <= TERM.0
+ IF INDEX(TERM.I,TAG) > 0 THEN DO
+    NUMS=SUBSTR(TERM.I,2,5)
+    J=I
+    CALL NUMCHK
+ END
+ I=I+1
+END
+
+CALL DELFILES
+
+"ALLOC DA('TEST.SI."USERID()".TERMS') FI(OUTPUT) NEW TRACKS SPACE(5,5)",
+"REUSE DIR(0) DSORG(PS) RECFM(F,B) LRECL(133) BLKSIZE(0)"
+"EXECIO * DISKW OUTPUT(FINIS STEM SEVS."
+"FREE FI(OUTPUT)"
+
+"ALLOC DA('TEST.SI."USERID()".TERMW') FI(OUTPUT) NEW TRACKS SPACE(5,5)",
+"REUSE DIR(0) DSORG(PS) RECFM(F,B) LRECL(133) BLKSIZE(0)"
+ DATA SET: E070397.REXX.EXEC                             MEMBER: LIST
+ DATE: 2020/09/30              TIME: 12:44                         PAGE:      2
+
+"EXECIO * DISKW OUTPUT(FINIS STEM WNIGS."
+"FREE FI(OUTPUT)"
+
+"ALLOC DA('TEST.SI."USERID()".TERMC') FI(OUTPUT) NEW TRACKS SPACE(5,5)",
+"REUSE DIR(0) DSORG(PS) RECFM(F,B) LRECL(133) BLKSIZE(0)"
+"EXECIO * DISKW OUTPUT(FINIS STEM COMS."
+"FREE FI(OUTPUT)"
+
+CALL MAILJCL
+
+EXIT
+
+NUMCHK:
+
+DO WHILE  J <= TERM.0
+
+  IF SUBSTR(TERM.J,10,5) = NUMS THEN DO
+     CALL ERRCHK
+  END
+J=J+1
+END
+
+J=0
+RETURN
+
+ERRCHK:
+  SELECT
+  WHEN SUBSTR(TERM.J,16,1) = 'W' THEN DO
+       WNIGS.W=TERM.I
+       W=W+1
+       WNIGS.W=TERM.J
+       W=W+1
+  END
+  WHEN SUBSTR(TERM.J,16,1) = 'E' THEN DO
+       COMS.C=TERM.I
+       C=C+1
+       COMS.C=TERM.J
+       C=C+1
+  END
+  WHEN SUBSTR(TERM.J,16,1) = 'S' THEN DO
+       SEVS.S=TERM.I
+       S=S+1
+       SEVS.S=TERM.J
+       S=S+1
+  END
+  OTHERWISE
+  END
+
+RETURN
+
+DELFILES:
+
+DSN1 ="'"||'TEST.SI.'||USERID()||'.TERMS'||"'"
+DSN2 ="'"||'TEST.SI.'||USERID()||'.TERMW'||"'"
+DSN3 ="'"||'TEST.SI.'||USERID()||'.TERMC'||"'"
+X=OUTTRAP('VAR.')
+IF SYSDSN(DSN1) = 'OK' THEN DO
+ DATA SET: E070397.REXX.EXEC                             MEMBER: LIST
+ DATE: 2020/09/30              TIME: 12:44                         PAGE:      3
+
+  ADDRESS TSO
+  "DELETE "DSN1
+  "DELETE "DSN2
+  "DELETE "DSN3
+X=OUTTRAP(OFF)
+END
+ELSE
+DO
+END
+
+RETURN
+
+MAILJCL:
+
+NUM=SUBSTR(USERID(),2)
+QUEUE "//"USERID()"T JOB ("NUM",SI,59294),'MAIL',"
+queue "//            CLASS=A,MSGCLASS=S,"
+queue "//            NOTIFY="USERID()""
+queue "/*JOBPARM  SYSAFF=CPUE"
+queue "//************************************************************"
+queue "//* STEP100 - PRINT TO EMAIL                                  "
+queue "//************************************************************"
+queue "// SET      P1='"USERID()"',"
+QUEUE "//          P2='ERROR & WARNING', "
+QUEUE "//          P3='TEST.SI."USERID()".TERMW',"
+QUEUE "//          P4='TEST.SI."USERID()".TERMC',"
+QUEUE "//          P5='TEST.SI."USERID()".TERMS',"
+queue "//          QUOTE='''' "
+queue "//STEP100  EXEC PGM=IEBGENER"
+queue "//SYSIN     DD DUMMY "
+queue "//TXTOUT    OUTPUT DEST=EPSA.EMAILTXT, + "
+queue "//     USERDATA=(&QUOTE.TO=&P1.&QUOTE., + "
+queue "//     &QUOTE.SUBJECT=&P2.&QUOTE.) "
+queue "//SYSUT2    DD SYSOUT=9,OUTPUT=(*.TXTOUT) "
+queue "//SYSUT1    DD DSN=&P3.,DISP=SHR "
+queue "//          DD DSN=&P4.,DISP=SHR "
+queue "//          DD DSN=&P5.,DISP=SHR "
+queue "//*"
+queue "//"
+queue "ZZ"
+'SUBMIT * END(ZZ)'
+
+RETURN
+
+USECOUNT:
+
+TSA='TEST.SI.TERM.USAGE.COUNT'
+ADDRESS TSO
+"ALLOC F(INFILE) DSN('"TSA"')SHR REU"
+"EXECIO * DISKR INFILE(FINIS STEM COUNTY."
+"FREE F(INFILE)"
+
+TSB='MCI.DV.TECH.SARRPT.UPD.USERIDS.TEMP'
+ADDRESS TSO
+"ALLOC F(INFILE) DSN('"TSB"')SHR REU"
+"EXECIO * DISKR INFILE(FINIS STEM NAMEY."
+"FREE F(INFILE)"
+ DATA SET: E070397.REXX.EXEC                             MEMBER: LIST
+ DATE: 2020/09/30              TIME: 12:44                         PAGE:      4
+
+
+NAMY='NAME NOT FOUND IN FILE'
+DO I=1 TO NAMEY.0
+   IF (INDEX(NAMEY.I,USERID())) > 0 THEN DO
+       NAMY=SUBSTR(NAMEY.I,17,28)
+       I=NAMEY.0
+   END
+END
+
+FND=0
+DO I=1 TO COUNTY.0
+   IF (INDEX(COUNTY.I,USERID())) > 0 THEN DO
+       FND=I
+       I=COUNTY.0
+   END
+END
+
+IF FND=0 THEN DO
+   NXT=COUNTY.0+1
+   COUNTY.NXT='000000001 - '||USERID()||' - '||NAMY
+END
+ELSE
+DO
+   BBB=SUBSTR(COUNTY.FND,1,9)
+   BBB=BBB+1
+   BBB= RIGHT(BBB,9,0)
+   COUNTY.FND=BBB||' - '||USERID()||' - '||NAMY
+END
+
+
+ADDRESS TSO
+"ALLOC DA('TEST.SI.TERM.USAGE.COUNT') FI(OUTPUT) OLD"
+"EXECIO * DISKW OUTPUT(FINIS STEM COUNTY."
+"FREE FI(OUTPUT)"
+
+RETURN
