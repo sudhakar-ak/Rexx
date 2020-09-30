@@ -1,0 +1,330 @@
+ DATA SET: E070397.REXX.EXEC                             MEMBER: COMPLST
+ DATE: 2020/09/30              TIME: 12:38                         PAGE:      1
+
+ /*REXX*/
+ ADDRESS TSO
+ UTILLIB = 'TEST.SI.COMPLST.REXX.TOOL'
+ ISPEXEC "LIBDEF ISPPLIB DATASET ID ('"UTILLIB"') UNCOND"
+ /**********************************************************************
+ *                           CALLING PANEL                             *
+ **********************************************************************/
+ CALL CALLPANEL
+CALLPANEL:
+ PNLNAME = COMPANEL
+ ISPEXEC "DISPLAY PANEL("PNLNAME")"
+ IF RC = 8 THEN EXIT
+ IF KEY = 'PF3' THEN EXIT
+ CALL CHECKINPUT
+ SAY 'COMPLETED'
+ EXIT
+ /**********************************************************************
+ *                        CHECKING INPUTS                              *
+ **********************************************************************/
+CHECKINPUT:
+ ALLSET=1
+ IF COMDAT='' | ENV='' | TYPE='' | STAGE='' | INFILE='' THEN
+    ALLSET=0
+ IF ALLSET <> 1 THEN DO
+    SAY 'PLEASE CHECK MANDATORY FIELDS'
+    CALL CALLPANEL
+ END
+ ELSE
+    CALL EXECUTE
+RETURN
+ /**********************************************************************
+ *                           INITIALIZATION                            *
+ **********************************************************************/
+EXECUTE:
+ USER1 = USERID()
+ USER2 = SUBSTR(USER1,2,6)
+ ACTION=STRIP('MOVE')
+ COMDATE=STRIP(COMDAT)
+ CCID=STRIP(CCID)
+ COMMENT=STRIP(COMMENT)
+ COMMENTLEN=LENGTH(COMMENT)
+ ENV=STRIP(ENV)
+ TYPE=STRIP(TYP)
+ STAGE=STRIP(S)
+ /**********************************************************************
+ *                   CHECKING INPUT EXIST OR NOT                       *
+ **********************************************************************/
+ IF SYSDSN("'"INFILE"'") = 'OK' THEN DO
+   X = OUTTRAP('LINE.')
+   "LISTDS  '"INFILE"' MEMBERS"
+   X = OUTTRAP('OFF')
+   END
+ ELSE DO
+    SAY 'INPUT FILE DOES NOT EXIST'
+    CALL CALLPANEL
+    END
+ /**********************************************************************
+ DATA SET: E070397.REXX.EXEC                             MEMBER: COMPLST
+ DATE: 2020/09/30              TIME: 12:38                         PAGE:      2
+
+ *                    CREATING OUTPUT FILE                             *
+ **********************************************************************/
+ OUTPUTFL = "TEST.SI."USERID()".COMPLIST"
+ IF SYSDSN("'"||OUTPUTFL||"'" ) <> "OK" THEN DO
+   "ALLOC FI(OUTFILE) DA('"OUTPUTFL"') NEW ",
+   "SP(10, 10)     DSORG(PS) DIR(0) BLKSIZE(8000)",
+   "LRECL(200) RECFM(F B)      "
+   "FREE F(OUTFILE)"
+ END
+ /**********************************************************************
+ *                         CHANGING DATE FORMATE                       *
+ **********************************************************************/
+ IF SUBSTR(COMDATE,3,2)='01' THEN
+   COMDATE=SUBSTR(COMDATE,1,2)||'JAN'||SUBSTR(COMDATE,5,2)
+ IF SUBSTR(COMDATE,3,2)='02' THEN
+   COMDATE=SUBSTR(COMDATE,1,2)||'FEB'||SUBSTR(COMDATE,5,2)
+ IF SUBSTR(COMDATE,3,2)='03' THEN
+   COMDATE=SUBSTR(COMDATE,1,2)||'MAR'||SUBSTR(COMDATE,5,2)
+ IF SUBSTR(COMDATE,3,2)='04' THEN
+   COMDATE=SUBSTR(COMDATE,1,2)||'APR'||SUBSTR(COMDATE,5,2)
+ IF SUBSTR(COMDATE,3,2)='05' THEN
+   COMDATE=SUBSTR(COMDATE,1,2)||'MAY'||SUBSTR(COMDATE,5,2)
+ IF SUBSTR(COMDATE,3,2)='06' THEN
+   COMDATE=SUBSTR(COMDATE,1,2)||'JUN'||SUBSTR(COMDATE,5,2)
+ IF SUBSTR(COMDATE,3,2)='07' THEN
+   COMDATE=SUBSTR(COMDATE,1,2)||'JUL'||SUBSTR(COMDATE,5,2)
+ IF SUBSTR(COMDATE,3,2)='08' THEN
+   COMDATE=SUBSTR(COMDATE,1,2)||'AUG'||SUBSTR(COMDATE,5,2)
+ IF SUBSTR(COMDATE,3,2)='09' THEN
+   COMDATE=SUBSTR(COMDATE,1,2)||'SEP'||SUBSTR(COMDATE,5,2)
+ IF SUBSTR(COMDATE,3,2)='10' THEN
+   COMDATE=SUBSTR(COMDATE,1,2)||'OCT'||SUBSTR(COMDATE,5,2)
+ IF SUBSTR(COMDATE,3,2)='11' THEN
+   COMDATE=SUBSTR(COMDATE,1,2)||'NOV'||SUBSTR(COMDATE,5,2)
+ IF SUBSTR(COMDATE,3,2)='12' THEN
+   COMDATE=SUBSTR(COMDATE,1,2)||'DEC'||SUBSTR(COMDATE,5,2)
+ /**********************************************************************
+ *                         BUILD SCL                                   *
+ **********************************************************************/
+ VAR1.0  = 5
+ CSTEM.0 = 0
+ CC = 1
+ DO I=7 TO LINE.0
+    CMP=STRIP(LINE.I)
+    ST =SUBSTR(CMP,01,02)
+    IF TYPE='JCL' | TYPE='DOC' THEN
+       ST=SUBSTR(CMP,02,02)
+    IF TYPE='CRD' | TYPE='PRC' THEN
+       ST=SUBSTR(CMP,03,02)
+    VAR1.1='PRINT ELEMENT '''CMP''''
+    VAR1.2='FROM ENVIRONMENT '''ENV''' SYSTEM '''ST''' SUBSYSTEM '''ST''''
+    VAR1.3='TYPE '''TYPE''' STAGE '''STAGE''''
+    VAR1.4='OPTIONS MASTER NOSEARCH'
+    VAR1.5='.'
+    DO J = 1 TO VAR1.0
+       CSTEM.CC = VAR1.J
+       CSTEM.0 = CSTEM.0 + 1
+ DATA SET: E070397.REXX.EXEC                             MEMBER: COMPLST
+ DATE: 2020/09/30              TIME: 12:38                         PAGE:      3
+
+       CC = CC + 1
+    END
+ END
+ SCL   = 'TEST.SI.COMPLST.REXX.TOOL(SCL)'
+         "ALLOC FI(OUT) DA('"SCL"') SHR REUSE"
+         "EXECIO "CSTEM.0" DISKW OUT (STEM CSTEM.  FINIS"
+         "FREE FI(OUT)"
+
+ ENDVR = 'TEST.SI.COMPLST.REXX.TOOL(ENDJCL)'
+         "ALLOC DA('"ENDVR"') F(MODD) SHR"
+         "EXECIO * DISKR MODD (STEM ENDLN. FINIS"
+         "FREE F(MODD)"
+ ENDLN.1 = OVERLAY(USER1,ENDLN.1,03,07)
+ ENDLN.1 = OVERLAY(USER2,ENDLN.1,17,06)
+ ENDVR = 'TEST.SI.COMPLST.REXX.TOOL(ENDJCL)'
+          "ALLOC FI(OUT) DA('"ENDVR"') SHR REUSE"
+          "EXECIO * DISKW OUT (STEM ENDLN.  FINIS"
+          "FREE FI(OUT)"
+ /**********************************************************************
+ *                           SUBMI SCL                                 *
+ **********************************************************************/
+ X = OUTTRAP('LOG.')
+ "SUBMIT '"ENDVR"'"
+ X = OUTTRAP('OFF')
+ ADDRESS SYSCALL
+       "SLEEP" 10
+ ADDRESS TSO
+ PARSE VAR LOG.1 "JOB" JOBNAME "("OJOBID")" MESSAGE
+ SAY "JOB "JOBNAME"("OJOBID") "MESSAGE
+ RUNTIME = 0
+ MAXRUNTIME = 2
+ DO UNTIL RUNTIME >= MAXRUNTIME
+  RC=ISFCALLS('ON')
+  IF RC > 0 THEN EXIT END
+   ISFPREFIX = JOBNAME
+   ISFOWNER = USER1
+   ADDRESS SDSF "ISFEXEC ST"
+    SAY 'NO OF "'JOBNAME'" IN SPOOL' JNAME.0
+     X = JNAME.0
+     OJOBIDC = SUBSTR(OJOBID,4,5)
+     MAXCC = SUBSTR(RETCODE.X,1,2)
+     RETCD01 = SUBSTR(RETCODE.X,4,4)
+      IF SUBSTR(JOBID.X,4,5) = OJOBIDC & RETCD01 <= 12 &,
+       STRIP(QUEUE.X) = 'PRINT' & MAXCC ='CC' THEN DO
+       SAY '"'JOBNAME'" EXECUTED SUCCESSFULLY'
+       RUNTIME = MAXRUNTIME
+       END
+      ELSE DO
+       IF SUBSTR(JOBID.X,4,5) = OJOBIDC &,
+          (MAXCC ='AB' | MAXCC ='JC'| RETCD01 > 12 ) THEN DO
+          SAY '"'JOBNAME'" GOT ABENDED OR JCL ERROR'
+          EXIT
+       END
+       RUNTIME = RUNTIME + 1
+       ADDRESS SYSCALL
+       "SLEEP" 30
+       END
+ DATA SET: E070397.REXX.EXEC                             MEMBER: COMPLST
+ DATE: 2020/09/30              TIME: 12:38                         PAGE:      4
+
+ RC=ISFCALLS('OFF')
+ END
+ /**********************************************************************
+ *                         CHECKING MODULES                            *
+ **********************************************************************/
+ REPORT = 'TEST.SI.COMPLS.ENDVR.REP2'
+          "ALLOC DA('"REPORT"') F(MODD) SHR"
+          "EXECIO * DISKR MODD (STEM REPLN. FINIS"
+          "FREE F(MODD)"
+ TAIL=0
+ DO I=7 TO LINE.0
+     LASTPOS=3
+     CMP=STRIP(LINE.I)
+     PRINT=1
+     REASON=' FOUND IN REGION,'
+     FOUND=0
+     DO J=LASTPOS TO REPLN.0
+       IF INDEX(REPLN.J,'PRINT') > 0 THEN
+         DO
+          POSELEMENT=J+1
+          POSLASTACTION=J+8
+          POSCOMMENT=J+10
+          POSDATE=J+9
+          POSCCID=J+9
+          POSACTION=J+10
+          POSRC=J+11
+          IF INDEX(REPLN.POSELEMENT,'ELEMENT: 'CMP'') > 0 &,
+             INDEX(REPLN.POSLASTACTION,'LAST ELEMENT ACTION')> 0 THEN
+             DO
+               FOUND=1
+               IF CCID <> '' THEN DO
+                  IF STRIP(SUBSTR(REPLN.POSCCID,63,09)) <> CCID THEN
+                  DO
+                    PRINT=0
+                    REASON=REASON||' EXPECTED CCID IS '||CCID|| ,
+                           ',READ CCID IS '|| ,
+                           STRIP(SUBSTR(REPLN.POSCCID,63,09))
+                  END
+               END
+               IF STRIP(SUBSTR(REPLN.POSDATE,33,07)) <> COMDATE THEN
+                 DO
+                  PRINT=0
+                  REASON=REASON||' EXPECTED DATE IS '||COMDATE|| ,
+                           ',READ DATE IS '|| ,
+                           STRIP(SUBSTR(REPLN.POSDATE,33,07))
+                 END
+               IF COMMENT <> '' THEN DO
+                  IF STRIP(SUBSTR(REPLN.POSCOMMENT,11,COMMENTLEN)) <> ,
+                                                    COMMENT THEN DO
+                  PRINT=0
+                  REASON=REASON||' EXPECTED COMMENT IS '||COMMENT||,
+                  ' READ COMMENT IS '||
+                  STRIP(SUBSTR(REPLN.POSCOMMENT,11,COMMENTLEN))
+                  END
+               END
+               IF ACTION <> '' THEN DO
+                  IF STRIP(SUBSTR(REPLN.POSACTION,63,04)) <> ACTION THEN
+ DATA SET: E070397.REXX.EXEC                             MEMBER: COMPLST
+ DATE: 2020/09/30              TIME: 12:38                         PAGE:      5
+
+                  DO
+                     PRINT=0
+                     REASON=REASON||' EXPECTED ACTION IS '|| ACTION ||,
+                     ',READ ACTION IS '|| ,
+                     STRIP(SUBSTR(REPLN.POSACTION,63,04))
+                  END
+               END
+               IF STRIP(SUBSTR(REPLN.POSRC,11,04)) <> "0004" &,
+                  STRIP(SUBSTR(REPLN.POSRC,11,04)) <> "0003" &,
+                  STRIP(SUBSTR(REPLN.POSRC,11,04)) <> "0002" &,
+                  STRIP(SUBSTR(REPLN.POSRC,11,04)) <> "0001" &,
+                  STRIP(SUBSTR(REPLN.POSRC,11,04)) <> "0000" THEN
+                  DO
+                    PRINT=0
+                    REASON=REASON||' RC SHOULD LESS THAN 0004',
+                    ',READ RC IS '|| ,
+                    STRIP(SUBSTR(REPLN.POSRC,11,04))
+               END
+             END
+          ELSE
+             LASTPOS=LASTPOS+53
+         END
+     END
+     IF FOUND <> 1 | PRINT <> 1 THEN DO
+        TAIL=TAIL+1
+        IF FOUND <> 1 THEN DO
+          OUTPUT.TAIL=CMP||' NOT FOUND IN REGION'
+        END
+        IF PRINT <> 1 THEN DO
+          OUTPUT.TAIL=CMP||REASON
+        END
+     END
+ END
+ TAIL=TAIL+1
+ OUTPUT.TAIL=' '
+ TAIL=TAIL+1
+ OUTPUT.TAIL='*****************END OF LIST*****************'
+ /*********************************************************************
+ *                       WRITE TO OUTPUT FILE                         *
+ *********************************************************************/
+ "ALLOC F(MYOUTDD) DA('"OUTPUTFL"') SHR "
+ "EXECIO * DISKW MYOUTDD (OPEN"
+ "EXECIO * DISKW MYOUTDD (STEM OUTPUT. "
+ "EXECIO * DISKW MYOUTDD (FINIS"
+ "FREE F(MYOUTDD)"
+ /*********************************************************************
+ *                     SEND OUTPUT FILE TO USER                       *
+ *********************************************************************/
+ QUEUE "//"USERID()"S JOB ("USER2",SI,59294),'GDGS',"
+ QUEUE "//            CLASS=A,MSGCLASS=S,"
+ QUEUE "//            NOTIFY="USERID()""
+ QUEUE "//JOBLIB   DD DSN=DTF.IT.PROD.PGMLIB,DISP=SHR"
+ QUEUE "//         DD DSN=DTF.IT.TEST.PGMLIB,DISP=SHR "
+ QUEUE "//         DD DSN=DTF.IT.PROD.PGMLIB,DISP=SHR "
+ QUEUE "//         DD DSN=ITF.IT.PROD.PGMLIB,DISP=SHR "
+ QUEUE "//         DD DSN=YTF.AD.PROD.PGMLIB,DISP=SHR "
+ QUEUE "//         DD DSN=MCI.AD.TEST.PGMLIB,DISP=SHR "
+ DATA SET: E070397.REXX.EXEC                             MEMBER: COMPLST
+ DATE: 2020/09/30              TIME: 12:38                         PAGE:      6
+
+ QUEUE "//         DD DSN=MCI.AD.PROD.PGMLIB,DISP=SHR "
+ QUEUE "//         DD DSN=MCI.DB.D2D1.SDSNEXIT,DISP=SHR "
+ QUEUE "//         DD DSN=MCI.DB.D2D1.SHRD.SDSNEXIT,DISP=SHR"
+ QUEUE "//         DD DSN=MCI.DB.D2D1.SDSNLOAD,DISP=SHR "
+ QUEUE "//UCC11    EXEC UCC11,RUNTYP='F' "
+ QUEUE "//************************************************************"
+ QUEUE "//*           PRINT TO EMAIL                                  "
+ QUEUE "//************************************************************"
+ QUEUE "// SET      P1='"USERID()"',"
+ QUEUE "//          P2='COMPONENT NOT FOUND', "
+ QUEUE "//          P3='"OUTPUTFL"',"
+ QUEUE "//          QUOTE='''' "
+ QUEUE "//STEP100  EXEC PGM=IEBGENER"
+ QUEUE "//SYSIN     DD DUMMY "
+ QUEUE "//TXTOUT    OUTPUT DEST=EPSA.EMAILTXT, + "
+ QUEUE "//     USERDATA=(&QUOTE.TO=&P1.&QUOTE., + "
+ QUEUE "//     &QUOTE.SUBJECT=&P2.&QUOTE.) "
+ QUEUE "//SYSUT2    DD SYSOUT=9,OUTPUT=(*.TXTOUT) "
+ QUEUE "//SYSUT1    DD DSN=&P3.,DISP=SHR "
+ QUEUE "//*"
+ QUEUE "//"
+ QUEUE "ZZ"
+ 'SUBMIT * END(ZZ)'
+ RETURN
+ /*********************************************************************
+ *                          END                                       *
+ *********************************************************************/
