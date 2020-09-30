@@ -1,0 +1,187 @@
+ DATA SET: E070397.REXX.EXEC                             MEMBER: CHK
+ DATE: 2020/09/30              TIME: 12:44                         PAGE:      1
+
+/* REXX */
+ARG NUM LMT COUNT X
+CALL USECOUNT
+SAY NUM
+SAY LMT
+SAY COUNT
+SAY X
+L = LENGTH(NUM)
+SAY L
+IF(L > = 11)  THEN
+IF (LMT > 11 | LMT < 20) THEN
+IF COUNT > 0 THEN
+NUM0 = RIGHT(COUNT,4,0)
+NUM2= LEFT(NUM,LMT,0)
+NUM1 = LEFT(NUM2,19,' ')
+IF (X= YES | X = NO) THEN
+CALL ROUTINE
+IF(X=YES) THEN
+CALL ROUTINE1
+EXIT
+ROUTINE:
+ID=SUBSTR(USERID(),2)
+queue "//"USERID()"I JOB ("ID",SI,52861),'CHECK DIGIT-19',"
+queue "//            CLASS=A,MSGCLASS=S,"
+queue "//            NOTIFY="USERID()""
+queue "/*JOBPARM  SYSAFF=ANY "
+queue "//JOBLIB   DD DSN=DTF.IT.TEST.PGMLIB,DISP=SHR "
+queue "//         DD DSN=MCI.AD.PROD.PGMLIB,DISP=SHR "
+queue "//**************************************************************"
+queue "//*        STEP001 - SCRATCHD TA SETS "
+queue "//**************************************************************"
+queue "//STEP901  EXEC PGM=IEFBR14 "
+queue "//SCRTCH01  DD DSN=TEST.SI.REL42.CARDNO.CHECK.DIGIT, "
+queue "//             DISP=(MOD,DELETE,DELETE), "
+queue "//             SPACE=(TRK,(0,0)) "
+queue "//************************************************************"
+queue "//* STEP005 - DELETE THE EXISTING FILE                       "
+queue "//************************************************************"
+queue "//STEP005  EXEC PGM=IEFBR14 "
+queue "//SYSPRINT  DD SYSOUT=* "
+queue "//SYSOUT    DD SYSOUT=* "
+queue "//SYSUDUMP  DD SYSOUT=D "
+queue "//SYS001    DD DSN=TEST.SI."USERID()".CHKDIGIT,"
+queue "//             DISP=(MOD,DELETE,DELETE)"
+queue "//**************************************************************"
+queue "//*. "
+queue "//*.       STEP010 - CALCULATE MOD-10 CHECK DIGITS "
+queue "//*......                                                      ."
+queue "//*.  SICHK19 WILL PROVIDE A LIST OF CARD NUMBERS WITH CHECK DIG"
+queue "//*.  FOR CARD NUMBERS WITH A LENGTH OF 12 TO 19 DIGITS "
+queue "//*. "
+queue "//*. NOTE:  IF 'COUNT = 0001', THEN THE CARD NUMBER PROVIDED WIL"
+queue "//*.        VALIDATED FOR A VALID CHECK DIGIT.  IF THE CARD NUMB"
+queue "//*.        DOES NOT HAVE A VALID CHECK DIGIT, THEN AN 'ERR3' IS"
+queue "//*.        RETURNED WITH A CARDNUMBER WITH A VALID CHECK DIGIT"
+queue "//*. "
+queue "//**************************************************************"
+ DATA SET: E070397.REXX.EXEC                             MEMBER: CHK
+ DATE: 2020/09/30              TIME: 12:44                         PAGE:      2
+
+queue "//STEP010  EXEC PGM=SICHK19 "
+queue "//SYSOUT    DD DSN=TEST.SI."USERID()".CHKDIGIT,"
+queue "//             DISP=(NEW,CATLG,DELETE), "
+queue "//          SPACE=(TRK,(25,10),RLSE), "
+queue "//          DCB=(RECFM=FB,LRECL=133,BLKSIZE=0)"
+queue "//SYSPRINT  DD SYSOUT=* "
+queue "//SYSUDUMP  DD SYSOUT=* "
+queue "//SYS201    DD DSN=TEST.SI.REL42.CARDNO.CHECK.DIGIT, "
+queue "//             DISP=(,DELETE,DELETE), "
+queue "//*            DISP=(,CATLG,DELETE), "
+queue "//             SPACE=(CYL,(1,1),RLSE), "
+queue "//             DCB=(RECFM=FB,LRECL=80,BLKSIZE=6800) "
+queue "//**********************************************************"
+queue "//*. "
+queue "//*. INPUT FORMAT: "
+queue "//*.  COL 1-2   MUST BE '..' "
+queue "//*.  COL 3-21  CARD NUMBER(CARD NUMBER MUST BE A LENGTH OF 12 -"
+queue "//*.  COL 22-22 SHOULD BE A SPACE "
+queue "//*.  COL 23-28 SHOULD BE 'COUNT=' "
+queue "//*.  COL 29-32 NUMBER OF CARD NUMBERS TO RETURN "
+queue "//*......                                                     ."
+queue "//*. SAMPLE INPUT: "
+queue "//*. "
+queue "//*.  COLS 0 0      1          2 2     2  3 "
+queue "//*.       1.3......0..........1.2.....9..2 "
+queue "//*.       ..511524000000        COUNT=0005 "
+queue "//*.       ..5340350000000       COUNT=0005 "
+queue "//*.       ..50576800000000      COUNT=0005 "
+queue "//*.       ..581061000000000     COUNT=0005 "
+queue "//*.       ..3030000000000000    COUNT=0005 "
+queue "//*.       ..54271100000000000   COUNT=0005 "
+queue "//*.       ..542712000000000000  COUNT=0005 "
+queue "//*.       ..5810060000000000000 COUNT=0005 "
+queue "//*. "
+queue "//**************************************************************"
+queue "//SYSIN     DD * "
+QUEUE " ."NUM1" COUNT="NUM0" "
+queue "/* 5312590000000001 "
+queue "ZZ"
+'SUBMIT * END(ZZ)'
+RETURN
+ROUTINE1:
+ID=SUBSTR(USERID(),2)
+queue "//"USERID()"I JOB ("ID",SI,52861),'CHECK DIGIT-19',"
+queue "//            CLASS=A,MSGCLASS=S,"
+queue "//            NOTIFY="USERID()""
+queue "/*JOBPARM  SYSAFF=ANY "
+queue "//JOBLIB   DD DSN=DTF.IT.TEST.PGMLIB,DISP=SHR "
+queue "//         DD DSN=MCI.AD.PROD.PGMLIB,DISP=SHR "
+queue "//************************************************************"
+queue "//* STEP011 - PRINT TO EMAIL                                  "
+queue "//************************************************************"
+queue "// SET      P1='"USERID()"',"
+queue "//          P2='CHK DIGIT', "
+queue "//          P3='TEST.SI."USERID()".CHKDIGIT',"
+queue "//          QUOTE='''' "
+queue "//STEP030  EXEC PGM=IEBGENER"
+ DATA SET: E070397.REXX.EXEC                             MEMBER: CHK
+ DATE: 2020/09/30              TIME: 12:44                         PAGE:      3
+
+queue "//SYSIN     DD DUMMY "
+queue "//TXTOUT    OUTPUT DEST=EPSA.EMAILTXT, + "
+queue "//     USERDATA=(&QUOTE.TO=&P1.&QUOTE., + "
+queue "//     &QUOTE.SUBJECT=&P2.&QUOTE.) "
+queue "//SYSUT2    DD SYSOUT=9,OUTPUT=(*.TXTOUT) "
+queue "//SYSUT1    DD DSN=&P3.,DISP=SHR "
+queue "//*"
+queue "//"
+queue "ZZ"
+'SUBMIT * END(ZZ)'
+RETURN
+
+USECOUNT:
+
+TSA='TEST.SI.CHKDIGIT.USAGE.COUNT'
+ADDRESS TSO
+"ALLOC F(INFILE) DSN('"TSA"')SHR REU"
+"EXECIO * DISKR INFILE(FINIS STEM COUNTY."
+"FREE F(INFILE)"
+
+TSB='MCI.DV.TECH.SARRPT.UPD.USERIDS.TEMP'
+ADDRESS TSO
+"ALLOC F(INFILE) DSN('"TSB"')SHR REU"
+"EXECIO * DISKR INFILE(FINIS STEM NAMEY."
+"FREE F(INFILE)"
+
+NAMY='NAME NOT FOUND IN FILE'
+DO I=1 TO NAMEY.0
+   IF (INDEX(NAMEY.I,USERID())) > 0 THEN DO
+       NAMY=SUBSTR(NAMEY.I,17,28)
+       I=NAMEY.0
+   END
+END
+
+FND=0
+DO I=1 TO COUNTY.0
+   IF (INDEX(COUNTY.I,USERID())) > 0 THEN DO
+       FND=I
+       I=COUNTY.0
+   END
+END
+
+IF FND=0 THEN DO
+   NXT=COUNTY.0+1
+   COUNTY.NXT='000000001 - '||USERID()||' - '||NAMY
+END
+ELSE
+DO
+   BBB=SUBSTR(COUNTY.FND,1,9)
+   BBB=BBB+1
+   BBB= RIGHT(BBB,9,0)
+   COUNTY.FND=BBB||' - '||USERID()||' - '||NAMY
+END
+
+
+ADDRESS TSO
+"ALLOC DA('TEST.SI.CHKDIGIT.USAGE.COUNT') FI(OUTPUT) OLD"
+ DATA SET: E070397.REXX.EXEC                             MEMBER: CHK
+ DATE: 2020/09/30              TIME: 12:44                         PAGE:      4
+
+"EXECIO * DISKW OUTPUT(FINIS STEM COUNTY."
+"FREE FI(OUTPUT)"
+
+RETURN
