@@ -1,0 +1,4808 @@
+~
+ PARM LINK(BE3010 R) BIND(STATIC-ONLY) PLAN(BE3010EZ) SQLSYNTAX(NONE)
+
+%BE3000DC
+
+%WMDATE
+FILE BEUPDATE
+     BEN-REC                1     190 A
+     BEN-DATA               1     190 A
+     SSN-O                  1       4 B 0
+     PLAN-NAME-O            5       3 A
+     PLAN-YEAR-O            8       2 B 0
+     PAYROLL-DATE-O        10      10 A
+     HISTORY-TYPE-O        20       1 A
+     COV-START-DATE-O      21      10 A
+     COV-END-DATE-O        31      10 A
+     COV-OPTION-O          41       1 A
+     COV-CATEGORY-O        42       1 A
+     BEN-OPTION-O          43       1 A
+     ENROLL-DATE-O         44      10 A
+     ENROLL-RCPT-DATE-O    54      10 A
+     CONFIRM-DATE-O        64      10 A
+     REMINDER-DATE-O       74      10 A
+     ELIGIBILITY-DATE-O    84      10 A
+     ORIG-COV-DATE-O       94      10 A
+     ARREARS-CANCEL-DT-O  104      10 A
+     PEAK-TIME-DATE-O     114      10 A
+     DEFAULT-DATE-O       124      10 A
+     COPY-TO-PAYROLL-O    134       1 A
+     CHANGE-REASON-CD-O   135       2 A
+     LAST-CHANGE-DATE-O   137      10 A
+     LAST-CHANGE-ID-O     147       8 A
+     PROVIDER-ID-O        155       2 B 0
+     ENROLL-LATE-INT-O    157       1 A
+     WAIT-DAY-QTY-O       158       2 B 0
+     BEN-BKRID-O          160       2 B 0
+     OUT-POCKET-MAX-CD    162       1 A
+     UP-FRONT-ALLOW-CD    163       1 A
+     BEN-FILLER           164      26 A
+     INIT1                  1      20 A
+     INIT2                 21      20 A
+     INIT3                 41      20 A
+     INIT4                 61      20 A
+     INIT5                 81      20 A
+     INIT6                101      20 A
+     INIT7                121      20 A
+     INIT8                141      20 A
+     INIT9                161      20 A
+     INIT10               181      10 A
+
+FILE ENRDATES
+ENRDATES-REC                  1  80  A
+ENROLL-START-DATE             1  10  A
+ENROLL-FILLER-1              11  01  A
+ENROLL-END-DATE              12  10  A
+
+FILE FAMCHANG
+   FAMCHG-REC               1    80  A
+   FAMCHG-PLAN-YEAR         1     4  N 0
+   FAMCHG-FILL-1            5     2  A
+   FAMCHG-SSN               7    10  N 0
+   FAMCHG-FILL-2           17     2  A
+   FAMCHG-CHANGE-DATE      19    10  A
+   FAMCHG-FILL-3           29     1  A
+   FAMCHG-FSC-DATE         30    10  A
+   FAMCHG-FILL-4           40     1  A
+   FAMCHG-FSC-REASON       41     2  A
+   FAMCHG-FILL-5           43     1  A
+   FAMCHG-UPDATE-CODE      44     1  A
+
+     WEB-COUNT              W      10 N 0 VALUE 0
+     AE-RECS                W      10 N 0 VALUE 0
+     FSC-RECS               W      10 N 0 VALUE 0
+     AE-RECS-GENERATED      W      10 N 0 VALUE 0
+     OE-RECS                W      10 N 0 VALUE 0
+     TOT-RECS-WRITTEN       W      10 N 0 VALUE 0
+     FIRST-FLAG             W       1 A VALUE 'Y'
+     WS-SESSION-MONTH       W       2 N 0
+     WS-DENIAL-LETTER       W       1 A VALUE 'N'
+     WS-EVENT-DATE          W      10 A
+     WS-EVENT-YEAR   WS-EVENT-DATE      4 N
+     WS-EVENT-FILL1  WS-EVENT-DATE   +4 1 A VALUE '-'
+     WS-EVENT-MONTH  WS-EVENT-DATE   +5 2 N
+     WS-EVENT-FILL2  WS-EVENT-DATE   +7 1 A VALUE '-'
+     WS-EVENT-DAY    WS-EVENT-DATE   +8 2 N 0
+     WS-EVENT-DATE1         W      10 A
+     WS-EVENT-YEAR1  WS-EVENT-DATE1     4 N
+     WS-EVENT-FILL11 WS-EVENT-DATE1  +4 1 A VALUE '-'
+     WS-EVENT-MONTH1 WS-EVENT-DATE1  +5 2 N
+     WS-EVENT-FILL21 WS-EVENT-DATE1  +7 1 A VALUE '-'
+     WS-EVENT-DAY1   WS-EVENT-DATE1  +8 2 N 0
+     WS-SQL-DISPLAY         W       4 N 0
+     ANNUAL-ENROLLMENT      W       1 A VALUE 'N'
+     PAY-PERIOD-BEGIN       W      10 A
+     NEXT-PAY-PERIOD-BEGIN  W      10 A
+     NEXT-PLAN-YR-START                    W 10 A
+       NEXT-PLAN-YY NEXT-PLAN-YR-START        4 N 0
+       NEXT-PLAN-F1 NEXT-PLAN-YR-START     +4 1 A VALUE '-'
+       NEXT-PLAN-MN NEXT-PLAN-YR-START     +5 2 N 0 VALUE 01
+       NEXT-PLAN-F2 NEXT-PLAN-YR-START     +7 1 A VALUE '-'
+       NEXT-PLAN-DD NEXT-PLAN-YR-START     +8 2 N 0 VALUE 01
+     CURRENT-PLAN-YEAR      W       2 B 0
+     NEXT-PLAN-YEAR         W       2 B 0
+     LOOKUP-PLAN-YEAR       W       2 B 0
+     LOOKUP-PLAN-YEAR-N     W       5 N 0
+     CURRENT-DATE           W      10 A VALUE ' '
+     WCOVERAGE-OPT-PREV     W       1 A VALUE ' '
+     WCOVERAGE-CAT-PREV     W       1 A VALUE ' '
+     SESSION-TIMESTAMP                    W      26 A
+        SESSION-DATE SESSION-TIMESTAMP           10 A
+        SESSION-TIME SESSION-TIMESTAMP    +10    16 A
+
+DEFINE      WSSN                           W       9 P 0
+DEFINE      WPLAN-NAME                     W       3 A
+DEFINE      WPLAN-YEAR                     W       4 P 0
+DEFINE      WPAYROLL-DATE                  W      10 A
+DEFINE      WPAYROLL-DATE-IND              W       2 B 0
+DEFINE      WHISTORY-TYPE-CD               W       1 A
+DEFINE      WCOVERAGE-START-DT             W      10 A
+DEFINE      WCOVERAGE-START-DT-IND         W       2 B 0
+DEFINE      WCOVERAGE-END-DT               W      10 A
+DEFINE      WCOVERAGE-END-DT-IND           W       2 B 0
+DEFINE      WCOVERAGE-OPTION               W       1 A
+DEFINE      WCOVERAGE-CATEGORY             W       1 A
+DEFINE      WBENEFIT-OPTION                W       1 A
+DEFINE      WENROLLMENT-DATE               W      10 A
+DEFINE      WENROLLMENT-DATE-IND           W       2 B 0
+DEFINE      WENROLL-RCPT-DATE              W      10 A
+DEFINE      WENROLL-RCPT-DATE-IND          W       2 B 0
+DEFINE      WCONFIRM-DATE                  W      10 A
+DEFINE      WCONFIRM-DATE-IND              W       2 B 0
+DEFINE      WREMINDER-DATE                 W      10 A
+DEFINE      WREMINDER-DATE-IND             W       2 B 0
+DEFINE      WELIGIBILITY-DATE              W      10 A
+DEFINE      WELIGIBILITY-DATE-IND          W       2 B 0
+DEFINE      WORIG-COVERAGE-DATE            W      10 A
+DEFINE      WORIG-COVERAGE-DATE-IND        W       2 B 0
+DEFINE      WORIG-COVERAGE-DATE-PLUS15     W      10 A
+DEFINE      WORIG-COVERAGE-DATE-PLUS15-IND W       2 B 0
+DEFINE      WARREARS-CANCEL-DT             W      10 A
+DEFINE      WARREARS-CANCEL-DT-IND         W       2 B 0
+DEFINE      WPEAK-TIME-DATE                W      10 A
+DEFINE      WPEAK-TIME-DATE-IND            W       2 B 0
+DEFINE      WDEFAULT-DATE                  W      10 A
+DEFINE      WDEFAULT-DATE-IND              W       2 B 0
+DEFINE      WCOPY-TO-PAYROLL-FL            W       1 A
+DEFINE      WCHANGE-REASON-CODE            W       2 A
+DEFINE      WCHANGE-REASON-CODE-IND        W       2 B 0
+DEFINE      WLAST-CHANGE-DATE              W      10 A
+DEFINE      WLAST-CHANGE-DATE-IND          W       2 B 0
+DEFINE      WLAST-CHANGE-ID                W       8 A
+DEFINE      WLAST-CHANGE-ID-IND            W       2 B 0
+DEFINE      WORIG-COVERAGE-DATE-PLUS60     W      10 A
+DEFINE      WORIG-COVERAGE-DATE-PLUS60-IND W       2 B 0
+DEFINE      WORIG-COVERAGE-DATE-PLUS75     W      10 A
+DEFINE      WORIG-COVERAGE-DATE-PLUS75-IND W       2 B 0
+DEFINE      WENROLL-LATE-INT               W       1 A
+DEFINE      WASC-PAY-CODE                  W       1 A
+DEFINE      WASC-PAY-CODE-IND              W       2 B 0
+DEFINE      WASC-PAY-CD                    W       1 A
+DEFINE      WASC-PAY-CD-IND                W       2 B 0
+DEFINE      WASC-JOB-CODE                  W       1 A
+DEFINE      WASC-JOB-CODE-IND              W       2 B 0
+DEFINE      WSTATE-PROVINCE-CD-IND         W       2 B 0
+DEFINE      WASC-TYPE-CODE                 W       1 A
+DEFINE      WPEAK-NEWLY-ELIGIBLE-DATE-START W     10 A
+DEFINE      WPEAK-NEWLY-ELIGIBLE-DATE-END   W     10 A
+DEFINE      WMGMT-NEWLY-ELIGIBLE-DATE       W     10 A
+DEFINE      WHRLY-NEWLY-ELIGIBLE-DATE       W     10 A
+DEFINE      WHRLY-NEWLY-ELIGIBLE-DTPLUS90   W     10 A
+DEFINE      WHRLY-NEWLY-ELIGIBLE-DTPLUS194  W     10 A
+DEFINE      WWAIT-DAY-QTY                   W      2 B 0
+DEFINE      WWAIT-DAY-QTY-IND               W      2 B 0
+DEFINE      WSTATE-PROVINCE-CD              W      2 A
+DEFINE      TPLAN-NAME                      W      3 A
+DEFINE      TPLAN-YEAR                      W      2 B 0
+DEFINE      TOPTION-CODE                    W      1 A
+DEFINE      TOPTION-AMT                     W      4 B 0
+DEFINE      WS-NULL-IND                     W      2 B 0
+DEFINE      WS-ORIG-EVENT-DATE              W      10 A
+DEFINE      WS-LAST-CHANGE-ID               W      1 A
+DEFINE      WINS-PROVIDER-ID                W      2 B 0
+DEFINE      WINS-PROVIDER-ID-IND            W      2 B 0
+DEFINE      WINS-BROKER-ID                  W      2 B 0
+DEFINE      WINS-BROKER-ID-IND              W      2 B 0
+DEFINE      WOUT-POCKET-MAX-CD              W      1 A
+DEFINE      WUP-FRONT-ALLOW-CD              W      1 A
+
+DEFINE      WSSN1                          W       4 B 0
+
+WPLAN-YEAR-PREV                     W        2 B 0
+WPAYROLL-DATE-PREV                  W       10 A
+WS-DI-LE-EVENT-DATE                 W       10 A
+WS-DAYS                             W        7 N
+
+WS-MY-BEN-USERID                    W       8  A
+   WS-USERID-CHG-REASON WS-MY-BEN-USERID    2  A
+   WS-USERID-CONST    WS-MY-BEN-USERID  +2  6  A  VALUE 'MBO   '
+WS-OUT-REC-SAVE                     W      190 A
+WS-ENROLLEE-SSN                     W       10 A
+WS-NEWLY-ELIGIBLE                   W        1 A
+WS-SESSION-TS                       W       26 A
+WS-SESSION-DATE     WS-SESSION-TS           10 A
+WS-SESSION-DATE-YY  WS-SESSION-DATE          4 N
+WS-SESSION-DATE-MM  WS-SESSION-DATE +5       2 N
+WS-SESSION-DATE-DD  WS-SESSION-DATE +8       2 N
+WS-WORK-STATE                       W        2 P 0
+WS-ALI-OPT                          W        3 A
+WS-ALI-SSN                          W       10 N 0
+WS-TOTAL-WAGES                      W        8 P 2
+WS-TOTAL-PAY-PERIOD                 W        2 B 0
+WS-ALI-COVERAGE-OPTION              W        1 A
+WS-ALI-AMT                          W       10 N 0
+WS-MAX-DLI-AMT                      W       10 N 0
+WS-MAX-DLI-OPT                      W        1 A
+WS-MAX-DLI-CATG                     W        1 A
+WS-HRS-WRK                          W        5 P 3
+WS-EVENT-DATE-CHANGED               W        1 A
+WS-CHANGE-REASON-CODE               W        2 A VALUE ' '
+WS-EVENT-TYPE-CODE                  W        2 B 0
+WS-GOOD-HEALTH-IND                  W        1 A
+WS-LETTER-NBR                       W      2 B 0
+WS-MSG-TXT                          W     45 A
+WS-ENROLLEE-SSN-BI                  W      4 B 0
+SESSION-DATE-PLUS1                  W     10 A VALUE ' '
+COVRG-DATE-NYEAR                    W     10 A VALUE ' '
+EVENT-DATE-PLUS1                    W     10 A VALUE ' '
+EVENT-DATE-PLUS1-IND                W     2 B 0
+WS-WAIT-PERIOD-END                  W     10 A
+WS-SPOUSE-COV-START-DATE            W     10 A
+WS-CHILD-COV-START-DATE             W     10 A
+WS-NEW-PICKUP-IND                   W     01 A VALUE 'N'
+WS-OPT-CAT-DECREASE                 W     01 A VALUE 'N'
+TWO-RECORDS-FLAG                    W     01 A VALUE 'N'
+FIRST-REC-FLAG                      W     01 A VALUE 'N'
+WS-PT-TRUCK                         W     01 A VALUE 'N'
+WS-TEMP-SSN                         W     10 A
+COV-OPTION-O1                       W     01 A
+COV-CATEGORY-O1                     W     01 A
+HISTORY-TYPE-O1                     W     01 A
+COV-START-DATE-O1                   W     10 A
+COV-OPTION-O2                       W     01 A
+COV-CATEGORY-O2                     W     01 A
+HISTORY-TYPE-O2                     W     01 A
+COV-START-DATE-O2                   W     10 A
+WTRANS-DATE                         W     10 A
+WTRANS-RSTRCT-CODE                  W      2 B  0
+WS-WIN                              W      4 B  0
+WS-WAIT-DAYS                        W      2 B 0
+WTRAN-CHANGE-REASON-CODE            W      2 A
+WTRANS-TYPE-CODE                    W      2 B  0
+
+WS-STD-LTD-NW-ELIG                  W        1 A
+
+WS-DEN-COV-STRT-DT                  W        10 A
+
+WS-EVENT-DATE-LD-SE                 W       10 A
+WS-EVENT-DATE-LD-SE-IND             W        2 B 0
+
+WS-EVENT-DATE-LD                    W       10 A
+WS-EVENT-DATE-LD-IND                W        2 B 0
+
+WS-DIS-COV-STRT-DT                  W        10 A
+
+SSN-CURR-YEAR          W    10 N 0
+SSN-PREV               W    10 N 0
+PLAN-NAME-PREV         W     3 A
+PLAN-YEAR-PREV         W     2 B 0
+COV-START-DATE-PREV    W    10 A
+COV-OPTION-PREV        W     1 A
+COV-CATEGORY-PREV      W     1 A
+ENROLL-RCPT-DATE-PREV  W    10 A
+ORIG-COV-DATE-PREV     W    10 A
+CHANGE-REASON-CD-PREV  W     2 A
+DC-ENROLL-TYPE-PREV    W     5 N 0
+
+WS-ALI-OPT-IND-TY      W     2 N 0
+WS-ALI-OPT-IND-NY      W     2 N 0
+WS-DLI-OPT-IND-TY      W     2 N 0
+WS-DLI-OPT-IND-NY      W     2 N 0
+WS-DLI-CATG-IND-TY     W     2 N 0
+WS-DLI-CATG-IND-NY     W     2 N 0
+
+SW-DEBUG-SWITCH                     W        1 A VALUE 'N'
+SW-CURSOR2A-ACTIV                   W        1 A VALUE 'N'
+
+SW-POST-STD-LTD                     W        1 A
+SW-LOAD-ALI-DLI                     W        1 A
+WS-FOUND-SW                         W        1 A
+WS-COUNTER                          W        2 N
+WS-MGMT-ASSOC                       W        1 A
+WS-OFFICERS                         W        1 A
+WS-AUTO-APPRVL-FLAG                 W        1 A
+WS-JOB-CODE                         W        1 A
+WS-PAY-CODE                         W        1 A
+WS-PAY-CD                           W        1 A
+WS-MGMT-ASSOC1                      W        1 A
+WS-OFFCR-CNT                        W        2 B 0
+WS-SSN                              W        9 P 0
+WS-COVERAGE-OPT-CMP-ONE             W        1 A
+WS-COVERAGE-OPT-CMP-TWO             W        1 A
+WS-COVERAGE-OPT-ONE-INCREASED       W        1 A
+WS-COVERAGE-OPT-ONE-DECREASED       W        1 A
+WS-COVERAGE-OPT-ONE-EQUAL           W        1 A
+COV-OPT-PREV                        W        1 A
+WS-ENR-START-DT                     W       10 A
+WS-ENR-END-DT                       W       10 A
+WS-WIN-NBR                    W     4     B  0
+WS-RELATION-TYPE-CODE         W     5     A  VALUE  '     '
+WS-DP-FOUND-SW                W     1     A  VALUE  'N'
+WS-SP-FOUND-SW                W     1     A  VALUE  'N'
+WS-LEG-DEP-FOUND-SW           W     1     A  VALUE  'N'
+WS-DP-DEP-FOUND-SW            W     1     A  VALUE  'N'
+WS-GENDER-SAME-SW             W     1     A  VALUE  'N'
+WS-SP-COMMN-LAW-SW            W     1     A  VALUE  'N'
+WS-REL-TABLE-EOF-SW           W     1     A  VALUE  'N'
+WS-DEP-CHG-TABLE-EOF-SW       W     1     A  VALUE  'N'
+ ALI-TY-ARRAY  W 11  A   OCCURS  15
+   TABLE-ALI-OPT-TY   ALI-TY-ARRAY       1  A
+   TABLE-ALI-AMT-TY   ALI-TY-ARRAY  +1  10  N
+
+ ALI-NY-ARRAY  W 11  A   OCCURS  15
+   TABLE-ALI-OPT-NY   ALI-NY-ARRAY       1  A
+   TABLE-ALI-AMT-NY   ALI-NY-ARRAY  +1  10  N
+
+ DLI-TY-OPT-ARRAY  W 11  A   OCCURS  15
+   TABLE-DLI-OPT-TY       DLI-TY-OPT-ARRAY       1  A
+   TABLE-DLI-OPT-AMT-TY   DLI-TY-OPT-ARRAY  +1  10  N
+
+ DLI-NY-OPT-ARRAY  W  11 A   OCCURS  15
+   TABLE-DLI-OPT-NY       DLI-NY-OPT-ARRAY       1  A
+   TABLE-DLI-OPT-AMT-NY   DLI-NY-OPT-ARRAY  +1  10  N
+
+ DLI-TY-CATG-ARRAY  W 11  A   OCCURS  15
+   TABLE-DLI-CATG-TY       DLI-TY-CATG-ARRAY       1  A
+   TABLE-DLI-CATG-AMT-TY   DLI-TY-CATG-ARRAY  +1  10  N
+
+ DLI-NY-CATG-ARRAY  W 11  A   OCCURS  15
+   TABLE-DLI-CATG-NY       DLI-NY-CATG-ARRAY       1  A
+   TABLE-DLI-CATG-AMT-NY   DLI-NY-CATG-ARRAY  +1  10  N
+
+WS-WAGES-N                       W    5   N
+WS-WAGES-X1  WS-WAGES-N               2   N
+WS-WAGES-X2  WS-WAGES-N         +2    3   N
+
+WS-STP-OPTION                    W    1   A
+WS-STP-CATEGORY                  W    1   A
+WS-STP-NOCHANGE                  W    1   A
+WS-STP-RECTYPE-CD                W    1   A
+WS-BEN-OPTION                    W    1   A
+WS-SSN1                          W    9   P 0
+WS-PLAN-NAME                     W    3   A
+WS-COV-END-DT                    W    10  A
+WS-COVERAGE-START-DT             W    10  A
+WS-COV-END-DT-IND                W    2   B 0
+WS-ORIG-COV-DT                   W    10  A
+WS-ORIG-COV-DT-IND               W    2   B 0
+WS-EFF-DT                        W    10  A
+WS-WAIT-DAY-QTY                  W    2   B 0
+WS-ENROLL-LT-IND                 W    1   A
+WS-DISTRANS-SW                   W    1   A VALUE 'N'
+
+SQL DECLARE CURSOR1 CURSOR FOR                +
+ SELECT ANNUAL_ENROLL_FLAG,                   +
+        PLAN_YEAR,                            +
+        PLAN_YEAR + 1,                        +
+        LAST_PAYROLL_DATE + 1 DAY,            +
+        LAST_PAYROLL_DATE + 15 DAYS,          +
+        CURRENT DATE                          +
+ FROM   PLAN_YEAR                             +
+ WHERE  CURRENT_YEAR_FLAG = 'Y'               +
+ WITH UR
+
+SQL DECLARE CURSOR2B CURSOR FOR               +
+ SELECT (SUBSTR(CHAR(PLAN_YEAR+1),1,4)        +
+        || '-01-01')                          +
+ FROM   PLAN_YEAR                             +
+ WHERE  CURRENT_YEAR_FLAG = 'Y'               +
+ WITH UR
+
+SQL DECLARE CURSOR2 CURSOR FOR                       +
+ SELECT A.SSN                                     ,  +
+        A.PLAN_NAME                               ,  +
+        A.PLAN_YEAR                               ,  +
+        A.PAYROLL_DATE                            ,  +
+        A.HISTORY_TYPE_CD                         ,  +
+        A.COVERAGE_START_DT                       ,  +
+        A.COVERAGE_END_DT                         ,  +
+        A.COVERAGE_OPTION                         ,  +
+        A.COVERAGE_CATEGORY                       ,  +
+        A.BENEFIT_OPTION                          ,  +
+        A.ENROLLMENT_DATE                         ,  +
+        A.ENROLL_RCPT_DATE                        ,  +
+        A.CONFIRM_DATE                            ,  +
+        A.REMINDER_DATE                           ,  +
+        A.ELIGIBILITY_DATE                        ,  +
+        A.ORIG_COVERAGE_DATE                      ,  +
+        A.ORIG_COVERAGE_DATE + 15 DAYS            ,  +
+        A.ARREARS_CANCEL_DT                       ,  +
+        A.PEAK_TIME_DATE                          ,  +
+        A.DEFAULT_DATE                            ,  +
+        A.COPY_TO_PAYROLL_FL                      ,  +
+        A.CHANGE_REASON_CODE                      ,  +
+        A.LAST_CHANGE_DATE                        ,  +
+        A.LAST_CHANGE_ID                          ,  +
+        A.INS_PROVIDER_ID                         ,  +
+        A.INS_BROKER_ID                           ,  +
+        A.OUT_POCKET_MAX_CD                       ,  +
+        A.UP_FRONT_ALLOW_CD                       ,  +
+        A.ORIG_COVERAGE_DATE + 60 DAYS            ,  +
+        A.ORIG_COVERAGE_DATE + 75 DAYS            ,  +
+        A.ENROLL_LATE_IND                         ,  +
+        B.ASC_PAY_CODE                            ,  +
+        B.ASC_JOB_CODE                            ,  +
+        A.ELIGIBILITY_DATE                            , +
+        A.ELIGIBILITY_DATE + C.PEAK_TIME_DAY_CNT DAYS , +
+        A.ELIGIBILITY_DATE + C.MGT_ENROLL_DAY_CNT DAYS ,  +
+        A.ELIGIBILITY_DATE + C.FT_ENROLL_DAY_CNT DAYS  ,  +
+        B.ASC_WORK_STATE                               ,  +
+        A.ELIGIBILITY_DATE + 90 DAYS                   ,  +
+        DATE(SUBSTR(CHAR(DATE(A.ELIGIBILITY_DATE) + 89 DAYS),1,8) +
+        || '01' )                                      ,  +
+        A.ELIGIBILITY_DATE + C.FT_ENROLL_DAY_CNT DAYS + 90 DAYS,  +
+        A.WAIT_DAY_QTY     ,                              +
+        B.STATE_PROVINCE_CD                               +
+ FROM   BENEFIT_ENROLLMENT A                         +
+      , ASSOCIATE_ID_T B                             +
+      , ENROLLMENT_PLAN_YR C                         +
+ WHERE   A.PLAN_YEAR = :LOOKUP-PLAN-YEAR             +
+    AND  A.PLAN_NAME = :DC-PLAN-NAME                 +
+    AND  A.HISTORY_TYPE_CD = 'E'                     +
+    AND  A.SSN =:WSSN                                +
+    AND  B.ASC_SS_NBR =:WSSN                         +
+    AND  C.PLAN_YEAR = YEAR(CURRENT DATE)            +
+ WITH UR
+
+
+SQL DECLARE CURSOR2A CURSOR FOR                       +
+ SELECT A.SSN                                     ,  +
+        A.PLAN_NAME                               ,  +
+        A.PLAN_YEAR                               ,  +
+        A.PAYROLL_DATE                            ,  +
+        A.HISTORY_TYPE_CD                         ,  +
+        A.COVERAGE_START_DT                       ,  +
+        A.COVERAGE_END_DT                         ,  +
+        A.COVERAGE_OPTION                         ,  +
+        A.COVERAGE_CATEGORY                       ,  +
+        A.BENEFIT_OPTION                          ,  +
+        A.ENROLLMENT_DATE                         ,  +
+        A.ENROLL_RCPT_DATE                        ,  +
+        A.CONFIRM_DATE                            ,  +
+        A.REMINDER_DATE                           ,  +
+        A.ELIGIBILITY_DATE                        ,  +
+        A.ORIG_COVERAGE_DATE                      ,  +
+        A.ORIG_COVERAGE_DATE + 15 DAYS            ,  +
+        A.ARREARS_CANCEL_DT                       ,  +
+        A.PEAK_TIME_DATE                          ,  +
+        A.DEFAULT_DATE                            ,  +
+        A.COPY_TO_PAYROLL_FL                      ,  +
+        A.CHANGE_REASON_CODE                      ,  +
+        A.LAST_CHANGE_DATE                        ,  +
+        A.LAST_CHANGE_ID                          ,  +
+        A.INS_PROVIDER_ID                         ,  +
+        A.INS_BROKER_ID                           ,  +
+        A.OUT_POCKET_MAX_CD                       ,  +
+        A.UP_FRONT_ALLOW_CD                       ,  +
+        A.ORIG_COVERAGE_DATE + 60 DAYS            ,  +
+        A.ORIG_COVERAGE_DATE + 75 DAYS            ,  +
+        A.ENROLL_LATE_IND                         ,  +
+        CASE WHEN PAY_TYPE_CODE = 'S'               +
+           THEN '6'                       +
+           ELSE '1'                       +
+           END                                   , +
+        B.PAY_TYPE_CODE                            , +
+        B.ASC_TYPE_CODE                            ,  +
+        A.ELIGIBILITY_DATE                            , +
+        A.ELIGIBILITY_DATE + C.PEAK_TIME_DAY_CNT DAYS , +
+        A.ELIGIBILITY_DATE + C.MGT_ENROLL_DAY_CNT DAYS ,  +
+        A.ELIGIBILITY_DATE + C.FT_ENROLL_DAY_CNT DAYS  ,  +
+        CAST(D.STATE_NBR AS DECIMAL(2,0))              ,  +
+        A.ELIGIBILITY_DATE + 90 DAYS                   ,  +
+        DATE(SUBSTR(CHAR(DATE(A.ELIGIBILITY_DATE) + 89 DAYS),1,8) +
+        || '01' )                                      ,  +
+        A.ELIGIBILITY_DATE + C.FT_ENROLL_DAY_CNT DAYS + 90 DAYS,  +
+        A.WAIT_DAY_QTY     ,                              +
+        STR_STATE_PROV_CD                                     +
+ FROM  BENEFIT_ENROLLMENT A                              +
+      ,V3_WIN_ASC_NID_US B                          +
+      ,ENROLLMENT_PLAN_YR C                         +
+      ,STATE D                                      +
+ WHERE   A.PLAN_YEAR = :LOOKUP-PLAN-YEAR             +
+    AND  A.PLAN_NAME = :DC-PLAN-NAME                 +
+    AND  A.HISTORY_TYPE_CD = 'E'                     +
+    AND  A.SSN =:WSSN                                +
+    AND  NATIONAL_ID =CAST(SUBSTR(DIGITS(A.SSN),2,9) AS CHAR(23)) +
+    AND  STR_STATE_PROV_CD = STATE_CODE          +
+    AND  C.PLAN_YEAR = YEAR(CURRENT DATE)            +
+ WITH UR
+
+
+SQL DECLARE CURSOR3 CURSOR FOR                       +
+ SELECT A.PLAN_YEAR                               ,  +
+        A.PAYROLL_DATE                               +
+ FROM   BENEFIT_ENROLLMENT A                         +
+ WHERE   A.PLAN_YEAR = :WPLAN-YEAR-PREV              +
+    AND  A.PLAN_NAME = :DC-PLAN-NAME                 +
+    AND  A.HISTORY_TYPE_CD = 'E'                     +
+    AND  A.SSN =:WSSN                                +
+ WITH UR
+
+SQL DECLARE CURSOR4 CURSOR FOR                       +
+ SELECT ENROLLEE_SSN                                 +
+ FROM   ENROLLMENT_LETTER                            +
+ WHERE  ENROLLEE_SSN = :WSSN                         +
+   AND  SESSION_TS = :DC-SESSION-TS                  +
+   AND  LETTER_NBR = 1                               +
+   WITH UR
+
+SQL DECLARE CURSOR4A CURSOR FOR                      +
+ SELECT ENROLLEE_SSN                                 +
+ FROM   ENROLLMENT_LETTER                            +
+ WHERE  ENROLLEE_SSN = :WSSN                         +
+   AND  SESSION_TS = :DC-SESSION-TS                  +
+   AND  LETTER_NBR = :WS-LETTER-NBR                  +
+   WITH UR
+
+
+SQL DECLARE CURSOR5      CURSOR FOR                           +
+ SELECT SUM(ASC_BNFT_WAGES_AMT)                               +
+ FROM   WAGE_HISTORY_T            A                           +
+      , PLAN_YEAR                 B                           +
+      , ASSOCIATE_ID_T            C                           +
+ WHERE  A.ASC_SS_NBR=  :WSSN                                  +
+   AND  A.ASC_SS_NBR=  C.ASC_SS_NBR                           +
+   AND  CURRENT_YEAR_FLAG = 'Y'                               +
+   AND  C.ASC_HIRE_DATE <= A.ASC_PAYROLL_DATE                 +
+   AND  A.ASC_PAYROLL_DATE <= LAST_PAYROLL_DATE               +
+   AND  A.ASC_PAYROLL_DATE >= LAST_PAYROLL_DATE - 350 DAYS    +
+ WITH UR
+
+SQL DECLARE CURSOR5A     CURSOR FOR                              +
+SELECT COUNT(*)                                                  +
+FROM   WAGE_HISTORY_T            A                               +
+     , PLAN_YEAR                 B                               +
+     , ASSOCIATE_ID_T            C                               +
+     , ASSOC_CLASS_ELIG          D                               +
+WHERE  A.ASC_SS_NBR=   :WSSN                                     +
+    AND A.ASC_PAY_CODE =  D.PAY_CODE                             +
+AND A.ASC_JOB_CODE = D.JOB_CODE                                  +
+AND A.ASC_STATUS_CODE =  D.STATUS_CODE                           +
+  AND  A.ASC_SS_NBR=  C.ASC_SS_NBR                               +
+  AND  CURRENT_YEAR_FLAG = 'Y'                                   +
+  AND  A.ASC_PAYROLL_DATE >= C.ASC_HIRE_DATE                     +
+    AND  A.ASC_PAYROLL_DATE <= LAST_PAYROLL_DATE                 +
+    AND  A.ASC_PAYROLL_DATE >= LAST_PAYROLL_DATE - 350 DAYS      +
+    AND ((A.ASC_BNFT_HRS_WRK >= 0 AND SHORT_CLASS = 'MANAGEMENT')  +
+        OR (A.ASC_BNFT_HRS_WRK >= 10 AND SHORT_CLASS = 'HOURLY'))  +
+    AND  A.ASC_PAYROLL_TYPE =  ' '                                 +
+  WITH UR
+
+SQL DECLARE CURSOR6      CURSOR FOR                           +
+ SELECT PLAN_NAME                                             +
+      , PLAN_YEAR                                             +
+      , OPTION_CODE                                           +
+      , OPTION_AMT                                            +
+ FROM   COVERAGE_OPTION           A                           +
+ WHERE  PLAN_YEAR IN (:CURRENT-PLAN-YEAR, :NEXT-PLAN-YEAR)    +
+   AND  PLAN_NAME IN ('ALI','DLI')                            +
+        ORDER BY PLAN_NAME , PLAN_YEAR, OPTION_CODE             +
+ WITH UR
+SQL DECLARE CURSOR7      CURSOR FOR                           +
+  SELECT VALUE(A.CHANGE_REASON_CODE,' ')                      +
+             , A.CHANGE_EVENT_DATE                            +
+             , A.ENROLL_TYPE_CODE                             +
+  FROM    ENROLLMENT_SESSION A                                +
+  WHERE A.ENROLLEE_SSN = :WSSN                                +
+  AND     A.CHANGE_REASON_CODE NOT IN ('AE','NE','LD')        +
+  AND     A.PAYROLL_PROCESS_TS IS NULL                        +
+  AND     A.PROCESS_IND = 'Y'                                 +
+  AND     A.SESSION_TS =                                      +
+               (SELECT MAX(B.SESSION_TS)                      +
+                 FROM ENROLLMENT_SESSION B                    +
+                 WHERE B.ENROLLEE_SSN = :WSSN                 +
+                 AND B.CHANGE_REASON_CODE NOT IN ('AE','NE','LD') +
+                 AND B.PAYROLL_PROCESS_TS IS NULL             +
+                 AND B.PROCESS_IND = 'Y'                      +
+                 AND B.SESSION_TS < :DC-SESSION-TS)           +
+ WITH UR
+
+SQL DECLARE CURSOR8      CURSOR FOR                           +
+  SELECT VALUE(A.CHANGE_REASON_CODE,' ')                      +
+             , A.ENROLL_TYPE_CODE                             +
+  FROM    ENROLLMENT_SESSION A                                +
+  WHERE A.ENROLLEE_SSN = :WSSN                                +
+  AND    A.CHANGE_REASON_CODE IN  ('BI','AP','SC','MA','GS',  +
+         'LE','DI','NE','DS','LA','RW','TC')                  +
+  AND    A.PAYROLL_PROCESS_TS IS NULL                         +
+  AND    A.PROCESS_IND = 'Y'                                  +
+  AND    A.SESSION_TS =                                       +
+          (SELECT MAX(B.SESSION_TS)                           +
+          FROM ENROLLMENT_SESSION B                           +
+          WHERE B.ENROLLEE_SSN = :WSSN                        +
+           AND B.CHANGE_REASON_CODE NOT IN ('HE','SE','FP','PE','LD') +
+           AND B.PAYROLL_PROCESS_TS IS NULL                   +
+           AND B.PROCESS_IND = 'Y'                            +
+           AND B.SESSION_TS < :DC-SESSION-TS)                 +
+ WITH UR
+
+SQL DECLARE CURSOR9      CURSOR FOR                           +
+  SELECT EXTRN_SITE_IND                                       +
+  FROM    ENROLLMENT_SESSION A                                +
+  WHERE A.ENROLLEE_SSN = :WSSN                                +
+  AND     A.PROCESS_IND = 'Y'                                 +
+  AND     A.SESSION_TS = :DC-SESSION-TS                       +
+ WITH UR
+
+SQL DECLARE CURSOR10     CURSOR FOR                           +
+  SELECT BEN_OPTION_CODE                                      +
+       , BENEFIT_CATG_CODE                                    +
+    FROM ASSOC_INS_ENROLL                                     +
+   WHERE ASC_SS_NBR     = :WSSN                               +
+     AND PLAN_NAME      = 'STP'                               +
+     AND RECORD_TYPE_CD = :WS-STP-RECTYPE-CD                  +
+ WITH UR
+
+SQL DECLARE CURSOR11 CURSOR FOR                               +
+  SELECT DATE(SESSION_TS + 1 DAY)                             +
+  FROM   ENROLLMENT_SESSION                                   +
+  WHERE  ENROLLEE_SSN = :WS-ENROLLEE-SSN-BI                   +
+  AND    SESSION_TS  = :SESSION-TIMESTAMP                     +
+WITH UR
+
+SQL DECLARE CURSOR12 CURSOR FOR                               +
+  SELECT DATE(CHANGE_EVENT_DATE + 1 DAY)                      +
+  FROM   ENROLLMENT_SESSION                                   +
+  WHERE  ENROLLEE_SSN = :WSSN                                 +
+  AND    SESSION_TS  = :SESSION-TIMESTAMP                     +
+WITH UR
+
+
+SQL DECLARE GETRELCD CURSOR FOR                                     +
+SELECT DISTINCT R.RELATION_TYPE_CODE                                +
+FROM   INSURED_PERSON               P                               +
+      ,INSURED_RELATION             R                               +
+WHERE  P.NATIONAL_ID                =  :WSSN                        +
+AND    P.PERSON_ID                  =  R.PRI_PERSON_ID              +
+AND (R.RELATION_STOP_DATE IS NULL OR                                +
+R.RELATION_STOP_DATE >= CURRENT DATE )                              +
+WITH UR
+SQL DECLARE GETRELDP CURSOR FOR                                     +
+SELECT D.RELATION_TYPE                                              +
+FROM  DEPENDENT_CHANGE  D , ENROLLMENT_SESSION E                    +
+WHERE D.ENROLLEE_SSN = :WSSN                                        +
+AND   D.ENROLLEE_SSN = E.ENROLLEE_SSN                               +
+AND   D.SESSION_TS  = E.SESSION_TS                                  +
+AND   E.PROCESS_IND = 'Y'                                           +
+AND   D.DEP_COVERED_IND = 'Y'                                       +
+AND   D.SESSION_TS = ( SELECT                                       +
+                     MAX(DC.SESSION_TS)                             +
+                     FROM DEPENDENT_CHANGE DC                       +
+                     WHERE                                          +
+                     DC.ENROLLEE_SSN = :WSSN                        +
+                AND  DC.PROCESS_IND = 'Y' )                         +
+WITH UR
+SQL DECLARE GETWINNBR     CURSOR FOR                                +
+SELECT DISTINCT(WIN_NBR) , ASC_TYPE_CODE                            +
+FROM  V3_WIN_ASC_NID_US,ASSOCIATE_ID_T                              +
+WHERE NATIONAL_ID =                                                 +
+              CAST(SUBSTR(DIGITS(ASC_SS_NBR),2,9) AS CHAR(23))      +
+AND ASC_SS_NBR = :WSSN                                              +
+WITH UR
+
+
+SQL DECLARE GETWINNBRNEW  CURSOR FOR                                +
+SELECT DISTINCT(WIN_NBR) , ASC_TYPE_CODE                            +
+FROM  V3_WIN_ASC_NID_US                                             +
+WHERE NATIONAL_ID =                                                 +
+              CAST(SUBSTR(DIGITS(:WSSN1),2,9) AS CHAR(23))           +
+WITH UR
+
+
+SQL DECLARE GETGENDER CURSOR FOR                                    +
+SELECT 'Y'                                                          +
+FROM  V3_WIN_ASC_NID_US V ,                                         +
+      DEPENDENT_CHANGE  D                                           +
+WHERE D.ENROLLEE_SSN = :WSSN                                        +
+AND   V.NATIONAL_ID                                                 +
+            = CAST(SUBSTR(DIGITS(D.ENROLLEE_SSN),2,9) AS CHAR(23))  +
+AND   D.RELATION_TYPE = 'SP'                                        +
+AND   V.GENDER_CODE   = D.DEP_GENDER_IND                            +
+AND   D.SESSION_TS    = (                                           +
+                         SELECT MAX(D1.SESSION_TS)                  +
+                         FROM DEPENDENT_CHANGE D1                   +
+                         WHERE D1.ENROLLEE_SSN  = :WSSN             +
+                         AND D1.RELATION_TYPE   = 'SP'              +
+                         AND D1.PROCESS_IND = 'Y'                   +
+                         AND D1.DEP_COVERED_IND = 'Y')              +
+WITH UR
+SQL DECLARE GETUNIONCD CURSOR FOR                                  +
+SELECT 'Y'                                                         +
+FROM   ASSOC_PARTNER_SESSION P1                                    +
+WHERE  P1.UNION_TYPE_CD    = 2                                     +
+AND    P1.ENROLLEE_WIN_NBR = :WS-WIN-NBR                           +
+AND    P1.SESSION_TS IN (                                          +
+                         SELECT  MAX(P2.SESSION_TS)                +
+                         FROM    ASSOC_PARTNER_SESSION  P2         +
+                         WHERE   P2.UNION_TYPE_CD = 2              +
+                         AND     P2.ENROLLEE_WIN_NBR               +
+                                 = P1.ENROLLEE_WIN_NBR)            +
+WITH UR
+SQL    DECLARE TRANSITION CURSOR FOR                       +
+SELECT WIN_NBR                                             +
+      ,COALESCE(DATE(MAX(LAST_CHG_TS)),'0001-01-01')       +
+      ,TRANS_RSTRCTN_CODE                                  +
+      ,CHANGE_REASON_CODE                                  +
+      ,ASSOC_TRANS_TYPE_CODE                               +
+FROM   ASSOCIATE_TRANSITION                                +
+WHERE  WIN_NBR               = :WS-WIN-NBR                 +
+AND    FIRST_SESSN_CPLT_IND  = 'Y'                         +
+AND    ((TRANS_OBSOLETE_DATE IS NULL                       +
+AND    CURRENT DATE BETWEEN TRANS_EFFECTIVE_DATE           +
+AND    (TRANS_EFFECTIVE_DATE + 61 DAYS))                   +
+OR     (TRANS_OBSOLETE_DATE IS NOT NULL                    +
+AND    TRANS_OBSOLETE_DATE > CURRENT DATE))                +
+AND    CURRENT_DATE          >= TRANS_EFFECTIVE_DATE       +
+AND    CURRENT_DATE          <=                            +
+       CASE WHEN TRANS_OBSOLETE_DATE                       +
+                             IS NULL                       +
+                 THEN TRANS_EFFECTIVE_DATE + 61 DAYS       +
+            WHEN TRANS_OBSOLETE_DATE                       +
+                             IS NOT NULL                   +
+                 THEN TRANS_OBSOLETE_DATE                  +
+       END                                                 +
+GROUP  BY                                                  +
+       WIN_NBR                                             +
+      ,TRANS_RSTRCTN_CODE                                  +
+      ,CHANGE_REASON_CODE                                  +
+      ,ASSOC_TRANS_TYPE_CODE                               +
+WITH UR
+SQL    DECLARE WAITDAYS CURSOR FOR                         +
+SELECT DAYS(DATE(:COV-START-DATE-O))                       +
+     - DAYS(DATE(:WELIGIBILITY-DATE))                      +
+FROM   SYSIBM.SYSDUMMY1                                    +
+WITH   UR
+SQL    DECLARE GETCOVST CURSOR FOR                         +
+SELECT DATE(:WS-COVERAGE-START-DT) + 365 DAYS              +
+FROM   SYSIBM.SYSDUMMY1                                    +
+WITH   UR
+
+SQL DECLARE STDLTD CURSOR FOR                              +
+SELECT   ASC_SS_NBR,                                       +
+         BEN_OPTION_CODE,                                  +
+         PLAN_NAME,                                        +
+         EFFECTIVE_DT,                                     +
+         ORIG_COVERAGE_DATE,                               +
+         COVERAGE_END_DT,                                  +
+         WAIT_DAY_QTY,                                     +
+         ENROLL_LATE_IND                                   +
+FROM   ASSOC_INS_ENROLL                                    +
+WHERE    ASC_SS_NBR = :WSSN AND                            +
+         RECORD_TYPE_CD = 'F' AND                          +
+         CREATE_TS =                                       +
+                    (SELECT MAX(B.CREATE_TS)               +
+                    FROM ASSOC_INS_ENROLL B                +
+                    WHERE B.ASC_SS_NBR = :WSSN             +
+                    AND PLAN_NAME = :DC-PLAN-NAME          +
+                    AND RECORD_TYPE_CD = 'F')              +
+WITH UR
+
+SQL DECLARE PREVSES  CURSOR FOR                               +
+  SELECT VALUE(A.CHANGE_REASON_CODE,' ')                      +
+             , A.ENROLL_TYPE_CODE                             +
+             , A.CHANGE_EVENT_DATE                            +
+             , A.SESSION_TS                                   +
+  FROM    ENROLLMENT_SESSION A                                +
+  WHERE   A.ENROLLEE_SSN = :WSSN                              +
+  AND     A.CHANGE_REASON_CODE                                +
+              NOT IN ('AE','NE','AD','PD','RS','PH','DT')     +
+  AND     A.CHANGE_REASON_CODE ^=  :DC-CHANGE-REASON-CODE     +
+  AND     A.PAYROLL_PROCESS_TS IS NULL                        +
+  AND     A.PROCESS_IND = 'Y'                                 +
+  AND     A.SESSION_TS =                                      +
+               (SELECT MAX(B.SESSION_TS)                      +
+                 FROM ENROLLMENT_SESSION B                    +
+                 WHERE B.ENROLLEE_SSN = :WSSN                 +
+                 AND B.CHANGE_REASON_CODE                     +
+                 NOT IN ('AE','NE','AD','PD','RS','PH','DT')  +
+                 AND B.CHANGE_REASON_CODE ^=  :DC-CHANGE-REASON-CODE   +
+                 AND B.PAYROLL_PROCESS_TS IS NULL             +
+                 AND B.PROCESS_IND = 'Y'                      +
+                 AND B.SESSION_TS < :DC-SESSION-TS)           +
+ WITH UR
+
+SQL    DECLARE DISTRANS CURSOR FOR                         +
+SELECT 'Y'                                                 +
+FROM   ASSOCIATE_TRANSITION                                +
+WHERE  WIN_NBR               = :WS-WIN-NBR                 +
+AND    ((TRANS_OBSOLETE_DATE IS NULL                       +
+AND    CURRENT DATE BETWEEN TRANS_EFFECTIVE_DATE           +
+AND    (TRANS_EFFECTIVE_DATE + 61 DAYS))                   +
+OR     (TRANS_OBSOLETE_DATE IS NOT NULL                    +
+AND    TRANS_OBSOLETE_DATE > CURRENT DATE))                +
+WITH UR
+
+JOB INPUT DEPDATA START PROCESS-HOUSEKEEPING FINISH DISPLAY-COUNTS
+
+SESSION-TIMESTAMP = DC-SESSION-TS
+WS-ENROLLEE-SSN = DC-ENROLLEE-SSN
+
+IF DC-PLAN-YEAR = CURRENT-PLAN-YEAR
+   SSN-CURR-YEAR = DC-ENROLLEE-SSN
+END-IF
+ WS-SESSION-DATE   = SESSION-DATE
+
+TWO-RECORDS-FLAG = 'N'
+FIRST-REC-FLAG   = 'N'
+
+
+WEB-COUNT = WEB-COUNT + 1
+
+   WS-SESSION-MONTH = DC-SESSION-TS-MONTH + 1
+   WS-EVENT-MONTH   = WS-SESSION-MONTH
+   WS-EVENT-YEAR    = DC-SESSION-TS-YEAR
+   WS-EVENT-DAY     = 01
+   IF WS-EVENT-MONTH = 13
+      WS-EVENT-MONTH = 01
+      WS-EVENT-YEAR  = WS-EVENT-YEAR + 1
+   END-IF
+   WS-SESSION-MONTH = DC-SESSION-TS-MONTH + 2
+   WS-EVENT-MONTH1  = WS-SESSION-MONTH
+   WS-EVENT-YEAR1   = DC-SESSION-TS-YEAR
+   WS-EVENT-DAY1    = 01
+   IF WS-EVENT-MONTH1 = 13
+      WS-EVENT-MONTH1 = 01
+      WS-EVENT-YEAR1  = WS-EVENT-YEAR1 + 1
+   END-IF
+   IF WS-EVENT-MONTH1 = 14
+      WS-EVENT-MONTH1 = 02
+      WS-EVENT-YEAR1 = WS-EVENT-YEAR1 + 1
+   END-IF
+   IF FIRST-FLAG = 'Y'
+      PERFORM GET-PLAN-YEAR
+      SW-LOAD-ALI-DLI =  'N'
+      PERFORM GET-ALI-DLI-AMOUNTS
+      FIRST-FLAG = 'N'
+   END-IF
+
+    IF DC-PAYROLL-PROCESS-TS-NULL-IND ^= '?'
+       IF SW-DEBUG-SWITCH = 'Y'
+       END-IF
+       GO TO JOB
+    END-IF
+
+
+IF DC-CHANGE-REASON-CODE = 'NC'
+   DC-CHANGE-REASON-CODE = 'AE'
+   DC-ENROLL-TYPE-CODE   =  4
+END-IF
+    IF SW-DEBUG-SWITCH = 'Y'
+               DC-ES-PROCESS-IND ' EC ' DC-EC-PROCESS-IND ' ' +
+             ' PAY ' DC-PAYROLL-LOAD-IND ' RC ' DC-CHANGE-REASON-CODE +
+               ' TC ' DC-ENROLL-TYPE-CODE
+    END-IF
+    WSSN = DC-ENROLLEE-SSN
+    LOOKUP-PLAN-YEAR = DC-PLAN-YEAR
+    PERFORM GET-BENEFIT-DATA
+    IF DC-PLAN-NAME = 'STD' 'LTD'
+       PERFORM GET-ASSOC-INS-DATA
+    END-IF
+    IF DC-CHANGE-REASON-CODE = 'LD' AND +
+       DC-PLAN-NAME = 'MED' 'DEN' 'ADD' 'VIS'
+       WS-CHANGE-REASON-CODE = ' '
+       WS-EVENT-TYPE-CODE    = 0
+       PERFORM GET-PREV-REASON-SAME-DAY
+       IF WS-CHANGE-REASON-CODE ^= ' '
+          DC-CHANGE-REASON-CODE = WS-CHANGE-REASON-CODE
+          DC-ENROLL-TYPE-CODE = WS-EVENT-TYPE-CODE
+          IF (WS-CHANGE-REASON-CODE = 'MA' 'GS' 'DI' 'LE' 'BI' 'AP' +
+                                      'SC' 'DS' 'LA' 'RW' 'TC')
+              DC-CHANGE-EVENT-DATE   = WS-EVENT-DATE-LD
+              COV-START-DATE-O       = WS-EVENT-DATE-LD
+              WS-ORIG-EVENT-DATE     = WS-EVENT-DATE-LD
+          END-IF
+          IF SW-DEBUG-SWITCH = 'Y'
+                     ' TYPE CHANGED TO ' WS-EVENT-TYPE-CODE
+          END-IF
+       END-IF
+    END-IF
+
+    IF DC-CHANGE-REASON-CODE = 'LD' AND +
+       DC-PLAN-NAME = 'STD' 'LTD'
+       WS-CHANGE-REASON-CODE = ' '
+       WS-EVENT-TYPE-CODE    = 0
+       PERFORM GET-PREV-SESSION-SAME-DAY
+       IF WS-CHANGE-REASON-CODE ^= ' '
+          IF ((WS-CHANGE-REASON-CODE = 'MA' 'GS' 'DI' 'LE' 'BI' 'AP' +
+              'SC' 'DS' 'LA' 'RW' 'TC') OR +
+             (WS-CHANGE-REASON-CODE = 'SE' AND DC-PLAN-NAME = 'STD'))
+             DC-CHANGE-REASON-CODE  = WS-CHANGE-REASON-CODE
+             DC-ENROLL-TYPE-CODE    = WS-EVENT-TYPE-CODE
+             DC-CHANGE-EVENT-DATE   = WS-EVENT-DATE-LD-SE
+          ELSE
+             DC-CHANGE-REASON-CODE = 'LD'
+          END-IF
+          IF SW-DEBUG-SWITCH = 'Y'
+                     ' TYPE CHANGED TO ' WS-EVENT-TYPE-CODE
+          END-IF
+       END-IF
+    END-IF
+
+    IF DC-CHANGE-REASON-CODE = 'SE' AND +
+       DC-PLAN-NAME ^= 'STD'
+       WS-CHANGE-REASON-CODE = ' '
+       WS-EVENT-TYPE-CODE    = 0
+       PERFORM GET-PREV-SESSION-SAME-DAY
+       IF WS-CHANGE-REASON-CODE ^= ' '
+          IF (WS-CHANGE-REASON-CODE = 'MA' 'GS' 'DI' 'LE' 'TC' +
+                                   'BI' 'AP' 'SC' 'LD' 'DS' 'LA' 'RW')
+             DC-CHANGE-REASON-CODE  = WS-CHANGE-REASON-CODE
+             DC-ENROLL-TYPE-CODE    = WS-EVENT-TYPE-CODE
+             IF (WS-CHANGE-REASON-CODE = 'LD')
+                 IF DC-PLAN-NAME = 'ALI' 'DLI'
+                    CONTINUE
+                 ELSE
+                   IF DC-PLAN-NAME = 'MED' 'DEN' 'ADD' 'VIS'
+                      WS-CHANGE-REASON-CODE = ' '
+                      WS-EVENT-TYPE-CODE    = 0
+                      PERFORM GET-PREV-REASON-SAME-DAY
+                      IF WS-CHANGE-REASON-CODE ^= ' '
+                         DC-CHANGE-REASON-CODE = WS-CHANGE-REASON-CODE
+                         DC-ENROLL-TYPE-CODE = WS-EVENT-TYPE-CODE
+                       END-IF
+                 ELSE
+                   DC-SESSION-TS          = WS-SESSION-TS
+                   PERFORM GET-PREV-SESSION-SAME-DAY
+                   IF (WS-CHANGE-REASON-CODE = 'MA' 'GS' 'DI' 'LE' +
+                                   'TC' 'RW' 'BI' 'SC' 'AP' 'DS' 'LA')
+                       DC-CHANGE-REASON-CODE  = WS-CHANGE-REASON-CODE
+                       DC-ENROLL-TYPE-CODE    = WS-EVENT-TYPE-CODE
+                       DC-CHANGE-EVENT-DATE   = WS-EVENT-DATE-LD-SE
+                   ELSE
+                       DC-CHANGE-REASON-CODE = 'SE'
+                   END-IF
+                 END-IF
+                 END-IF
+             ELSE
+                 DC-CHANGE-EVENT-DATE   = WS-EVENT-DATE-LD-SE
+             END-IF
+          ELSE
+             DC-CHANGE-REASON-CODE = 'SE'
+          END-IF
+          IF SW-DEBUG-SWITCH = 'Y'
+                     ' TYPE CHANGED TO ' WS-EVENT-TYPE-CODE
+          END-IF
+       END-IF
+    END-IF
+IF DC-CHANGE-REASON-CODE = 'HE' 'PE' AND +
+   DC-PLAN-NAME = 'MED' 'VIS'
+   DC-CHANGE-REASON-CODE = 'SE'
+   DC-ENROLL-TYPE-CODE   = 68
+END-IF
+IF DC-CHANGE-REASON-CODE = 'FP'  AND +
+   DC-PLAN-NAME = 'MED' 'VIS'
+   DC-CHANGE-REASON-CODE = 'FP'
+   DC-ENROLL-TYPE-CODE   = 17
+END-IF
+IF DC-CHANGE-REASON-CODE = 'HE' 'FP' 'PE' AND +
+   DC-PLAN-NAME = 'ALI' 'DLI' 'STD' 'LTD'
+   DC-CHANGE-REASON-CODE = 'LD'
+   DC-ENROLL-TYPE-CODE   = 64
+END-IF
+IF DC-CHANGE-REASON-CODE = 'SE' 'HE' 'FP' 'PE' AND +
+   DC-PLAN-NAME =  'DEN' 'ADD'
+   WS-CHANGE-REASON-CODE = ' '
+   WS-EVENT-TYPE-CODE    = 0
+   PERFORM GET-PREV-REASON-HE
+   IF WS-CHANGE-REASON-CODE ^= ' '
+      DC-CHANGE-REASON-CODE = WS-CHANGE-REASON-CODE
+      DC-ENROLL-TYPE-CODE = WS-EVENT-TYPE-CODE
+      IF SW-DEBUG-SWITCH = 'Y'
+              ' TYPE CHANGED TO ' WS-EVENT-TYPE-CODE
+         END-IF
+      END-IF
+END-IF
+    WS-ORIG-EVENT-DATE = ' '
+    WS-EVENT-DATE-CHANGED = 'N'
+    IF DC-CHANGE-REASON-CODE = 'LE'  AND  +
+       DC-PLAN-NAME ^= 'STD' 'LTD'
+       WS-ORIG-EVENT-DATE = DC-CHANGE-EVENT-DATE
+       PERFORM GET-EVENT-DATE
+       DC-CHANGE-EVENT-DATE = WS-DI-LE-EVENT-DATE
+       IF SW-DEBUG-SWITCH = 'Y'
+       END-IF
+    END-IF
+    IF DC-CHANGE-REASON-CODE = 'DI' 'DS'
+ *31 - ADD 'ADD' TO CONDTION NOW THAT CATEGORY CODE IS USED
+       IF DC-PLAN-NAME = 'MED' 'DEN' 'STD' 'DLI' 'ADD' 'VIS'  AND +
+          DC-CATEGORY-CODE < WCOVERAGE-CATEGORY
+          WS-ORIG-EVENT-DATE = DC-CHANGE-EVENT-DATE
+          IF SW-DEBUG-SWITCH = 'Y'
+          END-IF
+          PERFORM GET-EVENT-DATE
+          DC-CHANGE-EVENT-DATE = WS-DI-LE-EVENT-DATE
+          WS-EVENT-DATE-CHANGED = 'Y'
+       END-IF
+       WS-COVERAGE-OPT-CMP-ONE = DC-OPTION-CODE
+       WS-COVERAGE-OPT-CMP-TWO = WCOVERAGE-OPTION
+       WS-COVERAGE-OPT-ONE-INCREASED  = 'N'
+       WS-COVERAGE-OPT-ONE-DECREASED  = 'N'
+       WS-COVERAGE-OPT-ONE-EQUAL  = 'N'
+       PERFORM COMPARE-COVERAGE-OPTIONS
+       IF DC-PLAN-NAME = 'ADD' 'ALI' 'DLI' AND +
+          WS-COVERAGE-OPT-ONE-DECREASED = 'Y' AND +
+          WS-EVENT-DATE-CHANGED = 'N'
+           WS-ORIG-EVENT-DATE = DC-CHANGE-EVENT-DATE
+          IF SW-DEBUG-SWITCH = 'Y'
+           END-IF
+           PERFORM GET-EVENT-DATE
+           DC-CHANGE-EVENT-DATE = WS-DI-LE-EVENT-DATE
+       END-IF
+    END-IF
+   IF  DC-ENROLLEE-SSN  = SSN-PREV        AND +
+       DC-PLAN-NAME = PLAN-NAME-PREV      AND +
+       CHANGE-REASON-CD-PREV = 'LE'       AND +
+       DC-CHANGE-REASON-CODE = 'AE'       AND +
+       DC-ENROLL-TYPE-PREV =  67          AND +
+       DC-ENROLL-TYPE-CODE =  67
+           PERFORM GET-EVENT-DATE
+           DC-CHANGE-EVENT-DATE = WS-DI-LE-EVENT-DATE
+       IF SW-DEBUG-SWITCH = 'Y'
+       END-IF
+   END-IF
+   IF  DC-ENROLLEE-SSN  = SSN-PREV         AND +
+       DC-PLAN-NAME = PLAN-NAME-PREV        AND +
+       CHANGE-REASON-CD-PREV = 'DI'         AND +
+       DC-CHANGE-REASON-CODE = 'AE'         AND +
+       DC-ENROLL-TYPE-PREV = 13             AND +
+       DC-ENROLL-TYPE-CODE = 13             AND +
+       DC-OPTION-CODE <= COV-OPTION-O       AND +
+       DC-CATEGORY-CODE < COV-CATEGORY-O
+           PERFORM GET-EVENT-DATE
+           DC-CHANGE-EVENT-DATE = WS-DI-LE-EVENT-DATE
+       IF SW-DEBUG-SWITCH = 'Y'
+       END-IF
+   END-IF
+
+   IF  DC-ENROLLEE-SSN  = SSN-PREV         AND +
+       DC-PLAN-NAME = PLAN-NAME-PREV        AND +
+       CHANGE-REASON-CD-PREV = 'DS'         AND +
+       DC-CHANGE-REASON-CODE = 'AE'         AND +
+       DC-ENROLL-TYPE-PREV = 16             AND +
+       DC-ENROLL-TYPE-CODE = 16             AND +
+       DC-OPTION-CODE <= COV-OPTION-O       AND +
+       DC-CATEGORY-CODE < COV-CATEGORY-O
+           PERFORM GET-EVENT-DATE
+           DC-CHANGE-EVENT-DATE = WS-DI-LE-EVENT-DATE
+       IF SW-DEBUG-SWITCH = 'Y'
+       END-IF
+   END-IF
+
+   IF SW-DEBUG-SWITCH = 'Y'
+                DC-CHANGE-EVENT-DATE  ' ' DC-PLAN-NAME
+   END-IF
+
+    IF ( DC-ES-PROCESS-IND = 'Y' AND                  +
+        DC-EC-PROCESS-IND = 'Y' AND                  +
+        DC-PAYROLL-LOAD-IND = 'Y')
+
+        IF SW-DEBUG-SWITCH = 'Y'
+        END-IF
+    ELSE
+       IF (DC-PLAN-NAME = 'ALI' AND                  +
+           DC-ES-PROCESS-IND = 'Y' AND               +
+           DC-EC-PROCESS-IND = 'Y' AND               +
+           DC-PAYROLL-LOAD-IND ^= ' ' AND            +
+           WS-NEWLY-ELIGIBLE     = 'Y')
+           IF SW-DEBUG-SWITCH = 'Y'
+           END-IF
+       ELSE
+         IF DC-PLAN-NAME = 'DLI'
+            WS-DENIAL-LETTER = 'N'
+            WSSN = DC-ENROLLEE-SSN
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            PERFORM CHECK-FOR-DENIAL-LETTER
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+         END-IF
+         IF (DC-PLAN-NAME = 'DLI' AND               +
+             DC-ES-PROCESS-IND = 'Y' AND            +
+             DC-EC-PROCESS-IND = 'Y' AND            +
+             DC-PAYROLL-LOAD-IND ^= ' '             +
+             AND WS-DENIAL-LETTER = 'N' )
+
+             IF SW-DEBUG-SWITCH = 'Y'
+             END-IF
+         ELSE
+       WS-COVERAGE-OPT-CMP-ONE = DC-OPTION-CODE
+       WS-COVERAGE-OPT-CMP-TWO = WCOVERAGE-OPTION
+       WS-COVERAGE-OPT-ONE-INCREASED  = 'N'
+       WS-COVERAGE-OPT-ONE-DECREASED  = 'N'
+       WS-COVERAGE-OPT-ONE-EQUAL  = 'N'
+       PERFORM COMPARE-COVERAGE-OPTIONS
+            IF DC-PLAN-NAME = 'ALI'  AND +
+            WS-COVERAGE-OPT-ONE-DECREASED  = 'Y'
+            ELSE
+             IF (( WASC-PAY-CODE = '1' '3' '6' AND +
+                WASC-JOB-CODE = 'T' 'P' ) OR WS-PT-TRUCK = 'Y' ) AND  +
+                DC-PLAN-NAME = 'ALI' AND  WS-SESSION-DATE-YY = 2016 +
+                AND DC-CHANGE-REASON-CODE = 'AE'
+                     IF SW-DEBUG-SWITCH = 'Y'
+                     END-IF
+             ELSE
+               IF SW-DEBUG-SWITCH = 'Y'
+                           DC-ENROLLEE-SSN
+               END-IF
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+               IF SW-CURSOR2A-ACTIV = 'Y'
+                  PERFORM CLOSE-BENEFIT-DATAN
+               END-IF
+               PERFORM CLOSE-BENEFIT-DATA
+               GO TO JOB
+             END-IF
+            END-IF
+         END-IF
+       END-IF
+    END-IF
+
+    WS-ENROLLEE-SSN-BI = DC-ENROLLEE-SSN
+    PERFORM GET-SESSION-DATE-PLUS1
+
+    PERFORM BUILD-UPDATE-YEAR-RECORD
+    IF SW-DEBUG-SWITCH = 'Y'
+    END-IF
+    IF SW-CURSOR2A-ACTIV = 'Y'
+       PERFORM CLOSE-BENEFIT-DATAN
+    END-IF
+    PERFORM CLOSE-BENEFIT-DATA
+
+GET-BENEFIT-DATA. PROC
+ SQL OPEN CURSOR2
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               DC-ENROLLEE-SSN
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ WWAIT-DAY-QTY = 0
+ SQL FETCH CURSOR2                                   +
+ INTO :WSSN ,                                        +
+      :WPLAN-NAME ,                                  +
+      :WPLAN-YEAR ,                                  +
+      :WPAYROLL-DATE :WPAYROLL-DATE-IND,             +
+      :WHISTORY-TYPE-CD ,                            +
+      :WCOVERAGE-START-DT :WCOVERAGE-START-DT-IND,   +
+      :WCOVERAGE-END-DT :WCOVERAGE-END-DT-IND,       +
+      :WCOVERAGE-OPTION ,                            +
+      :WCOVERAGE-CATEGORY ,                          +
+      :WBENEFIT-OPTION ,                             +
+      :WENROLLMENT-DATE :WENROLLMENT-DATE-IND,       +
+      :WENROLL-RCPT-DATE :WENROLL-RCPT-DATE-IND,     +
+      :WCONFIRM-DATE :WCONFIRM-DATE-IND,             +
+      :WREMINDER-DATE :WREMINDER-DATE-IND,           +
+      :WELIGIBILITY-DATE :WELIGIBILITY-DATE-IND,     +
+      :WORIG-COVERAGE-DATE :WORIG-COVERAGE-DATE-IND, +
+      :WORIG-COVERAGE-DATE-PLUS15                    +
+      :WORIG-COVERAGE-DATE-PLUS15-IND,               +
+      :WARREARS-CANCEL-DT :WARREARS-CANCEL-DT-IND,   +
+      :WPEAK-TIME-DATE :WPEAK-TIME-DATE-IND,         +
+      :WDEFAULT-DATE :WDEFAULT-DATE-IND,             +
+      :WCOPY-TO-PAYROLL-FL ,                         +
+      :WCHANGE-REASON-CODE :WCHANGE-REASON-CODE-IND, +
+      :WLAST-CHANGE-DATE :WLAST-CHANGE-DATE-IND,     +
+      :WLAST-CHANGE-ID :WLAST-CHANGE-ID-IND,         +
+      :WINS-PROVIDER-ID :WINS-PROVIDER-ID-IND,       +
+      :WINS-BROKER-ID :WINS-BROKER-ID-IND,           +
+      :WOUT-POCKET-MAX-CD,                           +
+      :WUP-FRONT-ALLOW-CD,                           +
+      :WORIG-COVERAGE-DATE-PLUS60                    +
+      :WORIG-COVERAGE-DATE-PLUS60-IND,               +
+      :WORIG-COVERAGE-DATE-PLUS75                    +
+      :WORIG-COVERAGE-DATE-PLUS75-IND,               +
+      :WENROLL-LATE-INT,                             +
+      :WASC-PAY-CODE,                                +
+      :WASC-JOB-CODE,                                +
+      :WPEAK-NEWLY-ELIGIBLE-DATE-START,              +
+      :WPEAK-NEWLY-ELIGIBLE-DATE-END,                +
+      :WMGMT-NEWLY-ELIGIBLE-DATE,                    +
+      :WHRLY-NEWLY-ELIGIBLE-DATE,                    +
+      :WS-WORK-STATE,                                +
+      :WHRLY-NEWLY-ELIGIBLE-DTPLUS90,                +
+      :WS-DIS-COV-STRT-DT,                           +
+      :WHRLY-NEWLY-ELIGIBLE-DTPLUS194,               +
+      :WWAIT-DAY-QTY:WWAIT-DAY-QTY-IND ,             +
+      :WSTATE-PROVINCE-CD
+
+   IF SQLCODE = 0
+      IF  WPLAN-NAME  = 'ALI'
+          WS-ALI-COVERAGE-OPTION =  WCOVERAGE-OPTION
+      END-IF
+      WS-NEWLY-ELIGIBLE = 'N'
+      WS-STD-LTD-NW-ELIG = 'N'
+      IF WS-TEMP-SSN NE WS-ENROLLEE-SSN
+         WS-PT-TRUCK = 'N'
+         IF WASC-JOB-CODE = 'D'
+            PERFORM GET-WIN-NBR
+         END-IF
+      END-IF
+      IF ( WASC-PAY-CODE = '1' '3' '6'  AND      +
+         WASC-JOB-CODE = 'P' 'T' OR WS-PT-TRUCK = 'Y' ) AND +
+         SESSION-DATE <= WCOVERAGE-START-DT
+         WS-NEWLY-ELIGIBLE     = 'Y'
+         WS-WAIT-PERIOD-END    = WCOVERAGE-START-DT
+         IF  WPLAN-NAME  = 'DEN'
+             WS-DEN-COV-STRT-DT = WCOVERAGE-START-DT
+         END-IF
+         IF  ( WPLAN-NAME  = 'STD' 'LTD') AND +
+             SESSION-DATE <= WS-DEN-COV-STRT-DT
+             WS-STD-LTD-NW-ELIG = 'Y'
+         END-IF
+      ELSE
+         IF WASC-PAY-CODE = '1'    AND      +
+            WASC-JOB-CODE = 'F'    AND      +
+            SESSION-DATE <= WCOVERAGE-START-DT
+            WS-NEWLY-ELIGIBLE     = 'Y'
+         IF (WPLAN-NAME  = 'STD' 'LTD') AND +
+             SESSION-DATE <= WS-DIS-COV-STRT-DT
+             WS-STD-LTD-NW-ELIG = 'Y'
+         END-IF
+            WS-WAIT-PERIOD-END    = WCOVERAGE-START-DT
+         ELSE
+            IF SESSION-DATE <= WMGMT-NEWLY-ELIGIBLE-DATE
+               WS-NEWLY-ELIGIBLE = 'Y'
+            IF (WPLAN-NAME  = 'STD' 'LTD')
+                  WS-STD-LTD-NW-ELIG = 'Y'
+            END-IF
+               WS-WAIT-PERIOD-END = SESSION-DATE
+            ELSE
+               WS-NEWLY-ELIGIBLE = 'N'
+               WS-STD-LTD-NW-ELIG = 'N'
+            END-IF
+         END-IF
+      END-IF
+      IF SW-DEBUG-SWITCH = 'Y'
+                 ' ' WS-NEWLY-ELIGIBLE                                +
+                 ' ' WASC-PAY-CODE                                    +
+                 ' ' WASC-JOB-CODE                                    +
+                 ' ES ' SESSION-DATE                                  +
+                 ' PTB ' WPEAK-NEWLY-ELIGIBLE-DATE-START              +
+                 ' PTE ' WPEAK-NEWLY-ELIGIBLE-DATE-END                +
+                 ' MED ' WMGMT-NEWLY-ELIGIBLE-DATE                    +
+                 ' HED ' WHRLY-NEWLY-ELIGIBLE-DATE
+      END-IF
+   ELSE
+
+
+      IF SQLCODE = 100
+         PERFORM GET-BENEFIT-DATAN
+
+      ELSE
+         WS-SQL-DISPLAY = SQLCODE
+         LOOKUP-PLAN-YEAR-N = LOOKUP-PLAN-YEAR
+                  WS-SQL-DISPLAY
+                 ' PLAN YEAR = ' LOOKUP-PLAN-YEAR-N                 +
+                 ' PLAN NAME = ' DC-PLAN-NAME
+      RETURN-CODE = 1
+      STOP
+      END-IF
+   END-IF
+END-PROC
+
+ CLOSE-BENEFIT-DATA. PROC
+
+   SQL CLOSE CURSOR2
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+END-PROC
+
+
+GET-BENEFIT-DATAN. PROC
+ SQL OPEN CURSOR2A
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   ELSE
+      SW-CURSOR2A-ACTIV = 'Y'
+   END-IF
+ WWAIT-DAY-QTY = 0
+ SQL FETCH CURSOR2A                                  +
+ INTO :WSSN ,                                        +
+      :WPLAN-NAME ,                                  +
+      :WPLAN-YEAR ,                                  +
+      :WPAYROLL-DATE :WPAYROLL-DATE-IND,             +
+      :WHISTORY-TYPE-CD ,                            +
+      :WCOVERAGE-START-DT :WCOVERAGE-START-DT-IND,   +
+      :WCOVERAGE-END-DT :WCOVERAGE-END-DT-IND,       +
+      :WCOVERAGE-OPTION ,                            +
+      :WCOVERAGE-CATEGORY ,                          +
+      :WBENEFIT-OPTION ,                             +
+      :WENROLLMENT-DATE :WENROLLMENT-DATE-IND,       +
+      :WENROLL-RCPT-DATE :WENROLL-RCPT-DATE-IND,     +
+      :WCONFIRM-DATE :WCONFIRM-DATE-IND,             +
+      :WREMINDER-DATE :WREMINDER-DATE-IND,           +
+      :WELIGIBILITY-DATE :WELIGIBILITY-DATE-IND,     +
+      :WORIG-COVERAGE-DATE :WORIG-COVERAGE-DATE-IND, +
+      :WORIG-COVERAGE-DATE-PLUS15                    +
+      :WORIG-COVERAGE-DATE-PLUS15-IND,               +
+      :WARREARS-CANCEL-DT :WARREARS-CANCEL-DT-IND,   +
+      :WPEAK-TIME-DATE :WPEAK-TIME-DATE-IND,         +
+      :WDEFAULT-DATE :WDEFAULT-DATE-IND,             +
+      :WCOPY-TO-PAYROLL-FL ,                         +
+      :WCHANGE-REASON-CODE :WCHANGE-REASON-CODE-IND, +
+      :WLAST-CHANGE-DATE :WLAST-CHANGE-DATE-IND,     +
+      :WLAST-CHANGE-ID :WLAST-CHANGE-ID-IND,         +
+      :WINS-PROVIDER-ID :WINS-PROVIDER-ID-IND,       +
+      :WINS-BROKER-ID :WINS-BROKER-ID-IND,           +
+      :WOUT-POCKET-MAX-CD,                           +
+      :WUP-FRONT-ALLOW-CD,                           +
+      :WORIG-COVERAGE-DATE-PLUS60                    +
+      :WORIG-COVERAGE-DATE-PLUS60-IND,               +
+      :WORIG-COVERAGE-DATE-PLUS75                    +
+      :WORIG-COVERAGE-DATE-PLUS75-IND,               +
+      :WENROLL-LATE-INT,                             +
+      :WASC-PAY-CODE :WASC-PAY-CODE-IND,             +
+      :WASC-PAY-CD :WASC-PAY-CD-IND,                 +
+      :WASC-JOB-CODE :WASC-JOB-CODE-IND,             +
+      :WPEAK-NEWLY-ELIGIBLE-DATE-START,              +
+      :WPEAK-NEWLY-ELIGIBLE-DATE-END,                +
+      :WMGMT-NEWLY-ELIGIBLE-DATE,                    +
+      :WHRLY-NEWLY-ELIGIBLE-DATE,                    +
+      :WS-WORK-STATE,                                +
+      :WHRLY-NEWLY-ELIGIBLE-DTPLUS90,                +
+      :WS-DIS-COV-STRT-DT,                           +
+      :WHRLY-NEWLY-ELIGIBLE-DTPLUS194,               +
+      :WWAIT-DAY-QTY:WWAIT-DAY-QTY-IND ,             +
+      :WSTATE-PROVINCE-CD :WSTATE-PROVINCE-CD-IND
+
+   IF SQLCODE = 0 AND WASC-PAY-CODE-IND = 0 AND WASC-JOB-CODE-IND = 0
+      IF  WPLAN-NAME  = 'ALI'
+          WS-ALI-COVERAGE-OPTION =  WCOVERAGE-OPTION
+      END-IF
+      WS-NEWLY-ELIGIBLE = 'N'
+      WS-STD-LTD-NW-ELIG = 'N'
+      IF WS-TEMP-SSN NE WS-ENROLLEE-SSN
+         WS-PT-TRUCK = 'N'
+         IF WASC-PAY-CD  = 'D'
+            PERFORM GET-WIN-NBR
+         END-IF
+      END-IF
+      IF ( WASC-PAY-CODE = '1' '6'  AND      +
+         WASC-JOB-CODE = 'P' 'T' OR WS-PT-TRUCK = 'Y' ) AND +
+         SESSION-DATE <= WCOVERAGE-START-DT
+         WS-NEWLY-ELIGIBLE     = 'Y'
+         WS-WAIT-PERIOD-END    = WCOVERAGE-START-DT
+         IF  WPLAN-NAME  = 'DEN'
+             WS-DEN-COV-STRT-DT = WCOVERAGE-START-DT
+         END-IF
+         IF  ( WPLAN-NAME  = 'STD' 'LTD') AND +
+             SESSION-DATE <= WS-DEN-COV-STRT-DT
+             WS-STD-LTD-NW-ELIG = 'Y'
+         END-IF
+      ELSE
+         IF WASC-PAY-CODE = '1'    AND      +
+            WASC-JOB-CODE = 'F'    AND      +
+            SESSION-DATE <= WCOVERAGE-START-DT
+            WS-NEWLY-ELIGIBLE     = 'Y'
+         IF (WPLAN-NAME  = 'STD' 'LTD') AND +
+             SESSION-DATE <= WS-DIS-COV-STRT-DT
+             WS-STD-LTD-NW-ELIG = 'Y'
+         END-IF
+            WS-WAIT-PERIOD-END    = WCOVERAGE-START-DT
+         ELSE
+            IF SESSION-DATE <= WMGMT-NEWLY-ELIGIBLE-DATE
+               WS-NEWLY-ELIGIBLE = 'Y'
+            IF (WPLAN-NAME  = 'STD' 'LTD')
+                  WS-STD-LTD-NW-ELIG = 'Y'
+            END-IF
+               WS-WAIT-PERIOD-END = SESSION-DATE
+            ELSE
+               WS-NEWLY-ELIGIBLE = 'N'
+               WS-STD-LTD-NW-ELIG = 'N'
+            END-IF
+         END-IF
+      END-IF
+      IF SW-DEBUG-SWITCH = 'Y'
+                 ' ' WS-NEWLY-ELIGIBLE                                +
+                 ' ' WASC-PAY-CODE                                    +
+                 ' ' WASC-JOB-CODE                                    +
+                 ' ES ' SESSION-DATE                                  +
+                 ' PTB ' WPEAK-NEWLY-ELIGIBLE-DATE-START              +
+                 ' PTE ' WPEAK-NEWLY-ELIGIBLE-DATE-END                +
+                 ' MED ' WMGMT-NEWLY-ELIGIBLE-DATE                    +
+                 ' HED ' WHRLY-NEWLY-ELIGIBLE-DATE
+      END-IF
+   ELSE
+   IF SQLCODE = 100 OR WASC-PAY-CODE-IND = -1 OR +
+         WASC-JOB-CODE-IND = -1 OR +
+         WSTATE-PROVINCE-CD-IND = -1
+
+         WS-SQL-DISPLAY = SQLCODE
+         LOOKUP-PLAN-YEAR-N = LOOKUP-PLAN-YEAR
+                  WS-SQL-DISPLAY
+                 ' PLAN YEAR = ' LOOKUP-PLAN-YEAR-N                 +
+                 ' PLAN NAME = ' DC-PLAN-NAME
+         IF SW-CURSOR2A-ACTIV = 'Y'
+            PERFORM CLOSE-BENEFIT-DATAN
+         END-IF
+         PERFORM CLOSE-BENEFIT-DATA
+      GO TO JOB
+   ELSE
+         WS-SQL-DISPLAY = SQLCODE
+         LOOKUP-PLAN-YEAR-N = LOOKUP-PLAN-YEAR
+                  WS-SQL-DISPLAY
+                 ' PLAN YEAR = ' LOOKUP-PLAN-YEAR-N                 +
+                 ' PLAN NAME = ' DC-PLAN-NAME
+         RETURN-CODE = 1
+         STOP
+   END-IF
+   END-IF
+END-PROC
+
+ CLOSE-BENEFIT-DATAN. PROC
+
+   SQL CLOSE CURSOR2A
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   ELSE
+      SW-CURSOR2A-ACTIV = 'N'
+   END-IF
+END-PROC
+
+
+GET-BENEFIT-DATA-PREV. PROC
+ SQL OPEN CURSOR3
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ SQL FETCH CURSOR3                                   +
+ INTO :WPLAN-YEAR-PREV,                              +
+      :WPAYROLL-DATE-PREV
+
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+      LOOKUP-PLAN-YEAR-N = LOOKUP-PLAN-YEAR - 1
+               WS-SQL-DISPLAY
+              ' PLAN YEAR = ' LOOKUP-PLAN-YEAR-N                 +
+              ' PLAN NAME = ' DC-PLAN-NAME
+      RETURN-CODE = 1
+      STOP
+   END-IF
+
+   SQL CLOSE CURSOR3
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+END-PROC
+
+GET-PREV-REASON-SAME-DAY. PROC
+ SQL OPEN CURSOR7
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ SQL FETCH CURSOR7                                   +
+ INTO :WS-CHANGE-REASON-CODE,                        +
+      :WS-EVENT-DATE-LD :WS-EVENT-DATE-LD-IND,       +
+      :WS-EVENT-TYPE-CODE
+
+   IF SQLCODE ^= 0 +100
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+              ' SESSION TS= ' DC-SESSION-TS
+      RETURN-CODE = 1
+      STOP
+   END-IF
+   IF SQLCODE = +100
+      WS-CHANGE-REASON-CODE  = ' '
+      WS-EVENT-TYPE-CODE     = 0
+   END-IF
+
+   SQL CLOSE CURSOR7
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+END-PROC
+
+GET-PREV-REASON-HE. PROC
+ SQL OPEN CURSOR8
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ SQL FETCH CURSOR8                                   +
+ INTO :WS-CHANGE-REASON-CODE                         +
+      :WS-EVENT-TYPE-CODE
+
+   IF SQLCODE ^= 0 +100
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+              ' SESSION TS= ' DC-SESSION-TS
+      RETURN-CODE = 1
+      STOP
+   END-IF
+   IF SQLCODE = +100
+      WS-CHANGE-REASON-CODE  = ' '
+      WS-EVENT-TYPE-CODE     = 0
+   END-IF
+
+   SQL CLOSE CURSOR8
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+END-PROC
+
+BUILD-UPDATE-YEAR-RECORD. PROC
+   INIT1          = X'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
+   INIT2          = X'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
+   INIT3          = X'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
+   INIT4          = X'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
+   INIT5          = X'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
+   INIT6          = X'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
+   INIT7          = X'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
+   INIT8          = X'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
+   INIT9          = X'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
+   INIT10         = X'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
+
+   SW-POST-STD-LTD = 'N'
+   WS-STP-NOCHANGE = 'N'
+   WS-DP-FOUND-SW = 'N'
+   WS-SP-FOUND-SW = 'N'
+   WS-LEG-DEP-FOUND-SW = 'N'
+   WS-DP-DEP-FOUND-SW = 'N'
+
+
+   IF (DC-PLAN-NAME = 'MED'              AND +
+    DC-OPTION-CODE = WCOVERAGE-OPTION    AND +
+    DC-OPTION-CODE = '1' )                OR +
+    (DC-PLAN-NAME = 'DLI'                AND +
+    DC-OPTION-CODE > WCOVERAGE-OPTION    AND +
+    DC-CATEGORY-CODE = WCOVERAGE-CATEGORY AND +
+    WCOVERAGE-OPTION >= '2' )
+      IF SW-CURSOR2A-ACTIV = 'Y'
+         PERFORM CLOSE-BENEFIT-DATAN
+      END-IF
+      PERFORM CLOSE-BENEFIT-DATA
+      GO TO JOB
+   END-IF
+
+   IF ((DC-OPTION-CODE = WCOVERAGE-OPTION    AND +
+        DC-CATEGORY-CODE = WCOVERAGE-CATEGORY AND +
+        DC-INS-PROV-ID   = WINS-PROVIDER-ID AND +
+        DC-INS-BROKER-ID   = WINS-BROKER-ID  AND +
+        DC-OUT-POCKET-MAX-CD  = WOUT-POCKET-MAX-CD  AND +
+        DC-UP-FRONT-ALLOW-CD  = WUP-FRONT-ALLOW-CD) OR +
+       (DC-OPTION-CODE = '1' AND +
+        WCOVERAGE-OPTION = '4' +
+        AND DC-PLAN-NAME = 'STD'))
+      IF SW-DEBUG-SWITCH = 'Y'
+                 ' ' DC-PLAN-NAME                                     +
+                 ' DCO ' DC-OPTION-CODE                               +
+                 ' WCO ' WCOVERAGE-OPTION                             +
+                 ' DCC ' DC-CATEGORY-CODE                             +
+                 ' WCC ' WCOVERAGE-CATEGORY                           +
+                 ' DCC ' DC-INS-PROV-ID                               +
+                 ' WCC ' WINS-PROVIDER-ID                             +
+                 ' PLAN YEAR ' LOOKUP-PLAN-YEAR                       +
+                 ' DC PLAN YR ' DC-PLAN-YEAR
+                 ' WC OPCT MX ' WOUT-POCKET-MAX-CD                    +
+                 ' DC UFRT AL ' DC-UP-FRONT-ALLOW-CD                  +
+                 ' WC UFRT AL ' WUP-FRONT-ALLOW-CD
+      END-IF
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      IF SW-CURSOR2A-ACTIV = 'Y'
+         PERFORM CLOSE-BENEFIT-DATAN
+      END-IF
+      PERFORM CLOSE-BENEFIT-DATA
+      GO TO JOB
+   END-IF
+
+
+   SSN-O                        =     WSSN
+   PLAN-YEAR-O                  =     WPLAN-YEAR
+   PLAN-NAME-O                  =     WPLAN-NAME
+   PAYROLL-DATE-O               =     WPAYROLL-DATE
+   HISTORY-TYPE-O               =     WHISTORY-TYPE-CD
+   COV-OPTION-O                 =     DC-OPTION-CODE
+   COV-CATEGORY-O               =     DC-CATEGORY-CODE
+   ENROLL-RCPT-DATE-O           =     CURRENT-DATE
+   LAST-CHANGE-DATE-O           =     CURRENT-DATE
+   PERFORM SET-LAST-CHANGE-ID
+      PROVIDER-ID-O             =     DC-INS-PROV-ID
+   CHANGE-REASON-CD-O           =     DC-CHANGE-REASON-CODE
+   OUT-POCKET-MAX-CD            =     DC-OUT-POCKET-MAX-CD
+   UP-FRONT-ALLOW-CD            =     DC-UP-FRONT-ALLOW-CD
+   COPY-TO-PAYROLL-O            =     ' '
+
+   IF SW-DEBUG-SWITCH = 'Y'
+   END-IF
+   IF PLAN-NAME-O = 'ALI'
+      IF CHANGE-REASON-CD-O = 'NE'
+         WS-COVERAGE-OPT-CMP-ONE = DC-OPTION-CODE
+         WS-COVERAGE-OPT-CMP-TWO = WCOVERAGE-OPTION
+         WS-COVERAGE-OPT-ONE-INCREASED  = 'N'
+         WS-COVERAGE-OPT-ONE-DECREASED  = 'N'
+         WS-COVERAGE-OPT-ONE-EQUAL  = 'N'
+         PERFORM COMPARE-COVERAGE-OPTIONS
+         IF WS-COVERAGE-OPT-ONE-INCREASED  = 'Y'
+            IF WCOVERAGE-OPTION = '1'
+               COV-OPTION-O = '2'
+               WS-NEW-PICKUP-IND = 'Y'
+               WS-OPT-CAT-DECREASE = 'N'
+               PERFORM POPULATE-COV-START-DT
+            ELSE
+               IF SW-CURSOR2A-ACTIV = 'Y'
+                  PERFORM CLOSE-BENEFIT-DATAN
+               END-IF
+               PERFORM CLOSE-BENEFIT-DATA
+               GO TO JOB
+            END-IF
+         ELSE
+            IF WS-COVERAGE-OPT-ONE-DECREASED  = 'Y' AND +
+               SESSION-DATE >= WCOVERAGE-START-DT
+               COV-START-DATE-O = SESSION-DATE-PLUS1
+            END-IF
+         END-IF
+      END-IF
+      IF CHANGE-REASON-CD-O ^= 'NE'
+         IF PLAN-NAME-PREV = 'ALI'              AND  +
+            SSN-O = SSN-PREV                    AND  +
+            CHANGE-REASON-CD-O = 'AE'           AND  +
+            CHANGE-REASON-CD-PREV = 'OE'        AND  +
+            (COV-OPTION-PREV > '1' OR COV-OPT-PREV ALPHABETIC)
+               WS-COVERAGE-OPT-CMP-ONE = DC-OPTION-CODE
+               WS-COVERAGE-OPT-CMP-TWO = COV-OPTION-PREV
+               WS-COVERAGE-OPT-ONE-INCREASED  = 'N'
+               WS-COVERAGE-OPT-ONE-DECREASED  = 'N'
+               WS-COVERAGE-OPT-ONE-EQUAL  = 'N'
+               PERFORM COMPARE-COVERAGE-OPTIONS
+               IF WS-COVERAGE-OPT-ONE-INCREASED  = 'Y' OR +
+                  WS-COVERAGE-OPT-ONE-EQUAL  = 'Y'
+                    COV-OPTION-O = COV-OPTION-PREV
+                    COV-START-DATE-O = COV-START-DATE-PREV
+                    ORIG-COV-DATE-O  = ORIG-COV-DATE-PREV
+               END-IF
+         ELSE
+           WS-COVERAGE-OPT-CMP-ONE = COV-OPTION-O
+           WS-COVERAGE-OPT-CMP-TWO = WCOVERAGE-OPTION
+           WS-COVERAGE-OPT-ONE-INCREASED  = 'N'
+           WS-COVERAGE-OPT-ONE-DECREASED  = 'N'
+           WS-COVERAGE-OPT-ONE-EQUAL  = 'N'
+           PERFORM COMPARE-COVERAGE-OPTIONS
+           IF WS-COVERAGE-OPT-ONE-INCREASED  = 'Y'
+              IF (( WASC-PAY-CODE = '1' '3' '6' AND +
+                 WASC-JOB-CODE = 'T' 'P' ) OR WS-PT-TRUCK = 'Y' ) AND +
+                 DC-PLAN-NAME = 'ALI' AND  WS-SESSION-DATE-YY = 2016 +
+                 AND DC-CHANGE-REASON-CODE = 'AE'
+                    IF SW-DEBUG-SWITCH = 'Y'
+                    END-IF
+              ELSE
+                    COV-OPTION-O = WCOVERAGE-OPTION
+                    IF SW-CURSOR2A-ACTIV = 'Y'
+                       PERFORM CLOSE-BENEFIT-DATAN
+                    END-IF
+                    PERFORM CLOSE-BENEFIT-DATA
+                    GO TO JOB
+              END-IF
+           ELSE
+             IF WS-COVERAGE-OPT-ONE-DECREASED  = 'Y'
+               WS-NEW-PICKUP-IND = 'N'
+               WS-OPT-CAT-DECREASE = 'Y'
+               PERFORM POPULATE-COV-START-DT
+             END-IF
+           END-IF
+         END-IF
+      END-IF
+   IF COV-OPTION-O = WCOVERAGE-OPTION
+      IF SW-CURSOR2A-ACTIV = 'Y'
+         PERFORM CLOSE-BENEFIT-DATAN
+      END-IF
+      PERFORM CLOSE-BENEFIT-DATA
+      GO TO JOB
+   END-IF
+   END-IF
+   IF (PLAN-NAME-O = 'DLI'              AND  +
+     DC-SESSION-DATE >= WS-ENR-START-DT AND  +
+     DC-SESSION-DATE <= WS-ENR-END-DT)
+        WS-DP-FOUND-SW              =    'N'
+        WS-SP-FOUND-SW              =    'N'
+        WS-LEG-DEP-FOUND-SW         =    'N'
+        WS-DP-DEP-FOUND-SW          =    'N'
+        PERFORM GET-RELATION-TYPE-CD-CURSOR
+        IF WS-DP-FOUND-SW = 'N'
+        PERFORM GET-RELATION-TYPE-CD-CURSOR-CHANGE
+        END-IF
+        IF WS-DP-FOUND-SW = 'Y' AND WS-SP-FOUND-SW = 'Y'
+           WS-SP-FOUND-SW = 'N'
+        END-IF
+        IF WS-SP-FOUND-SW = 'Y'
+           PERFORM GET-WIN-NBR
+           PERFORM CHECK-IF-SPOUSE-IS-DP
+        END-IF
+   END-IF
+
+   IF (PLAN-NAME-O = 'DLI' AND                  +
+       CHANGE-REASON-CD-O = 'AE' 'NE' 'MA' AND  +
+       DC-ENROLL-TYPE-CODE = 4 34 30)
+       IF SW-DEBUG-SWITCH = 'Y'
+       END-IF
+       IF COV-OPTION-O >= '2'         AND       +
+          WCOVERAGE-OPTION = '1'      AND       +
+          WCOVERAGE-CATEGORY = 'A'
+          IF SW-DEBUG-SWITCH = 'Y'
+          END-IF
+          IF CHANGE-REASON-CD-O = 'AE'
+             COV-OPTION-O = '1'
+          ELSE
+             COV-OPTION-O = '2'
+          END-IF
+          WS-NEW-PICKUP-IND = 'Y'
+          WS-OPT-CAT-DECREASE = 'N'
+          PERFORM POPULATE-COV-START-DT
+             IF WS-DP-FOUND-SW  = 'Y'
+                  COV-OPTION-O     = '2'
+             END-IF
+       ELSE
+          IF COV-OPTION-O > WCOVERAGE-OPTION    +
+             OR COV-OPTION-O = X'00'
+             IF SW-DEBUG-SWITCH = 'Y'
+             END-IF
+             COV-OPTION-O = WCOVERAGE-OPTION
+             WS-NEW-PICKUP-IND = 'N'
+             WS-OPT-CAT-DECREASE = 'N'
+          PERFORM POPULATE-COV-START-DT
+             IF WS-DP-FOUND-SW  = 'Y' AND WCOVERAGE-OPTION = '1'
+                  COV-OPTION-O     = '2'
+             END-IF
+          END-IF
+       END-IF
+       IF COV-OPTION-O < WCOVERAGE-OPTION
+          IF SW-DEBUG-SWITCH = 'Y'
+          END-IF
+          WS-NEW-PICKUP-IND = 'N'
+          WS-OPT-CAT-DECREASE = 'Y'
+          PERFORM POPULATE-COV-START-DT
+          COV-OPTION-O = COV-OPTION-O
+       END-IF
+       IF COV-CATEGORY-O = X'00'
+          IF SW-DEBUG-SWITCH = 'Y'
+          END-IF
+          COV-CATEGORY-O = WCOVERAGE-CATEGORY
+       END-IF
+       IF COV-CATEGORY-O = ' '                        . *   01
+          IF SW-DEBUG-SWITCH = 'Y'
+          END-IF
+          COV-CATEGORY-O = WCOVERAGE-CATEGORY         . *   01
+       END-IF                                         . *   01
+   END-IF
+
+
+
+   IF  PLAN-NAME-O = 'DLI' AND                  +
+       CHANGE-REASON-CD-O = 'AE' 'LD' AND       +
+       WS-NEWLY-ELIGIBLE    = 'N'     AND       +
+       DC-ENROLL-TYPE-CODE ^= 30
+       IF SW-DEBUG-SWITCH = 'Y'
+       END-IF
+       IF DC-OPTION-CODE > WCOVERAGE-OPTION
+          IF SW-DEBUG-SWITCH = 'Y'
+          END-IF
+          IF COV-CATEGORY-O = WCOVERAGE-CATEGORY   +
+                 AND WS-DP-FOUND-SW = 'N'
+          ELSE
+             COV-OPTION-O = WCOVERAGE-OPTION
+          END-IF
+          IF WS-DP-FOUND-SW  = 'Y'   AND   WCOVERAGE-OPTION = '1'
+              COV-OPTION-O     = '2'
+          END-IF
+       END-IF
+       IF COV-CATEGORY-O > WCOVERAGE-CATEGORY
+          IF SW-DEBUG-SWITCH = 'Y'
+          END-IF
+             IF WCOVERAGE-OPTION = '1'  AND    +
+                WCOVERAGE-CATEGORY = 'A'
+                   COV-START-DATE-O = SESSION-DATE
+                   ORIG-COV-DATE-O = SESSION-DATE
+             ELSE
+                COV-START-DATE-O = SESSION-DATE
+             END-IF
+       ELSE
+             COV-START-DATE-O = SESSION-DATE-PLUS1
+       END-IF
+   END-IF
+   IF PLAN-NAME-O = 'DLI'                 AND  +
+      PLAN-NAME-PREV = 'DLI'              AND  +
+      SSN-O = SSN-PREV                    AND  +
+      CHANGE-REASON-CD-O = 'AE'           AND  +
+      CHANGE-REASON-CD-PREV = 'MA'        AND  +
+      COV-OPTION-PREV > '1'
+       IF SW-DEBUG-SWITCH = 'Y'
+       END-IF
+       IF DC-OPTION-CODE > COV-OPTION-PREV
+          IF SW-DEBUG-SWITCH = 'Y'
+          END-IF
+          COV-OPTION-O = COV-OPTION-PREV
+       END-IF
+   END-IF
+
+
+
+   IF DC-PLAN-YEAR = WPLAN-YEAR AND           +
+      DC-PLAN-NAME = WPLAN-NAME AND           +
+      CHANGE-REASON-CD-O = 'DI' 'MA' 'GS' 'LE' 'DS' 'LA' 'RW' +
+                           'TC' AND  +
+      DC-PLAN-NAME = 'MED' 'DEN' 'ADD' 'VIS'
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      IF DC-OPTION-CODE ^= WCOVERAGE-OPTION OR +
+         DC-CATEGORY-CODE ^= WCOVERAGE-CATEGORY
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF WCOVERAGE-OPTION = '1'
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+               COV-START-DATE-O = DC-CHANGE-EVENT-DATE
+               ORIG-COV-DATE-O  = DC-CHANGE-EVENT-DATE
+         ELSE
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+               COV-START-DATE-O = DC-CHANGE-EVENT-DATE
+         END-IF
+      END-IF
+   END-IF
+
+
+   IF DC-PLAN-YEAR = WPLAN-YEAR AND           +
+      DC-PLAN-NAME = WPLAN-NAME AND           +
+      CHANGE-REASON-CD-O = 'BI' 'AP' 'SC' 'SE' 'FP' AND +
+      DC-PLAN-NAME = 'MED' 'DEN' 'ADD' 'VIS'
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      IF DC-OPTION-CODE ^= WCOVERAGE-OPTION     OR +
+         DC-CATEGORY-CODE ^= WCOVERAGE-CATEGORY
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF WCOVERAGE-OPTION = '1'
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            COV-START-DATE-O = DC-CHANGE-EVENT-DATE
+            ORIG-COV-DATE-O  = DC-CHANGE-EVENT-DATE
+         ELSE
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            COV-START-DATE-O = DC-CHANGE-EVENT-DATE
+         END-IF
+      END-IF
+   END-IF
+
+   IF DC-PLAN-YEAR = WPLAN-YEAR AND           +
+      DC-PLAN-NAME = WPLAN-NAME AND           +
+      CHANGE-REASON-CD-O = 'DI' 'DS'
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      IF DC-PLAN-NAME = 'DLI'
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF DC-OPTION-CODE < WCOVERAGE-OPTION   AND +
+            DC-CATEGORY-CODE < WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            PERFORM CREATE-TWO-DLI-COV-RECORDS
+         END-IF
+         IF DC-OPTION-CODE < WCOVERAGE-OPTION   AND +
+            DC-CATEGORY-CODE = WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            COV-START-DATE-O = DC-CHANGE-EVENT-DATE
+         END-IF
+         IF DC-OPTION-CODE = WCOVERAGE-OPTION   AND +
+            DC-CATEGORY-CODE < WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            WS-NEW-PICKUP-IND = 'N'
+            WS-OPT-CAT-DECREASE = 'Y'
+            PERFORM POPULATE-COV-START-DT
+         END-IF
+         IF DC-OPTION-CODE = WCOVERAGE-OPTION   AND +
+            DC-CATEGORY-CODE = WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-CURSOR2A-ACTIV = 'Y'
+               PERFORM CLOSE-BENEFIT-DATAN
+            END-IF
+            PERFORM CLOSE-BENEFIT-DATA
+            GO TO JOB
+         END-IF
+      END-IF
+   END-IF
+
+   IF DC-PLAN-YEAR = WPLAN-YEAR AND           +
+      DC-PLAN-NAME = WPLAN-NAME AND           +
+      CHANGE-REASON-CD-O = 'DI' 'DS'   AND    +
+     ( (WASC-PAY-CODE = '1'            AND     +
+        WASC-JOB-CODE = 'F' 'T' 'P')     OR    +
+       (WASC-PAY-CODE = '6'            AND     +
+        WS-NEWLY-ELIGIBLE = 'N')         OR    +
+       (WASC-PAY-CODE = '1'            AND     +
+        WASC-JOB-CODE ^= 'F' 'T' 'P'   AND     +
+        WS-NEWLY-ELIGIBLE = 'N') )
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      IF DC-PLAN-NAME = 'DLI'
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF DC-OPTION-CODE > WCOVERAGE-OPTION   AND +
+            DC-CATEGORY-CODE  = WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-CURSOR2A-ACTIV = 'Y'
+               PERFORM CLOSE-BENEFIT-DATAN
+            END-IF
+            PERFORM CLOSE-BENEFIT-DATA
+            GO TO JOB
+         END-IF
+         IF DC-OPTION-CODE <  WCOVERAGE-OPTION AND +
+            DC-CATEGORY-CODE > WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+               IF WCOVERAGE-OPTION = '1' AND +
+                  WCOVERAGE-CATEGORY = 'A'
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                  PERFORM CREATE-TWO-DLI-COV-RECORDS
+               ELSE
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                  PERFORM CREATE-TWO-DLI-COV-RECORDS
+               END-IF
+         END-IF
+         IF DC-OPTION-CODE >= WCOVERAGE-OPTION   AND +
+            DC-CATEGORY-CODE > WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            DC-OPTION-CODE = WCOVERAGE-OPTION
+               IF WCOVERAGE-OPTION = '1' AND +
+                  WCOVERAGE-CATEGORY = 'A'
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                  COV-START-DATE-O = SESSION-DATE
+                  ORIG-COV-DATE-O =  SESSION-DATE
+               ELSE
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                  COV-START-DATE-O = SESSION-DATE
+                  WS-NEW-PICKUP-IND = 'N'
+                  WS-OPT-CAT-DECREASE = 'N'
+                  PERFORM POPULATE-COV-START-DT
+               END-IF
+         END-IF
+         IF DC-OPTION-CODE > WCOVERAGE-OPTION   AND +
+            DC-CATEGORY-CODE < WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            COV-OPTION-O = WCOVERAGE-OPTION
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+ *                COV-START-DATE-O = PAY-PERIOD-BEGIN
+                  WS-NEW-PICKUP-IND = 'N'
+                  WS-OPT-CAT-DECREASE = 'Y'
+                  PERFORM POPULATE-COV-START-DT
+ *             END-IF
+         END-IF
+      END-IF
+   END-IF
+
+   IF DC-PLAN-YEAR = WPLAN-YEAR AND           +
+      DC-PLAN-NAME = WPLAN-NAME AND           +
+      CHANGE-REASON-CD-O = 'DI' 'DS'   AND    +
+     ( (WASC-PAY-CODE = '6'            AND     +
+        WS-NEWLY-ELIGIBLE = 'Y')         OR    +
+       (WASC-PAY-CODE = '1'            AND     +
+        WASC-JOB-CODE ^= 'F' 'T' 'P'   AND     +
+        WS-NEWLY-ELIGIBLE = 'Y') )
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      IF DC-PLAN-NAME  = 'DLI'
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF DC-OPTION-CODE = WCOVERAGE-OPTION AND     +
+            DC-CATEGORY-CODE = WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-CURSOR2A-ACTIV = 'Y'
+               PERFORM CLOSE-BENEFIT-DATAN
+            END-IF
+            PERFORM CLOSE-BENEFIT-DATA
+            GO TO JOB
+         END-IF
+         IF DC-OPTION-CODE = WCOVERAGE-OPTION AND     +
+            DC-CATEGORY-CODE > WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF WCOVERAGE-OPTION    = '1'   AND  +
+               WCOVERAGE-CATEGORY = 'A'
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+                  COV-START-DATE-O = SESSION-DATE
+                  ORIG-COV-DATE-O  = SESSION-DATE
+            ELSE
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+                  COV-START-DATE-O = SESSION-DATE
+            END-IF
+         END-IF
+         IF DC-OPTION-CODE >  WCOVERAGE-OPTION AND  +
+            DC-CATEGORY-CODE >  WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            COV-OPTION-O   = WCOVERAGE-OPTION
+            IF WCOVERAGE-OPTION    = '1'   AND  +
+               WCOVERAGE-CATEGORY = 'A'
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+               COV-START-DATE-O = SESSION-DATE
+               ORIG-COV-DATE-O  = SESSION-DATE
+            ELSE
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+                  COV-START-DATE-O = SESSION-DATE
+            END-IF
+         END-IF
+         IF DC-OPTION-CODE >  WCOVERAGE-OPTION AND  +
+            DC-CATEGORY-CODE <  WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            COV-OPTION-O   = WCOVERAGE-OPTION
+               COV-START-DATE-O = SESSION-DATE-PLUS1
+         END-IF
+         IF DC-OPTION-CODE <  WCOVERAGE-OPTION AND  +
+            DC-CATEGORY-CODE >  WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+           PERFORM CREATE-TWO-DLI-COV-RECORDS
+         END-IF
+      END-IF
+   END-IF
+
+
+   IF DC-PLAN-YEAR = WPLAN-YEAR AND           +
+      DC-PLAN-NAME = WPLAN-NAME AND           +
+      CHANGE-REASON-CD-O = 'MA' 'BI' 'AP' 'SC'
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      IF DC-PLAN-NAME = 'DLI'
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF DC-OPTION-CODE < WCOVERAGE-OPTION  AND   +
+            DC-CATEGORY-CODE < WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            WS-NEW-PICKUP-IND = 'N'
+            WS-OPT-CAT-DECREASE = 'Y'
+            PERFORM POPULATE-COV-START-DT
+         END-IF
+         IF DC-OPTION-CODE = WCOVERAGE-OPTION  AND   +
+            DC-CATEGORY-CODE < WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            WS-NEW-PICKUP-IND = 'N'
+            WS-OPT-CAT-DECREASE = 'Y'
+            PERFORM POPULATE-COV-START-DT
+         END-IF
+         IF DC-OPTION-CODE < WCOVERAGE-OPTION  AND   +
+            DC-CATEGORY-CODE = WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            WS-NEW-PICKUP-IND = 'N'
+            WS-OPT-CAT-DECREASE = 'Y'
+            PERFORM POPULATE-COV-START-DT
+         END-IF
+      END-IF
+   END-IF
+
+   IF DC-PLAN-YEAR = WPLAN-YEAR AND           +
+      DC-PLAN-NAME = WPLAN-NAME AND           +
+      CHANGE-REASON-CD-O = 'MA' 'BI' 'AP' 'SC' AND     +
+     ( (WASC-PAY-CODE = '1'            AND     +
+        WASC-JOB-CODE = 'F' 'T' 'P')     OR    +
+       (WASC-PAY-CODE = '6'            AND     +
+        WS-NEWLY-ELIGIBLE = 'N')         OR    +
+       (WASC-PAY-CODE = '1'            AND     +
+        WASC-JOB-CODE ^= 'F' 'T' 'P'   AND     +
+        WS-NEWLY-ELIGIBLE = 'N') )
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+   END-IF
+
+   IF DC-PLAN-YEAR = WPLAN-YEAR AND           +
+      DC-PLAN-NAME = WPLAN-NAME AND           +
+      CHANGE-REASON-CD-O = 'BI' 'AP' 'SC' AND      +
+      ( (WASC-PAY-CODE = '1'            AND     +
+         WASC-JOB-CODE = 'F' 'T' 'P')     OR    +
+        (WASC-PAY-CODE = '6'            AND     +
+         WS-NEWLY-ELIGIBLE = 'N')         OR    +
+        (WASC-PAY-CODE = '1'            AND     +
+         WASC-JOB-CODE ^= 'F' 'T' 'P'   AND     +
+         WS-NEWLY-ELIGIBLE = 'N') )
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      IF DC-PLAN-NAME  = 'DLI'
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF DC-OPTION-CODE = WCOVERAGE-OPTION AND     +
+            DC-CATEGORY-CODE = WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-CURSOR2A-ACTIV = 'Y'
+               PERFORM CLOSE-BENEFIT-DATAN
+            END-IF
+            PERFORM CLOSE-BENEFIT-DATA
+            GO TO JOB
+         END-IF
+         IF DC-OPTION-CODE >  WCOVERAGE-OPTION AND  +
+            DC-CATEGORY-CODE = WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-CURSOR2A-ACTIV = 'Y'
+               PERFORM CLOSE-BENEFIT-DATAN
+            END-IF
+            PERFORM CLOSE-BENEFIT-DATA
+            GO TO JOB
+         END-IF
+         IF DC-OPTION-CODE = WCOVERAGE-OPTION AND     +
+            DC-CATEGORY-CODE > WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF WCOVERAGE-OPTION    = '1'   AND  +
+               WCOVERAGE-CATEGORY = 'A'
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                  WS-NEW-PICKUP-IND = 'Y'
+                  WS-OPT-CAT-DECREASE = 'N'
+                  PERFORM POPULATE-COV-START-DT
+            ELSE
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+                  WS-NEW-PICKUP-IND = 'N'
+                  WS-OPT-CAT-DECREASE = 'N'
+                  PERFORM POPULATE-COV-START-DT
+            END-IF
+         END-IF
+         IF DC-OPTION-CODE >  WCOVERAGE-OPTION AND  +
+            DC-CATEGORY-CODE >  WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            COV-OPTION-O   = WCOVERAGE-OPTION
+            IF WCOVERAGE-OPTION    = '1'   AND  +
+               WCOVERAGE-CATEGORY = 'A'
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+               WS-NEW-PICKUP-IND = 'Y'
+               WS-OPT-CAT-DECREASE = 'N'
+               PERFORM POPULATE-COV-START-DT
+            ELSE
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+               WS-NEW-PICKUP-IND = 'N'
+               WS-OPT-CAT-DECREASE = 'N'
+               PERFORM POPULATE-COV-START-DT
+            END-IF
+         END-IF
+         IF DC-OPTION-CODE >  WCOVERAGE-OPTION AND  +
+            DC-CATEGORY-CODE <  WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            COV-OPTION-O   = WCOVERAGE-OPTION
+            WS-NEW-PICKUP-IND = 'N'
+            WS-OPT-CAT-DECREASE = 'Y'
+            PERFORM POPULATE-COV-START-DT
+         END-IF
+         IF DC-OPTION-CODE <  WCOVERAGE-OPTION AND  +
+            DC-CATEGORY-CODE >  WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            PERFORM CREATE-TWO-DLI-COV-RECORDS
+         END-IF
+      END-IF
+   END-IF
+   IF DC-PLAN-YEAR = WPLAN-YEAR AND           +
+      DC-PLAN-NAME = WPLAN-NAME AND           +
+      CHANGE-REASON-CD-O = 'LE' 'GS' 'LA' 'RW'  'TC' AND     +
+      WS-NEWLY-ELIGIBLE = 'N'
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      IF DC-PLAN-NAME  = 'DLI'
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF DC-OPTION-CODE = WCOVERAGE-OPTION AND     +
+            DC-CATEGORY-CODE = WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-CURSOR2A-ACTIV = 'Y'
+               PERFORM CLOSE-BENEFIT-DATAN
+            END-IF
+            PERFORM CLOSE-BENEFIT-DATA
+            GO TO JOB
+         END-IF
+         IF DC-OPTION-CODE < WCOVERAGE-OPTION AND     +
+            DC-CATEGORY-CODE = WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            COV-OPTION-O =  DC-OPTION-CODE
+            WS-NEW-PICKUP-IND = 'N'
+            WS-OPT-CAT-DECREASE = 'Y'
+            PERFORM POPULATE-COV-START-DT
+         END-IF
+         IF DC-OPTION-CODE >  WCOVERAGE-OPTION    AND  +
+            DC-CATEGORY-CODE = WCOVERAGE-CATEGORY
+            WCOVERAGE-OPTION = '1'
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-CURSOR2A-ACTIV = 'Y'
+               PERFORM CLOSE-BENEFIT-DATAN
+            END-IF
+            PERFORM CLOSE-BENEFIT-DATA
+            GO TO JOB
+         END-IF
+         IF DC-CATEGORY-CODE > WCOVERAGE-CATEGORY   AND +
+            DC-OPTION-CODE   > WCOVERAGE-OPTION
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            COV-OPTION-O =  WCOVERAGE-OPTION
+            COV-CATEGORY-O =  DC-CATEGORY-CODE
+             IF WCOVERAGE-CATEGORY = 'A'          AND +
+                WCOVERAGE-OPTION   = '1'
+                 WS-NEW-PICKUP-IND = 'Y'
+                 WS-OPT-CAT-DECREASE = 'N'
+                 PERFORM POPULATE-COV-START-DT
+             ELSE
+                 WS-NEW-PICKUP-IND = 'N'
+                 WS-OPT-CAT-DECREASE = 'N'
+                 PERFORM POPULATE-COV-START-DT
+
+             END-IF
+         END-IF
+         IF DC-CATEGORY-CODE < WCOVERAGE-CATEGORY   AND +
+         DC-OPTION-CODE   > WCOVERAGE-OPTION
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            COV-OPTION-O =  WCOVERAGE-OPTION
+            COV-CATEGORY-O =  DC-CATEGORY-CODE
+            WS-NEW-PICKUP-IND = 'N'
+            WS-OPT-CAT-DECREASE = 'Y'
+            PERFORM POPULATE-COV-START-DT
+          END-IF
+         IF DC-CATEGORY-CODE < WCOVERAGE-CATEGORY   AND +
+            DC-OPTION-CODE  <= WCOVERAGE-OPTION
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            COV-OPTION-O =  DC-OPTION-CODE
+            COV-CATEGORY-O =  DC-CATEGORY-CODE
+             WS-NEW-PICKUP-IND = 'N'
+             WS-OPT-CAT-DECREASE = 'Y'
+             PERFORM POPULATE-COV-START-DT
+          END-IF
+          IF DC-CATEGORY-CODE > WCOVERAGE-CATEGORY   AND +
+             DC-OPTION-CODE  = WCOVERAGE-OPTION
+             IF WCOVERAGE-CATEGORY = 'A'          AND +
+                WCOVERAGE-OPTION   = '1'
+                COV-START-DATE-O = NEXT-PAY-PERIOD-BEGIN
+                WS-NEW-PICKUP-IND = 'Y'
+                WS-OPT-CAT-DECREASE = 'N'
+                PERFORM POPULATE-COV-START-DT
+             ELSE
+                WS-NEW-PICKUP-IND = 'N'
+                WS-OPT-CAT-DECREASE = 'N'
+                PERFORM POPULATE-COV-START-DT
+             END-IF
+          END-IF
+          IF DC-CATEGORY-CODE > WCOVERAGE-CATEGORY   AND +
+             DC-OPTION-CODE   < WCOVERAGE-OPTION
+             PERFORM CREATE-TWO-DLI-COV-RECORDS
+          END-IF
+      END-IF
+   END-IF
+   IF DC-PLAN-YEAR = WPLAN-YEAR AND           +
+      DC-PLAN-NAME = WPLAN-NAME AND           +
+      CHANGE-REASON-CD-O = 'LE' 'GS' 'LA' 'RW' 'TC' AND     +
+      WS-NEWLY-ELIGIBLE = 'Y'
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      IF DC-PLAN-NAME  = 'DLI'
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF DC-OPTION-CODE > '1' AND                  +
+            WCOVERAGE-OPTION = '1'
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            COV-OPTION-O   = WCOVERAGE-OPTION
+         END-IF
+         IF DC-OPTION-CODE >  WCOVERAGE-OPTION AND  +
+            WCOVERAGE-OPTION > '1'
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            COV-OPTION-O   = WCOVERAGE-OPTION
+         END-IF
+         IF DC-OPTION-CODE = WCOVERAGE-OPTION AND  +
+            DC-CATEGORY-CODE = WCOVERAGE-CATEGORY
+            IF SW-CURSOR2A-ACTIV = 'Y'
+               PERFORM CLOSE-BENEFIT-DATAN
+            END-IF
+            PERFORM CLOSE-BENEFIT-DATA
+            GO TO JOB
+         END-IF
+
+         IF DC-OPTION-CODE >  WCOVERAGE-OPTION    AND  +
+            DC-CATEGORY-CODE = WCOVERAGE-CATEGORY
+            WCOVERAGE-OPTION = '1'
+            IF SW-CURSOR2A-ACTIV = 'Y'
+               PERFORM CLOSE-BENEFIT-DATAN
+            END-IF
+            PERFORM CLOSE-BENEFIT-DATA
+            GO TO JOB
+         END-IF
+
+         IF DC-OPTION-CODE < WCOVERAGE-OPTION AND     +
+            DC-CATEGORY-CODE = WCOVERAGE-CATEGORY
+            COV-OPTION-O =  DC-OPTION-CODE
+            WS-NEW-PICKUP-IND = 'N'
+            WS-OPT-CAT-DECREASE = 'Y'
+            PERFORM POPULATE-COV-START-DT
+         END-IF
+
+         IF DC-CATEGORY-CODE > WCOVERAGE-CATEGORY   AND +
+            DC-OPTION-CODE   > WCOVERAGE-OPTION
+            COV-OPTION-O =  WCOVERAGE-OPTION
+            COV-CATEGORY-O =  DC-CATEGORY-CODE
+            IF WCOVERAGE-CATEGORY = 'A'          AND +
+               WCOVERAGE-OPTION   = '1'
+               WS-NEW-PICKUP-IND = 'Y'
+               WS-OPT-CAT-DECREASE = 'N'
+               PERFORM POPULATE-COV-START-DT
+            ELSE
+               WS-NEW-PICKUP-IND = 'N'
+               WS-OPT-CAT-DECREASE = 'N'
+               PERFORM POPULATE-COV-START-DT
+            END-IF
+         END-IF
+
+         IF DC-CATEGORY-CODE < WCOVERAGE-CATEGORY   AND +
+            DC-OPTION-CODE   > WCOVERAGE-OPTION
+            COV-OPTION-O =  WCOVERAGE-OPTION
+            COV-CATEGORY-O =  DC-CATEGORY-CODE
+            WS-NEW-PICKUP-IND = 'N'
+            WS-OPT-CAT-DECREASE = 'Y'
+            PERFORM POPULATE-COV-START-DT
+         END-IF
+
+         IF DC-CATEGORY-CODE < WCOVERAGE-CATEGORY   AND +
+            DC-OPTION-CODE  <= WCOVERAGE-OPTION
+            COV-OPTION-O =  DC-OPTION-CODE
+            COV-CATEGORY-O =  DC-CATEGORY-CODE
+            WS-NEW-PICKUP-IND = 'N'
+            WS-OPT-CAT-DECREASE = 'Y'
+            PERFORM POPULATE-COV-START-DT
+         END-IF
+
+         IF DC-CATEGORY-CODE > WCOVERAGE-CATEGORY   AND +
+            DC-OPTION-CODE  <= WCOVERAGE-OPTION
+            PERFORM CREATE-TWO-DLI-COV-RECORDS
+         END-IF
+      END-IF
+   END-IF
+   IF DC-PLAN-YEAR = WPLAN-YEAR AND           +
+      DC-PLAN-NAME = WPLAN-NAME AND           +
+      CHANGE-REASON-CD-O = 'BI' 'AP' 'SC' AND           +
+       ((WASC-PAY-CODE = '6'            AND     +
+         WS-NEWLY-ELIGIBLE = 'Y')         OR    +
+        (WASC-PAY-CODE = '1'            AND     +
+         WASC-JOB-CODE ^= 'F' 'T' 'P'   AND     +
+         WS-NEWLY-ELIGIBLE = 'Y'))
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      IF DC-PLAN-NAME  = 'DLI'
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF DC-OPTION-CODE = WCOVERAGE-OPTION AND     +
+            DC-CATEGORY-CODE = WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-CURSOR2A-ACTIV = 'Y'
+               PERFORM CLOSE-BENEFIT-DATAN
+            END-IF
+            PERFORM CLOSE-BENEFIT-DATA
+            GO TO JOB
+         END-IF
+         IF DC-OPTION-CODE = WCOVERAGE-OPTION AND     +
+            DC-CATEGORY-CODE > WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF WCOVERAGE-OPTION    = '1'   AND  +
+               WCOVERAGE-CATEGORY = 'A'
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+                  WS-NEW-PICKUP-IND = 'Y'
+                  WS-OPT-CAT-DECREASE = 'N'
+                  PERFORM POPULATE-COV-START-DT
+            ELSE
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+                  WS-NEW-PICKUP-IND = 'N'
+                  WS-OPT-CAT-DECREASE = 'N'
+                  PERFORM POPULATE-COV-START-DT
+            END-IF
+         END-IF
+         IF DC-OPTION-CODE >  WCOVERAGE-OPTION AND  +
+            DC-CATEGORY-CODE >  WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            COV-OPTION-O   = WCOVERAGE-OPTION
+            IF WCOVERAGE-OPTION    = '1'   AND  +
+               WCOVERAGE-CATEGORY = 'A'
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+                  WS-NEW-PICKUP-IND = 'Y'
+                  WS-OPT-CAT-DECREASE = 'N'
+                  PERFORM POPULATE-COV-START-DT
+            ELSE
+                  WS-NEW-PICKUP-IND = 'N'
+                  WS-OPT-CAT-DECREASE = 'N'
+                  PERFORM POPULATE-COV-START-DT
+            END-IF
+         END-IF
+         IF DC-OPTION-CODE >  WCOVERAGE-OPTION AND  +
+            DC-CATEGORY-CODE <  WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            COV-OPTION-O   = WCOVERAGE-OPTION
+            WS-NEW-PICKUP-IND = 'N'
+            WS-OPT-CAT-DECREASE = 'Y'
+            PERFORM POPULATE-COV-START-DT
+         END-IF
+         IF DC-OPTION-CODE <  WCOVERAGE-OPTION AND  +
+            DC-CATEGORY-CODE >  WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+               WS-NEW-PICKUP-IND = 'N'
+               WS-OPT-CAT-DECREASE = 'Y'
+               PERFORM POPULATE-COV-START-DT
+         END-IF
+      END-IF
+   END-IF
+
+   IF DC-PLAN-YEAR = WPLAN-YEAR AND           +
+      DC-PLAN-NAME = WPLAN-NAME AND           +
+      CHANGE-REASON-CD-O = 'MA'          AND  +
+      ( (WASC-PAY-CODE = '1'            AND     +
+         WASC-JOB-CODE = 'F' 'T' 'P')     OR    +
+        (WASC-PAY-CODE = '6'            AND     +
+         WS-NEWLY-ELIGIBLE = 'N')         OR    +
+        (WASC-PAY-CODE = '1'            AND     +
+         WASC-JOB-CODE ^= 'F' 'T' 'P'   AND     +
+         WS-NEWLY-ELIGIBLE = 'N') )
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      IF DC-PLAN-NAME  = 'DLI'
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF DC-OPTION-CODE = WCOVERAGE-OPTION AND     +
+            DC-CATEGORY-CODE = WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-CURSOR2A-ACTIV = 'Y'
+               PERFORM CLOSE-BENEFIT-DATAN
+            END-IF
+            PERFORM CLOSE-BENEFIT-DATA
+            GO TO JOB
+         END-IF
+         IF DC-OPTION-CODE >  WCOVERAGE-OPTION
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF WCOVERAGE-OPTION = '1'  AND +
+               WCOVERAGE-CATEGORY = 'A'
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+               COV-OPTION-O     = '2'
+               IF SESSION-DATE > DC-CHANGE-EVENT-DATE
+                  COV-START-DATE-O = SESSION-DATE
+                  ORIG-COV-DATE-O = SESSION-DATE
+               ELSE
+                  COV-START-DATE-O = DC-CHANGE-EVENT-DATE
+                  ORIG-COV-DATE-O  = DC-CHANGE-EVENT-DATE
+               END-IF
+            ELSE
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+               IF WCOVERAGE-OPTION = '1'  AND  +
+                  DC-OPTION-CODE > '1'
+                  COV-OPTION-O     = '2'
+               END-IF
+               IF WCOVERAGE-OPTION > '1'    AND +
+                  DC-OPTION-CODE > WCOVERAGE-OPTION
+                  COV-OPTION-O = WCOVERAGE-OPTION
+               END-IF
+               IF SESSION-DATE > DC-CHANGE-EVENT-DATE
+                  COV-START-DATE-O = SESSION-DATE
+               ELSE
+                  COV-START-DATE-O = DC-CHANGE-EVENT-DATE
+               END-IF
+            END-IF
+         ELSE
+            IF DC-CATEGORY-CODE >  WCOVERAGE-CATEGORY
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+               IF WCOVERAGE-OPTION = '1'  AND +
+                  WCOVERAGE-CATEGORY = 'A'
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                  COV-START-DATE-O = SESSION-DATE
+                  ORIG-COV-DATE-O  = SESSION-DATE
+               ELSE
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                  COV-START-DATE-O = SESSION-DATE
+               END-IF
+            END-IF
+         END-IF
+      END-IF
+   END-IF
+
+   IF DC-PLAN-YEAR = WPLAN-YEAR AND           +
+      DC-PLAN-NAME = WPLAN-NAME AND           +
+      CHANGE-REASON-CD-O = 'MA'          AND  +
+      ( (WASC-PAY-CODE = '6'            AND     +
+         WS-NEWLY-ELIGIBLE = 'Y')         OR    +
+        (WASC-PAY-CODE = '1'            AND     +
+         WASC-JOB-CODE ^= 'F' 'T' 'P'   AND     +
+         WS-NEWLY-ELIGIBLE = 'Y') )
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      IF DC-PLAN-NAME  = 'DLI'
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF DC-OPTION-CODE = WCOVERAGE-OPTION AND     +
+            DC-CATEGORY-CODE = WCOVERAGE-CATEGORY
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF SW-CURSOR2A-ACTIV = 'Y'
+               PERFORM CLOSE-BENEFIT-DATAN
+            END-IF
+            PERFORM CLOSE-BENEFIT-DATA
+            GO TO JOB
+         END-IF
+         IF DC-OPTION-CODE >  WCOVERAGE-OPTION
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            IF WCOVERAGE-OPTION = '1'  AND +
+               WCOVERAGE-CATEGORY = 'A'
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+               COV-OPTION-O     = '2'
+                  WS-NEW-PICKUP-IND = 'Y'
+                  WS-OPT-CAT-DECREASE = 'N'
+                  PERFORM POPULATE-COV-START-DT
+            ELSE
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+               IF WCOVERAGE-OPTION = '1'  AND  +
+                  DC-OPTION-CODE > '1'
+                  COV-OPTION-O     = '2'
+               END-IF
+               IF WCOVERAGE-OPTION > '1'    AND +
+                  DC-OPTION-CODE > WCOVERAGE-OPTION
+                  COV-OPTION-O = WCOVERAGE-OPTION
+               END-IF
+                  WS-NEW-PICKUP-IND = 'N'
+                  WS-OPT-CAT-DECREASE = 'N'
+                  PERFORM POPULATE-COV-START-DT
+            END-IF
+         ELSE
+            IF DC-CATEGORY-CODE >  WCOVERAGE-CATEGORY
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+               IF WCOVERAGE-OPTION = '1'  AND +
+                  WCOVERAGE-CATEGORY = 'A'
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                     WS-NEW-PICKUP-IND = 'Y'
+                     WS-OPT-CAT-DECREASE = 'N'
+                     PERFORM POPULATE-COV-START-DT
+               ELSE
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                     WS-NEW-PICKUP-IND = 'N'
+                     WS-OPT-CAT-DECREASE = 'N'
+                     PERFORM POPULATE-COV-START-DT
+               END-IF
+            END-IF
+         END-IF
+      END-IF
+   END-IF
+
+   IF CHANGE-REASON-CD-O = 'AE'
+      AE-RECS = AE-RECS + 1
+   ELSE
+      IF CHANGE-REASON-CD-O = 'NE'
+         CHANGE-REASON-CD-O = 'OE'
+         OE-RECS = OE-RECS + 1
+      ELSE
+         FSC-RECS = FSC-RECS + 1
+      END-IF
+   END-IF
+
+   TOT-RECS-WRITTEN = TOT-RECS-WRITTEN + 1
+
+   IF SW-DEBUG-SWITCH = 'Y'
+              DC-ENROLLEE-SSN
+   END-IF
+   IF DC-CHANGE-REASON-CODE = 'MA' 'DI' 'BI' 'AP' 'GS' 'LE' 'SE' +
+                              'SC' 'DS' 'LA' 'RW' 'TC' +
+   AND  WORIG-COVERAGE-DATE > COV-START-DATE-O
+      COV-START-DATE-O = WORIG-COVERAGE-DATE
+   END-IF
+
+   IF DC-CHANGE-REASON-CODE = 'MA' 'DI' 'BI' 'AP' 'GS' 'LE' 'SE' +
+                              'SC' 'DS' 'LA' 'RW' 'TC' +
+   AND WORIG-COVERAGE-DATE > ORIG-COV-DATE-O
+      ORIG-COV-DATE-O = WORIG-COVERAGE-DATE
+   END-IF
+
+   IF DC-CHANGE-REASON-CODE = 'MA' 'DI' 'BI' 'AP' 'GS' 'LE' 'SE' 'SC' +
+                              'DS' 'LA' 'RW' 'TC'
+      PERFORM FORMAT-FAMILY-CHANGE-REC
+      PUT FAMCHANG
+   END-IF
+
+   IF WS-PT-TRUCK = 'Y'
+      CONTINUE
+   ELSE
+      IF  (PLAN-NAME-O = 'LTD' AND ((DC-CHANGE-REASON-CODE NE 'NE') +
+                             AND (DC-CHANGE-REASON-CODE NE 'AE')))
+          IF DC-OPTION-CODE < WCOVERAGE-OPTION AND +
+              SESSION-DATE >= WCOVERAGE-START-DT
+              COV-START-DATE-O        =  SESSION-DATE-PLUS1
+          END-IF
+      END-IF
+      IF  (PLAN-NAME-O = 'LTD' AND DC-CHANGE-REASON-CODE EQ 'AE')
+          IF DC-OPTION-CODE < WCOVERAGE-OPTION AND +
+              SESSION-DATE >= WCOVERAGE-START-DT
+              PERFORM GET-COVRG-DATE-NYEAR
+              COV-START-DATE-O          =  COVRG-DATE-NYEAR
+          END-IF
+      END-IF
+      IF  (PLAN-NAME-O = 'STD' AND DC-PLAN-YEAR = 2015 AND +
+          COV-OPTION-O = '1' AND DC-CHANGE-REASON-CODE NE 'AE') OR +
+          (PLAN-NAME-O = 'STD' AND DC-PLAN-YEAR >= 2016 AND +
+          COV-OPTION-O = '4' AND DC-CHANGE-REASON-CODE NE 'AE')
+          IF DC-OPTION-CODE < WCOVERAGE-OPTION AND +
+              SESSION-DATE >= WCOVERAGE-START-DT
+              COV-START-DATE-O        =  SESSION-DATE-PLUS1
+          END-IF
+      END-IF
+      IF  (PLAN-NAME-O = 'STD' AND DC-PLAN-YEAR = 2015 AND +
+          COV-OPTION-O = '1' AND DC-CHANGE-REASON-CODE EQ 'AE') OR +
+          (PLAN-NAME-O = 'STD' AND DC-PLAN-YEAR >= 2016 AND +
+          COV-OPTION-O = '4' AND DC-CHANGE-REASON-CODE EQ 'AE')
+          IF DC-OPTION-CODE < WCOVERAGE-OPTION AND +
+              SESSION-DATE >= WCOVERAGE-START-DT
+              PERFORM GET-COVRG-DATE-NYEAR
+              COV-START-DATE-O          =  COVRG-DATE-NYEAR
+          END-IF
+      END-IF
+   END-IF
+
+      IF (DC-CHANGE-REASON-CODE = 'AE')   AND            +
+         (DC-PLAN-NAME = 'STD' 'LTD')
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF DC-OPTION-CODE > WCOVERAGE-OPTION
+          IF DC-ENROLL-TYPE-CODE = 4
+            WS-SESSION-TS             =  DC-SESSION-TS
+            WS-COVERAGE-START-DT      =  WS-SESSION-DATE
+            PERFORM GET-COVERAGE-START-DT
+            ORIG-COV-DATE-O           =  WS-COVERAGE-START-DT
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+          ELSE
+            WS-SESSION-TS             =  DC-SESSION-TS
+            WS-COVERAGE-START-DT      =  WS-SESSION-DATE
+            PERFORM GET-COVERAGE-START-DT
+            ORIG-COV-DATE-O           =  WS-COVERAGE-START-DT
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+          END-IF
+            IF WS-STD-LTD-NW-ELIG = 'N'
+               ENROLL-LATE-INT-O         =  'Y'
+            ELSE
+               ENROLL-LATE-INT-O         =  'N'
+               COV-START-DATE-O          =  WCOVERAGE-START-DT
+            END-IF
+            IF PLAN-NAME-O = 'STD'
+               WAIT-DAY-QTY-O            =  WWAIT-DAY-QTY
+            ELSE
+               WAIT-DAY-QTY-O            =  365
+            END-IF
+         END-IF
+         IF DC-OPTION-CODE < WCOVERAGE-OPTION
+            PERFORM GET-COVRG-DATE-NYEAR
+            IF WCOVERAGE-START-DT > COVRG-DATE-NYEAR
+                COV-START-DATE-O    =  WCOVERAGE-START-DT
+            ELSE
+            COV-START-DATE-O        =  COVRG-DATE-NYEAR
+            END-IF
+            ENROLL-LATE-INT-O         =  'N'
+         END-IF
+      END-IF
+
+   IF  (WS-PT-TRUCK ^= 'Y')  AND +
+       (DC-CHANGE-REASON-CODE = 'LE' 'GS' 'DI' 'MA' 'BI' 'AP' 'SC' +
+                                     'RW' 'LA' 'SE' 'DS' 'TC')  AND +
+       (DC-PLAN-NAME = 'STD' 'LTD') AND +
+       (WCOVERAGE-OPTION < COV-OPTION-O)
+       PERFORM GET-WIN-NBR
+       PERFORM CHECK-DISTRANS-CURSOR
+       IF WS-STD-LTD-NW-ELIG = 'Y' OR WS-DISTRANS-SW = 'Y'
+          ENROLL-LATE-INT-O         =  'N'
+          IF WS-DISTRANS-SW = 'Y'
+             COV-START-DATE-O          =   WS-SESSION-DATE
+          ELSE
+             COV-START-DATE-O          =  WCOVERAGE-START-DT
+          END-IF
+          WAIT-DAY-QTY-O            =  0
+       ELSE
+          IF DC-CHANGE-REASON-CODE ^= 'SE'
+             WS-COVERAGE-START-DT      =  DC-CHANGE-EVENT-DATE
+             PERFORM GET-COVERAGE-START-DT
+             ENROLL-LATE-INT-O         =  'Y'
+             WAIT-DAY-QTY-O            =  365
+          END-IF
+       END-IF
+       IF DC-CHANGE-REASON-CODE = 'SE'
+          IF WCOVERAGE-START-DT < '2016-03-19'
+             COV-START-DATE-O      = '2016-03-19'
+             ENROLL-LATE-INT-O         =  'N'
+             WAIT-DAY-QTY-O   =  0
+          ELSE
+             COV-START-DATE-O = WCOVERAGE-START-DT
+          END-IF
+       END-IF
+       SW-POST-STD-LTD = 'Y'
+   END-IF
+   IF  (DC-CHANGE-REASON-CODE = 'LE' 'GS' 'DI' 'MA' 'BI' 'AP' 'SC' +
+                                     'TC' 'RW' 'LA' 'SE' 'DS') AND +
+       (DC-PLAN-NAME = 'STD' 'LTD') AND +
+       (WCOVERAGE-OPTION > COV-OPTION-O)   AND +
+       (DC-PLAN-YEAR >= 2016)
+      IF DC-CHANGE-REASON-CODE ^= 'SE'
+          WS-COVERAGE-START-DT      =  DC-CHANGE-EVENT-DATE
+          IF WCOVERAGE-OPTION ^= '1' '4'
+             PERFORM GET-COVERAGE-START-DT
+          END-IF
+          IF (WS-COVERAGE-START-DT > WORIG-COVERAGE-DATE) AND +
+             (DC-PLAN-NAME = 'LTD')
+              PERFORM GET-SESSION-DATE-PLUS1
+              COV-START-DATE-O          = SESSION-DATE-PLUS1
+          END-IF
+      END-IF
+          IF (DC-OPTION-CODE = '1')
+             PERFORM GET-SESSION-DATE-PLUS1
+             ENROLL-LATE-INT-O         =  'N'
+             IF WCOVERAGE-OPTION ^= '1' '4'
+                COV-START-DATE-O          = SESSION-DATE-PLUS1
+             END-IF
+            IF PLAN-NAME-O = 'STD' AND DC-JOB-CODE ^= 'P' 'T' AND +
+               WS-WORK-STATE ^= 5 12 31 40
+                  COV-OPTION-O            = '4'
+             END-IF
+          END-IF
+   END-IF
+   IF  (DC-CHANGE-REASON-CODE = 'LD')  AND +
+       (DC-PLAN-NAME = 'LTD')   AND +
+       (DC-PLAN-YEAR >= 2016)
+       IF  (DC-OPTION-CODE ^= '1')
+           COV-START-DATE-O          = SESSION-DATE-PLUS1
+       END-IF
+   END-IF
+   IF  (DC-CHANGE-REASON-CODE = 'LD')  AND +
+       (DC-PLAN-YEAR >= 2016)
+          IF ((DC-OPTION-CODE = '1') AND +
+              (DC-PLAN-NAME = 'LTD'  OR +
+              (WCOVERAGE-OPTION ^= '1' '4' AND +
+               DC-PLAN-NAME = 'STD')))
+               PERFORM GET-SESSION-DATE-PLUS1
+               COV-START-DATE-O          = SESSION-DATE-PLUS1
+          END-IF
+          IF PLAN-NAME-O = 'STD' AND DC-JOB-CODE ^= 'P' 'T' 'S' AND +
+             WS-WORK-STATE ^= 5 12 31 40  AND +
+             (DC-OPTION-CODE = '1')
+                  COV-OPTION-O            = '4'
+          END-IF
+   END-IF
+
+   IF  (DC-JOB-CODE ^= 'D')  AND +
+       (DC-CHANGE-REASON-CODE = 'LE' 'GS' 'DI' 'MA' 'BI' 'AP' 'SC' +
+        'SE' 'LD' 'DS' 'LA' 'RW' 'TC') AND (DC-PLAN-NAME = 'STD') AND +
+       (WCOVERAGE-OPTION > COV-OPTION-O)   AND +
+       (DC-PLAN-YEAR >= 2016)
+       IF (WCOVERAGE-OPTION = '6' AND COV-OPTION-O = '5')
+           COV-START-DATE-O   = WCOVERAGE-START-DT
+           ENROLL-LATE-INT-O  = WENROLL-LATE-INT
+           WAIT-DAY-QTY-O     = WWAIT-DAY-QTY
+       END-IF
+   END-IF.
+   IF  (DC-JOB-CODE ^= 'D')  AND +
+       (DC-CHANGE-REASON-CODE = 'LD') AND +
+       (DC-PLAN-NAME = 'STD' 'LTD') AND +
+       (WCOVERAGE-OPTION < COV-OPTION-O)   AND +
+       (DC-PLAN-YEAR >= 2016)
+          COV-START-DATE-O   = WCOVERAGE-START-DT
+          ENROLL-LATE-INT-O  = WENROLL-LATE-INT
+          WAIT-DAY-QTY-O     = WWAIT-DAY-QTY
+   END-IF.
+
+   IF PLAN-NAME-O = 'ALI'
+      WS-ALI-OPT = COV-OPTION-O
+      WS-ALI-SSN = DC-ENROLLEE-SSN
+   END-IF
+
+
+   IF COV-OPTION-O = WCOVERAGE-OPTION AND  +
+      COV-CATEGORY-O = WCOVERAGE-CATEGORY AND +
+      PROVIDER-ID-O    = WINS-PROVIDER-ID AND  +
+      BEN-BKRID-O    = WINS-BROKER-ID   AND   +
+      PLAN-NAME-O ^= 'STD'
+      IF SW-DEBUG-SWITCH = 'Y'
+                 DC-ENROLLEE-SSN                                      +
+                 ' ' PLAN-NAME-O                                      +
+                 ' ' DC-PLAN-YEAR                                     +
+                 ' ' COV-OPTION-O                                     +
+                 ' ' COV-CATEGORY-O                                   +
+                 ' ' ORIG-COV-DATE-O                                  +
+                 ' ' CHANGE-REASON-CD-O                               +
+                 ' ' PROVIDER-ID-O
+      END-IF
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      IF SW-CURSOR2A-ACTIV = 'Y'
+         PERFORM CLOSE-BENEFIT-DATAN
+      END-IF
+      PERFORM CLOSE-BENEFIT-DATA
+      GO TO JOB
+   END-IF
+
+
+
+   IF CHANGE-REASON-CD-O = 'AE'
+         IF PLAN-NAME-O = 'STD' AND DC-PLAN-YEAR >= 2016
+            IF COV-OPTION-O = '1' AND WASC-PAY-CODE = '1'    AND +
+               WASC-JOB-CODE = 'F' AND +
+               WS-WORK-STATE ^= 5 12 31 40
+               COV-OPTION-O            = '4'
+            END-IF
+         END-IF
+
+      IF (DC-ENROLL-TYPE-CODE = 66 67 27 50     AND +
+          PLAN-NAME-O     = 'MED' 'DEN' 'ADD' 'VIS' )
+         IF WCOVERAGE-OPTION = '1'
+            COV-START-DATE-O = DC-CHANGE-EVENT-DATE
+            ORIG-COV-DATE-O =  DC-CHANGE-EVENT-DATE
+         ELSE
+            COV-START-DATE-O = DC-CHANGE-EVENT-DATE
+         END-IF
+      END-IF
+      IF (DC-ENROLL-TYPE-CODE = 7 5 51          AND +
+          PLAN-NAME-O     = 'MED' 'DEN' 'ADD' 'VIS' )
+         IF WCOVERAGE-OPTION = '1'
+            COV-START-DATE-O = DC-CHANGE-EVENT-DATE
+            ORIG-COV-DATE-O =  DC-CHANGE-EVENT-DATE
+         ELSE
+            COV-START-DATE-O = DC-CHANGE-EVENT-DATE
+         END-IF
+      END-IF
+      IF DC-ENROLL-TYPE-CODE = 13
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         CHANGE-REASON-CD-O = 'DI'
+      END-IF
+      IF DC-ENROLL-TYPE-CODE = 30
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         CHANGE-REASON-CD-O = 'MA'
+      END-IF
+      IF DC-ENROLL-TYPE-CODE =  7
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         CHANGE-REASON-CD-O = 'BI'
+      END-IF
+      IF DC-ENROLL-TYPE-CODE =  5
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         CHANGE-REASON-CD-O = 'AP'
+      END-IF
+      IF DC-ENROLL-TYPE-CODE =  51
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         CHANGE-REASON-CD-O = 'SC'
+      END-IF
+      IF DC-ENROLL-TYPE-CODE =  16
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         CHANGE-REASON-CD-O = 'DS'
+      END-IF
+      IF DC-ENROLL-TYPE-CODE = 64
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         CHANGE-REASON-CD-O = 'LD'
+      END-IF
+      IF DC-ENROLL-TYPE-CODE = 66
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         CHANGE-REASON-CD-O = 'GS'
+      END-IF
+      IF DC-ENROLL-TYPE-CODE = 67
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         CHANGE-REASON-CD-O = 'LE'
+      END-IF
+      IF DC-ENROLL-TYPE-CODE = 27
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         CHANGE-REASON-CD-O = 'LA'
+      END-IF
+      IF DC-ENROLL-TYPE-CODE = 50
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         CHANGE-REASON-CD-O = 'RW'
+      END-IF
+   END-IF
+
+   IF (PLAN-NAME-O = 'DLI' AND                 +
+      CHANGE-REASON-CD-O = 'OE' AND            +
+      DC-ENROLL-TYPE-CODE = 34)
+      IF  DC-OPTION-CODE > WCOVERAGE-OPTION  AND +
+          DC-CATEGORY-CODE >= WCOVERAGE-CATEGORY
+          IF (WCOVERAGE-OPTION = '1'       AND +
+              WCOVERAGE-CATEGORY = 'A')
+              WS-NEW-PICKUP-IND = 'Y'
+              WS-OPT-CAT-DECREASE = 'N'
+              PERFORM POPULATE-COV-START-DT
+          ELSE
+              WS-NEW-PICKUP-IND = 'N'
+              WS-OPT-CAT-DECREASE = 'N'
+              PERFORM POPULATE-COV-START-DT
+          END-IF
+      END-IF
+      IF  DC-OPTION-CODE = WCOVERAGE-OPTION  AND +
+          DC-CATEGORY-CODE >  WCOVERAGE-CATEGORY
+          IF (WCOVERAGE-OPTION = '1'       AND +
+              WCOVERAGE-CATEGORY = 'A')
+              WS-NEW-PICKUP-IND = 'Y'
+              WS-OPT-CAT-DECREASE = 'N'
+              PERFORM POPULATE-COV-START-DT
+          ELSE
+              WS-NEW-PICKUP-IND = 'N'
+              WS-OPT-CAT-DECREASE = 'N'
+              PERFORM POPULATE-COV-START-DT
+          END-IF
+      END-IF
+      IF (DC-OPTION-CODE < WCOVERAGE-OPTION) AND +
+         (DC-CATEGORY-CODE < WCOVERAGE-CATEGORY)
+          WS-NEW-PICKUP-IND = 'N'
+          WS-OPT-CAT-DECREASE = 'Y'
+          PERFORM POPULATE-COV-START-DT
+      END-IF
+      IF (DC-OPTION-CODE = WCOVERAGE-OPTION) AND +
+         (DC-CATEGORY-CODE < WCOVERAGE-CATEGORY)
+          WS-NEW-PICKUP-IND = 'N'
+          WS-OPT-CAT-DECREASE = 'Y'
+          PERFORM POPULATE-COV-START-DT
+      END-IF
+      IF (DC-OPTION-CODE < WCOVERAGE-OPTION) AND +
+         (DC-CATEGORY-CODE < WCOVERAGE-CATEGORY)
+          WS-NEW-PICKUP-IND = 'N'
+          WS-OPT-CAT-DECREASE = 'Y'
+          PERFORM POPULATE-COV-START-DT
+      END-IF
+      IF (DC-OPTION-CODE > WCOVERAGE-OPTION) AND +
+         (DC-CATEGORY-CODE < WCOVERAGE-CATEGORY)
+          IF WCOVERAGE-OPTION = '1'          AND +
+             ((WASC-PAY-CODE = '6')          OR  +
+               (WASC-PAY-CODE = '1'          AND +
+                  WASC-JOB-CODE ^= 'F' 'T' 'P'))
+              PERFORM CREATE-TWO-DLI-COV-RECORDS
+          ELSE
+              COV-OPTION-O = WCOVERAGE-OPTION
+              WS-NEW-PICKUP-IND = 'N'
+              WS-OPT-CAT-DECREASE = 'Y'
+              PERFORM POPULATE-COV-START-DT
+          END-IF
+      END-IF
+      IF (DC-OPTION-CODE < WCOVERAGE-OPTION) AND +
+         (DC-CATEGORY-CODE > WCOVERAGE-CATEGORY)
+          IF WCOVERAGE-OPTION = '1'          AND +
+             ((WASC-PAY-CODE = '6')          OR  +
+               (WASC-PAY-CODE = '1'          AND +
+                  WASC-JOB-CODE ^= 'F' 'T' 'P'))
+              PERFORM CREATE-TWO-DLI-COV-RECORDS
+          ELSE
+              COV-OPTION-O = WCOVERAGE-OPTION
+              WS-NEW-PICKUP-IND = 'N'
+              WS-OPT-CAT-DECREASE = 'Y'
+              PERFORM POPULATE-COV-START-DT
+          END-IF
+      END-IF
+   END-IF
+
+   CONFIRM-DATE-O = SESSION-DATE
+   IF SW-DEBUG-SWITCH = 'Y'
+              ' ' PLAN-NAME-O                                         +
+              ' ' DC-PLAN-YEAR                                        +
+              ' ' COV-START-DATE-O                                    +
+              ' ' COV-OPTION-O                                        +
+              ' ' COV-CATEGORY-O                                      +
+              ' ' ENROLL-RCPT-DATE-O                                  +
+              ' ' ORIG-COV-DATE-O                                     +
+              ' ' CHANGE-REASON-CD-O                                  +
+              ' ' PROVIDER-ID-O                                       +
+              ' ' ENROLL-LATE-INT-O
+   END-IF
+
+
+
+   IF (SSN-O = SSN-PREV                           AND   +
+       PLAN-NAME-O = PLAN-NAME-PREV  )
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+
+      IF (PLAN-NAME-O ^= 'STD' 'LTD')
+      IF (CHANGE-REASON-CD-PREV = 'MA' 'BI' 'DI' 'LD' 'GS' 'LE' 'AP' +
+          'SC' 'SE' 'DS' 'LA' 'RW' 'TC' AND   +
+          DC-ENROLL-TYPE-PREV = 30 13 16 7 5 51 64 66 67 68 27 50 AND +
+          CHANGE-REASON-CD-O = 'MA' 'BI' 'AP' 'DI' 'LD' 'GS' 'LE' +
+          'SC' 'SE' 'DS' 'LA' 'RW' 'TC' AND  +
+          DC-ENROLL-TYPE-CODE = 30 13 16 7 5 51 64 66 67 68 27 50 AND +
+          CHANGE-REASON-CD-O = CHANGE-REASON-CD-PREV   AND   +
+          DC-ENROLL-TYPE-CODE = DC-ENROLL-TYPE-PREV)
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF CHANGE-REASON-CD-O = 'DI' 'DS'     AND +
+            PLAN-NAME-O        = 'DLI'        AND +
+            COV-CATEGORY-O     >  COV-CATEGORY-PREV
+            COV-START-DATE-O = COV-START-DATE-PREV
+         END-IF
+         ORIG-COV-DATE-O = ORIG-COV-DATE-PREV
+      END-IF
+
+
+      IF (CHANGE-REASON-CD-PREV = 'MA' 'BI' 'DI' 'LD' 'NE' 'GS' 'LE' +
+                             'TC' 'SE' 'AP' 'SC' 'DS' 'LA' 'RW' AND +
+          DC-ENROLL-TYPE-PREV = 30 13 16 7 5 34 51 64 66 67 68 27 50  +
+      AND CHANGE-REASON-CD-O = 'AE'               AND   +
+          DC-ENROLL-TYPE-CODE = 4  )
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF (COV-OPTION-O = COV-OPTION-PREV      AND   +
+             COV-CATEGORY-O = COV-CATEGORY-PREV )
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+             COV-START-DATE-O = COV-START-DATE-PREV
+             ORIG-COV-DATE-O  = ORIG-COV-DATE-PREV
+         ELSE
+            IF PLAN-NAME-O = 'DLI'
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+               IF (COV-OPTION-PREV = '1'            AND   +
+                   COV-CATEGORY-PREV = 'A'      )
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                     COV-START-DATE-O = ORIG-COV-DATE-PREV
+                     ORIG-COV-DATE-O  = ORIG-COV-DATE-PREV
+               ELSE
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                     COV-START-DATE-O = COV-START-DATE-PREV
+                     ORIG-COV-DATE-O  = ORIG-COV-DATE-PREV
+               END-IF
+            END-IF
+            IF PLAN-NAME-O = 'ALI'
+               COV-START-DATE-O = COV-START-DATE-PREV
+               ORIG-COV-DATE-O  = ORIG-COV-DATE-PREV
+            END-IF
+            IF PLAN-NAME-O ^= 'DLI'
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+               IF COV-OPTION-PREV = '1'
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                  IF ORIG-COV-DATE-PREV <= NEXT-PLAN-YR-START
+                     IF SW-DEBUG-SWITCH = 'Y'
+                     END-IF
+                     COV-START-DATE-O = NEXT-PLAN-YR-START
+                     ORIG-COV-DATE-O  = NEXT-PLAN-YR-START
+                  ELSE
+                     IF SW-DEBUG-SWITCH = 'Y'
+                     END-IF
+                     COV-START-DATE-O = ORIG-COV-DATE-PREV
+                     ORIG-COV-DATE-O  = ORIG-COV-DATE-PREV
+                  END-IF
+               ELSE
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                  IF ORIG-COV-DATE-PREV <= NEXT-PLAN-YR-START
+                     IF SW-DEBUG-SWITCH = 'Y'
+                     END-IF
+                     COV-START-DATE-O = NEXT-PLAN-YR-START
+                     ORIG-COV-DATE-O  = ORIG-COV-DATE-PREV
+                  ELSE
+                     IF SW-DEBUG-SWITCH = 'Y'
+                     END-IF
+                     COV-START-DATE-O = ORIG-COV-DATE-PREV
+                     ORIG-COV-DATE-O  = ORIG-COV-DATE-PREV
+                  END-IF
+               END-IF
+            END-IF
+         END-IF
+      END-IF
+
+
+      IF (CHANGE-REASON-CD-PREV = 'AE'                     AND +
+          DC-ENROLL-TYPE-PREV = 4                          AND   +
+        CHANGE-REASON-CD-O = 'MA' 'BI' 'AP' 'SC' 'DI' 'LD' 'GS' 'TC' +
+        'LE' 'SE' 'DS' 'LA' 'RW' AND DC-ENROLL-TYPE-CODE = 30 13   +
+                           16 7 5 51 64 66 67 68 27 50)
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF (COV-OPTION-O = COV-OPTION-PREV      AND   +
+             COV-CATEGORY-O = COV-CATEGORY-PREV )
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+             COV-START-DATE-O = COV-START-DATE-PREV
+             ORIG-COV-DATE-O  = ORIG-COV-DATE-PREV
+         ELSE
+            IF PLAN-NAME-O = 'DLI'
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+               IF (COV-OPTION-PREV = '1'            AND   +
+                   COV-CATEGORY-PREV = 'A'      )
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                     COV-START-DATE-O = ORIG-COV-DATE-PREV
+                     ORIG-COV-DATE-O  = ORIG-COV-DATE-PREV
+               ELSE
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                     COV-START-DATE-O = COV-START-DATE-PREV
+                     ORIG-COV-DATE-O  = ORIG-COV-DATE-PREV
+               END-IF
+            END-IF
+            IF PLAN-NAME-O = 'ALI'
+               IF COV-OPTION-PREV = '1'
+                  COV-START-DATE-O = ORIG-COV-DATE-PREV
+                  ORIG-COV-DATE-O  = ORIG-COV-DATE-PREV
+               ELSE
+                  COV-START-DATE-O = COV-START-DATE-PREV
+                  ORIG-COV-DATE-O  = ORIG-COV-DATE-PREV
+               END-IF
+            ENDIF
+            IF PLAN-NAME-O ^= 'DLI' AND  +
+               PLAN-NAME-O = 'ALI'
+               IF SW-DEBUG-SWITCH = 'Y'
+               END-IF
+               IF COV-OPTION-PREV = '1'
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                  IF ORIG-COV-DATE-PREV <= NEXT-PLAN-YR-START
+                     IF SW-DEBUG-SWITCH = 'Y'
+                     END-IF
+                     COV-START-DATE-O = NEXT-PLAN-YR-START
+                     ORIG-COV-DATE-O  = NEXT-PLAN-YR-START
+                  ELSE
+                     IF SW-DEBUG-SWITCH = 'Y'
+                     END-IF
+                     COV-START-DATE-O = ORIG-COV-DATE-PREV
+                     ORIG-COV-DATE-O  = ORIG-COV-DATE-PREV
+                  END-IF
+               ELSE
+                  IF SW-DEBUG-SWITCH = 'Y'
+                  END-IF
+                  IF ORIG-COV-DATE-PREV <= NEXT-PLAN-YR-START
+                     IF SW-DEBUG-SWITCH = 'Y'
+                     END-IF
+                     COV-START-DATE-O = NEXT-PLAN-YR-START
+                     ORIG-COV-DATE-O  = ORIG-COV-DATE-PREV
+                  ELSE
+                     IF SW-DEBUG-SWITCH = 'Y'
+                     END-IF
+                     COV-START-DATE-O = ORIG-COV-DATE-PREV
+                     ORIG-COV-DATE-O  = ORIG-COV-DATE-PREV
+                  END-IF
+               END-IF
+            END-IF
+         END-IF
+      END-IF
+      END-IF
+   END-IF
+
+   IF SSN-CURR-YEAR ^= DC-ENROLLEE-SSN
+      IF CHANGE-REASON-CD-O = 'MA' 'BI' 'AP' 'SC' 'DI' 'GS' 'LE' 'DS' +
+                              'LA' 'RW' 'TC' +
+         AND DC-ENROLL-TYPE-CODE  = 30 13 16 7 5 51 66 67 27 50
+         IF SW-DEBUG-SWITCH = 'Y'
+         END-IF
+         IF DC-PLAN-NAME ^= 'MED' 'DEN' 'ADD' 'VIS'
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            WS-OUT-REC-SAVE = BEN-REC
+            WSSN = DC-ENROLLEE-SSN
+            WPLAN-YEAR-PREV = DC-PLAN-YEAR - 1
+            PERFORM GET-BENEFIT-DATA-PREV
+            IF SW-DEBUG-SWITCH = 'Y'
+            END-IF
+            PLAN-YEAR-O = WPLAN-YEAR-PREV
+            PAYROLL-DATE-O = WPAYROLL-DATE-PREV
+            IF SW-DEBUG-SWITCH = 'Y'
+                       ' ' WS-ENROLLEE-SSN                            +
+                       ' ' PLAN-NAME-O                                +
+                       ' ' PLAN-YEAR-O                                +
+                       ' ' PAYROLL-DATE-O                             +
+                       ' ' COV-START-DATE-O                           +
+                       ' ' COV-OPTION-O                               +
+                       ' ' COV-CATEGORY-O                             +
+                       ' ' ENROLL-RCPT-DATE-O                         +
+                       ' ' ORIG-COV-DATE-O                            +
+                       ' ' CHANGE-REASON-CD-O                         +
+                       ' ' PROVIDER-ID-O                              +
+                       ' ' ENROLL-LATE-INT-O
+            END-IF
+            PERFORM WRITE-BEUPDATE
+            BEN-REC = WS-OUT-REC-SAVE
+         END-IF
+      END-IF
+   END-IF
+   END-IF
+   IF SW-DEBUG-SWITCH = 'Y'
+              ' ' WS-ENROLLEE-SSN                                     +
+              ' ' PLAN-NAME-O                                         +
+              ' ' DC-PLAN-YEAR                                        +
+              ' ' COV-START-DATE-O                                    +
+              ' ' COV-OPTION-O                                        +
+              ' ' COV-CATEGORY-O                                      +
+              ' ' ENROLL-RCPT-DATE-O                                  +
+              ' ' ORIG-COV-DATE-O                                     +
+              ' ' CHANGE-REASON-CD-O                                  +
+              ' ' PROVIDER-ID-O                                       +
+              ' ' ENROLL-LATE-INT-O
+   END-IF
+
+   SSN-PREV               = SSN-O
+   PLAN-NAME-PREV         = PLAN-NAME-O
+   COV-START-DATE-PREV    = COV-START-DATE-O
+   COV-OPTION-PREV        = COV-OPTION-O
+   COV-CATEGORY-PREV      = COV-CATEGORY-O
+   ENROLL-RCPT-DATE-PREV  = ENROLL-RCPT-DATE-O
+   ORIG-COV-DATE-PREV     = ORIG-COV-DATE-O
+   CHANGE-REASON-CD-PREV  = CHANGE-REASON-CD-O
+   DC-ENROLL-TYPE-PREV    = DC-ENROLL-TYPE-CODE
+   WCOVERAGE-OPT-PREV     = WCOVERAGE-OPTION
+   WCOVERAGE-CAT-PREV     = WCOVERAGE-CATEGORY
+
+   IF SW-DEBUG-SWITCH = 'Y'
+              ' ' PLAN-NAME-PREV                                      +
+              ' ' COV-START-DATE-PREV                                 +
+              ' ' COV-OPTION-PREV                                     +
+              ' ' COV-CATEGORY-PREV                                   +
+              ' ' ENROLL-RCPT-DATE-PREV                               +
+              ' ' ORIG-COV-DATE-PREV                                  +
+              ' ' CHANGE-REASON-CD-PREV                               +
+              ' ' DC-ENROLL-TYPE-PREV
+   END-IF
+
+   IF TWO-RECORDS-FLAG = 'Y'
+      COV-OPTION-O = COV-OPTION-O1
+      COV-CATEGORY-O = COV-CATEGORY-O1
+      HISTORY-TYPE-O = HISTORY-TYPE-O1
+      COV-START-DATE-O = COV-START-DATE-O1
+      PERFORM GET-NEW-BROKER-COV-ST-DATE
+      PERFORM WRITE-BEUPDATE
+      FIRST-REC-FLAG = 'N'
+      COV-OPTION-O = COV-OPTION-O2
+      COV-CATEGORY-O = COV-CATEGORY-O2
+      HISTORY-TYPE-O = HISTORY-TYPE-O2
+      COV-START-DATE-O = COV-START-DATE-O2
+
+      PERFORM GET-NEW-BROKER-COV-ST-DATE
+      PERFORM WRITE-BEUPDATE
+    ELSE
+      PERFORM GET-NEW-BROKER-COV-ST-DATE
+      PERFORM WRITE-BEUPDATE
+   END-IF
+  END-PROC
+GET-NEW-BROKER-COV-ST-DATE. PROC
+      IF CHANGE-REASON-CD-O = 'OE' AND   +
+         DC-PLAN-YEAR = 2020 AND         +
+         DC-PLAN-NAME = 'MED' AND        +
+         DC-INS-BROKER-ID = 23 AND       +
+         WCOVERAGE-OPTION = '1' AND      +
+         COV-OPTION-O NE WCOVERAGE-OPTION AND +
+         WCOVERAGE-START-DT LE '2020-01-01'
+         COV-START-DATE-O = '2020-01-01'
+         ORIG-COV-DATE-O = '2020-01-01'
+      END-IF
+      IF DC-PLAN-YEAR = 2020 AND         +
+         DC-PLAN-NAME = 'MED' AND        +
+         DC-INS-BROKER-ID = 23 AND       +
+         COV-START-DATE-O LE '2020-01-01'
+         COV-START-DATE-O = '2020-01-01'
+      END-IF
+   END-PROC
+GET-RELATION-TYPE-CD-CURSOR. PROC
+
+      SQL OPEN GETRELCD
+      IF SQLCODE = +0
+      ELSE
+                 ' PLAN NAME = ' DC-PLAN-NAME
+         RETURN-CODE = 1
+         STOP EXECUTE
+      END-IF
+
+      WS-RELATION-TYPE-CODE       = '     '
+      WS-REL-TABLE-EOF-SW         = 'N'
+      DO WHILE WS-REL-TABLE-EOF-SW = 'N'
+      SQL FETCH GETRELCD                                         +
+          INTO :WS-RELATION-TYPE-CODE
+      IF SQLCODE = 0
+        CASE WS-RELATION-TYPE-CODE
+          WHEN 'DP   '
+            WS-DP-FOUND-SW              =    'Y'
+          WHEN 'SP   '
+            WS-SP-FOUND-SW              =    'Y'
+          WHEN 'S    ' 'D    ' 'SS   ' 'SD   '
+            WS-LEG-DEP-FOUND-SW         =    'Y'
+          WHEN 'PS   ' 'PD   '
+            WS-DP-DEP-FOUND-SW         =    'Y'
+        END-CASE
+      ELSE
+         IF SQLCODE = +100
+            WS-REL-TABLE-EOF-SW   = 'Y'
+         ELSE
+                   ' PLAN NAME = ' DC-PLAN-NAME
+            RETURN-CODE = 1
+            STOP EXECUTE
+         END-IF
+      END-IF
+      END-DO
+
+      SQL CLOSE GETRELCD
+      IF SQLCODE = +0
+      ELSE
+                 ' PLAN NAME = ' DC-PLAN-NAME
+         RETURN-CODE = 1
+         STOP EXECUTE
+      END-IF
+   END-PROC
+
+ GET-RELATION-TYPE-CD-CURSOR-CHANGE. PROC
+
+      SQL OPEN GETRELDP
+      IF SQLCODE = +0
+      ELSE
+                 ' PLAN NAME = ' DC-PLAN-NAME
+         RETURN-CODE = 1
+         STOP EXECUTE
+      END-IF
+
+      WS-RELATION-TYPE-CODE       = '     '
+      WS-DEP-CHG-TABLE-EOF-SW     = 'N'
+      DO WHILE WS-DEP-CHG-TABLE-EOF-SW = 'N'
+      SQL FETCH GETRELDP                                         +
+          INTO :WS-RELATION-TYPE-CODE
+      IF SQLCODE = 0
+        CASE WS-RELATION-TYPE-CODE
+          WHEN 'DP   '
+            WS-DP-FOUND-SW              =    'Y'
+          WHEN 'SP   '
+            WS-SP-FOUND-SW              =    'Y'
+          WHEN 'S    ' 'D    ' 'SS   ' 'SD   '
+            WS-LEG-DEP-FOUND-SW         =    'Y'
+          WHEN 'PS   ' 'PD   '
+            WS-DP-DEP-FOUND-SW         =    'Y'
+        END-CASE
+      ELSE
+         IF SQLCODE = +100
+            WS-DEP-CHG-TABLE-EOF-SW = 'Y'
+         ELSE
+                   ' PLAN NAME = ' DC-PLAN-NAME
+            RETURN-CODE = 1
+            STOP EXECUTE
+         END-IF
+      END-IF
+      END-DO
+
+      SQL CLOSE GETRELDP
+      IF SQLCODE = +0
+      ELSE
+                 ' PLAN NAME = ' DC-PLAN-NAME
+         RETURN-CODE = 1
+         STOP EXECUTE
+      END-IF
+   END-PROC
+
+GET-WIN-NBR. PROC
+  SQL OPEN GETWINNBR
+  IF SQLCODE = +0
+  ELSE
+     RETURN-CODE = 1
+     STOP EXECUTE
+  END-IF
+  SQL FETCH GETWINNBR                                                 +
+  INTO :WS-WIN-NBR,                                                   +
+       :WASC-TYPE-CODE
+  IF SQLCODE = +0
+     IF WASC-TYPE-CODE = 'P' 'T'
+        WS-PT-TRUCK = 'Y'
+     END-IF
+  ELSE
+     IF SQLCODE = -305
+        WS-PT-TRUCK = 'N'
+  ELSE
+     IF SQLCODE = 100
+        WSSN1 = WSSN
+        PERFORM GET-WIN-NBRN
+     ELSE
+        DC-ENROLLEE-SSN
+        RETURN-CODE = 1
+        STOP EXECUTE
+     END-IF
+     END-IF
+  END-IF
+
+  SQL CLOSE GETWINNBR
+  IF SQLCODE = +0
+  ELSE
+     RETURN-CODE = 1
+     STOP EXECUTE
+  END-IF
+END-PROC
+
+
+GET-WIN-NBRN. PROC
+  SQL OPEN GETWINNBRNEW
+  IF SQLCODE = +0
+  ELSE
+     RETURN-CODE = 1
+     STOP EXECUTE
+  END-IF
+
+  SQL FETCH GETWINNBRNEW                                              +
+  INTO :WS-WIN-NBR,                                                   +
+       :WASC-TYPE-CODE
+  IF SQLCODE = +0
+
+     IF WASC-TYPE-CODE = 'P' 'T'
+        WS-PT-TRUCK = 'Y'
+     END-IF
+  ELSE
+     IF SQLCODE = -305
+        WS-PT-TRUCK = 'N'
+
+  ELSE
+     DC-ENROLLEE-SSN
+     RETURN-CODE = 1
+     STOP EXECUTE
+
+     END-IF
+
+  END-IF
+
+  SQL CLOSE GETWINNBRNEW
+  IF SQLCODE = +0
+  ELSE
+     RETURN-CODE = 1
+     STOP EXECUTE
+  END-IF
+END-PROC
+
+CHECK-IF-SPOUSE-IS-DP. PROC
+
+      SQL OPEN GETGENDER
+      IF SQLCODE = +0
+      ELSE
+                 ' PLAN YEAR = ' LOOKUP-PLAN-YEAR-N                 +
+                 ' PLAN NAME = ' DC-PLAN-NAME
+         RETURN-CODE = 1
+         STOP EXECUTE
+      END-IF
+
+      SQL FETCH GETGENDER                                        +
+          INTO :WS-GENDER-SAME-SW
+      IF SQLCODE = 0
+         WS-DP-FOUND-SW   = 'Y'
+      ELSE
+         IF SQLCODE = +100
+            PERFORM CHECK-IF-SPOUSE-IS-COMMON-LAW
+         ELSE
+                    ' PLAN YEAR = ' LOOKUP-PLAN-YEAR-N               +
+                    ' PLAN NAME = ' DC-PLAN-NAME
+            RETURN-CODE = 1
+            STOP EXECUTE
+         END-IF
+      END-IF
+
+      SQL CLOSE GETGENDER
+      IF SQLCODE = +0
+      ELSE
+                 ' PLAN YEAR = ' LOOKUP-PLAN-YEAR-N              +
+                 ' PLAN NAME = ' DC-PLAN-NAME
+         RETURN-CODE = 1
+         STOP EXECUTE
+      END-IF
+END-PROC
+CHECK-IF-SPOUSE-IS-COMMON-LAW. PROC
+
+      SQL OPEN GETUNIONCD
+      IF SQLCODE = +0
+      ELSE
+                 ' PLAN YEAR = ' LOOKUP-PLAN-YEAR-N              +
+                 ' PLAN NAME = ' DC-PLAN-NAME
+         RETURN-CODE = 1
+         STOP EXECUTE
+      END-IF
+
+      SQL FETCH GETUNIONCD                                       +
+          INTO :WS-SP-COMMN-LAW-SW
+      IF SQLCODE = 0
+         WS-DP-FOUND-SW   = 'Y'
+      ELSE
+         IF SQLCODE = +100
+         ELSE
+                    ' PLAN YEAR = ' LOOKUP-PLAN-YEAR-N              +
+                    ' PLAN NAME = ' DC-PLAN-NAME
+            RETURN-CODE = 1
+            STOP EXECUTE
+         END-IF
+      END-IF
+
+      SQL CLOSE GETUNIONCD
+      IF SQLCODE = +0
+      ELSE
+                 ' PLAN YEAR = ' LOOKUP-PLAN-YEAR-N              +
+                 ' PLAN NAME = ' DC-PLAN-NAME
+         RETURN-CODE = 1
+         STOP EXECUTE
+      END-IF
+END-PROC
+WRITE-BEUPDATE. PROC
+   IF PLAN-NAME-O = 'MED' 'VIS'
+      IF WINS-PROVIDER-ID-IND < 0
+         WINS-PROVIDER-ID = 0
+      END-IF
+      IF WINS-BROKER-ID-IND < 0
+         WINS-BROKER-ID = 0
+      END-IF
+   END-IF
+
+   IF  LAST-CHANGE-ID-O ^=  'WEBSITE '
+       LAST-CHANGE-ID-O = 'ONLINE'
+   END-IF
+   IF  WS-NEWLY-ELIGIBLE  = 'N'
+     IF  PLAN-NAME-O  = 'MED' 'DEN' 'ALI' 'ADD' 'VIS'
+       IF  WCOVERAGE-OPTION  = '1'
+         IF COV-OPTION-O  ^= WCOVERAGE-OPTION
+            ENROLL-LATE-INT-O  = 'Y'
+         END-IF
+       END-IF
+     END-IF
+   END-IF
+   IF  WS-NEWLY-ELIGIBLE  = 'N'
+     IF  PLAN-NAME-O  = 'DLI'
+       IF  WCOVERAGE-OPTION  = '1'
+         IF WCOVERAGE-CATEGORY = 'A'
+            IF COV-OPTION-O  >  WCOVERAGE-OPTION
+               ENROLL-LATE-INT-O  = 'Y'
+            ELSE
+              IF COV-CATEGORY-O > WCOVERAGE-CATEGORY
+                 ENROLL-LATE-INT-O  = 'Y'
+              END-IF
+            END-IF
+         END-IF
+       END-IF
+     END-IF
+   END-IF
+       WS-COVERAGE-OPT-CMP-ONE = DC-OPTION-CODE
+       WS-COVERAGE-OPT-CMP-TWO = WCOVERAGE-OPTION
+       WS-COVERAGE-OPT-ONE-INCREASED  = 'N'
+       WS-COVERAGE-OPT-ONE-DECREASED  = 'N'
+       WS-COVERAGE-OPT-ONE-EQUAL  = 'N'
+       PERFORM COMPARE-COVERAGE-OPTIONS
+   IF PLAN-NAME-O  = 'ALI' 'DLI'  AND +
+       WS-COVERAGE-OPT-ONE-INCREASED  = 'Y'
+       IF WS-NEWLY-ELIGIBLE  = 'Y'
+           IF PLAN-NAME-O        = 'ALI'
+               WS-LETTER-NBR  =  5
+               WS-MSG-TXT = 'ALI GOOD HEALTH CHECK NE'
+           END-IF
+           IF PLAN-NAME-O        = 'DLI'
+               WS-LETTER-NBR  =  6
+               WS-MSG-TXT = 'DLI GOOD HEALTH CHECK NE'
+           END-IF
+           PERFORM PROOF-OF-GOOD-HEALTH
+           IF WS-GOOD-HEALTH-IND = 'Y'
+               IF WCOVERAGE-OPTION = '1'
+                 IF CHANGE-REASON-CD-O = 'AE'
+                    COV-OPTION-O = '1'
+                 ELSE
+                    COV-OPTION-O = '2'
+                 END-IF
+                 IF CHANGE-REASON-CD-O = 'AE'   AND +
+                    PLAN-NAME-O        = 'DLI'  AND +
+                    WS-DP-FOUND-SW     = 'Y'
+                      COV-OPTION-O = '2'
+                 END-IF
+               ELSE
+                   COV-OPTION-O = WCOVERAGE-OPTION
+               END-IF
+               IF PLAN-NAME-O        = 'DLI'    AND  +
+                 CHANGE-REASON-CD-O  = 'MA'     AND  +
+                 DC-OPTION-CODE      > '2'
+                   COV-OPTION-O = '2'
+               END-IF
+           END-IF
+           IF WS-GOOD-HEALTH-IND = 'N'
+              IF CHANGE-REASON-CD-O = 'AE'
+                 COV-OPTION-O = '1'
+              ELSE
+                 COV-OPTION-O = DC-OPTION-CODE
+              END-IF
+           END-IF
+       END-IF
+
+       IF  WS-NEWLY-ELIGIBLE  = 'N'
+           IF PLAN-NAME-O        = 'ALI'
+               WS-LETTER-NBR  =  5
+               WS-MSG-TXT = 'ALI GOOD HEALTH CHECK NOT NE'
+           END-IF
+           IF PLAN-NAME-O        = 'DLI'
+               WS-LETTER-NBR  =  6
+               WS-MSG-TXT = 'DLI GOOD HEALTH CHECK NOT NE'
+           END-IF
+           PERFORM PROOF-OF-GOOD-HEALTH
+           IF WS-GOOD-HEALTH-IND = 'Y'
+                   COV-OPTION-O = WCOVERAGE-OPTION
+               IF PLAN-NAME-O        = 'DLI'    AND  +
+                 CHANGE-REASON-CD-O  = 'MA'     AND  +
+                 DC-OPTION-CODE      >=  '2'
+                   COV-OPTION-O = '2'
+               END-IF
+               IF PLAN-NAME-O        = 'DLI'    AND  +
+                 CHANGE-REASON-CD-O  = 'AE'     AND  +
+                 WS-DP-FOUND-SW      = 'Y'      AND  +
+                 WCOVERAGE-OPTION    = '1'      AND  +
+                 DC-OPTION-CODE      >= '2'
+                   COV-OPTION-O = '2'
+               END-IF
+           END-IF
+           IF WS-GOOD-HEALTH-IND = 'N'
+               COV-OPTION-O = DC-OPTION-CODE
+           END-IF
+       END-IF
+   END-IF
+
+   IF PLAN-NAME-O  = 'DLI'  AND +
+      DC-OPTION-CODE < WCOVERAGE-OPTION AND +
+      FIRST-REC-FLAG = 'N'
+       COV-OPTION-O = DC-OPTION-CODE
+   END-IF
+   IF PLAN-NAME-O  = 'ALI'
+       WS-COVERAGE-OPT-CMP-ONE = DC-OPTION-CODE
+       WS-COVERAGE-OPT-CMP-TWO = WCOVERAGE-OPTION
+       WS-COVERAGE-OPT-ONE-INCREASED  = 'N'
+       WS-COVERAGE-OPT-ONE-DECREASED  = 'N'
+       WS-COVERAGE-OPT-ONE-EQUAL  = 'N'
+       PERFORM COMPARE-COVERAGE-OPTIONS
+       IF WS-COVERAGE-OPT-ONE-DECREASED  = 'Y' AND +
+          FIRST-REC-FLAG = 'N'
+           COV-OPTION-O = DC-OPTION-CODE
+       END-IF
+   END-IF
+   BEN-BKRID-O      = DC-INS-BROKER-ID
+   IF DC-OPTION-CODE EQ '1' AND WCOVERAGE-OPTION EQ '4' AND +
+      PLAN-NAME-O EQ 'STD'
+      CONTINUE
+   ELSE
+      PERFORM CHECK-TRANSITION-TABLE
+   END-IF
+   PERFORM ALI-DLI-PARTTIME-CHANGE
+   IF ((PLAN-NAME-O = 'MED' 'DEN' 'VIS' 'ADD') AND +
+       (CHANGE-REASON-CD-O = 'LA'  'TC')       AND +
+       (COV-OPTION-O = '1')                    AND +
+       (COV-OPTION-O ^= WCOVERAGE-OPTION))
+
+      PERFORM GET-EVENT-DATE-PLUS1
+      IF EVENT-DATE-PLUS1-IND = -1
+         COV-START-DATE-O = WS-EVENT-DATE-LD
+      ELSE
+         COV-START-DATE-O = EVENT-DATE-PLUS1
+      END-IF
+      CHANGE-REASON-CD-O = 'TC'
+   END-IF
+   PERFORM WRITE-UPDATED-REC
+   WS-TEMP-SSN = SSN-O
+END-PROC
+
+WRITE-UPDATED-REC. PROC
+   IF ((DC-PLAN-NAME = 'MED') AND (DC-CATEGORY-CODE = ' ') AND +
+      (DC-OPTION-CODE = '1') AND (WCOVERAGE-END-DT-IND = 0) AND +
+      (WASC-PAY-CODE = '1') AND (WASC-JOB-CODE = 'T' 'P'))
+      CONTINUE
+   ELSE
+      PUT BEUPDATE
+   END-IF
+END-PROC
+
+GET-EVENT-DATE-PLUS1. PROC
+ SQL OPEN CURSOR12
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ SQL FETCH CURSOR12                                  +
+ INTO                       +
+    :EVENT-DATE-PLUS1:EVENT-DATE-PLUS1-IND
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ SQL CLOSE CURSOR12
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+   END-PROC
+ALI-DLI-PARTTIME-CHANGE. PROC
+  IF (( WASC-PAY-CODE = '1' '3' '6' AND WASC-JOB-CODE =  'T' 'P' ) OR +
+        WS-PT-TRUCK = 'Y' )
+     IF WS-SESSION-DATE-YY = 2015 AND WCOVERAGE-START-DT LE '2016-01-01'
+         IF DC-CHANGE-REASON-CODE = 'AE'
+           IF PLAN-NAME-O  = 'ALI'
+              IF DC-OPTION-CODE NE '1' '2'
+                 IF WCOVERAGE-OPTION < DC-OPTION-CODE
+                    IF WCOVERAGE-OPTION EQ '1' '2'
+                       COV-OPTION-O = '2'
+                    ELSE
+                       COV-OPTION-O = WCOVERAGE-OPTION
+                    END-IF
+                 ELSE
+                    COV-OPTION-O = DC-OPTION-CODE
+                 END-IF
+              ELSE
+                 COV-OPTION-O = DC-OPTION-CODE
+              END-IF
+              COV-START-DATE-O = '2016-01-01'
+              ORIG-COV-DATE-O  = '2016-01-01'
+           ELSE
+              IF PLAN-NAME-O = 'DLI'
+                 COV-START-DATE-O = '2016-01-01'
+                 ORIG-COV-DATE-O  = '2016-01-01'
+              END-IF
+           END-IF
+         ELSE
+           IF DC-CHANGE-REASON-CODE = 'NE' AND DC-PLAN-YEAR = 2016 +
+              AND PLAN-NAME-O = 'ALI' 'DLI'
+                 COV-START-DATE-O = '2016-01-01'
+                 ORIG-COV-DATE-O  = '2016-01-01'
+           END-IF
+         END-IF
+      END-IF
+   END-IF
+END-PROC
+COMPARE-COVERAGE-OPTIONS. PROC
+   IF WS-COVERAGE-OPT-CMP-ONE NUMERIC AND +
+      WS-COVERAGE-OPT-CMP-TWO NUMERIC
+           IF WS-COVERAGE-OPT-CMP-ONE > WS-COVERAGE-OPT-CMP-TWO
+              WS-COVERAGE-OPT-ONE-INCREASED = 'Y'
+           ELSE
+              IF WS-COVERAGE-OPT-CMP-ONE < WS-COVERAGE-OPT-CMP-TWO
+                 WS-COVERAGE-OPT-ONE-DECREASED  = 'Y'
+              ELSE
+                 WS-COVERAGE-OPT-ONE-EQUAL = 'Y'
+              END-IF
+           END-IF
+   ELSE
+      IF WS-COVERAGE-OPT-CMP-ONE NUMERIC AND +
+         WS-COVERAGE-OPT-CMP-TWO ALPHABETIC
+             WS-COVERAGE-OPT-ONE-DECREASED = 'Y'
+      ELSE
+         IF WS-COVERAGE-OPT-CMP-ONE ALPHABETIC AND +
+            WS-COVERAGE-OPT-CMP-TWO NUMERIC
+             WS-COVERAGE-OPT-ONE-INCREASED =  'Y'
+         ELSE
+            IF WS-COVERAGE-OPT-CMP-ONE ALPHABETIC AND +
+               WS-COVERAGE-OPT-CMP-TWO ALPHABETIC
+                IF WS-COVERAGE-OPT-CMP-ONE > WS-COVERAGE-OPT-CMP-TWO
+                   WS-COVERAGE-OPT-ONE-INCREASED = 'Y'
+                ELSE
+                  IF WS-COVERAGE-OPT-CMP-ONE < WS-COVERAGE-OPT-CMP-TWO
+                     WS-COVERAGE-OPT-ONE-DECREASED = 'Y'
+                  ELSE
+                     WS-COVERAGE-OPT-ONE-EQUAL = 'Y'
+                  END-IF
+                END-IF
+             END-IF
+           END-IF
+        END-IF
+   END-IF
+END-PROC
+
+FORMAT-FAMILY-CHANGE-REC. PROC
+   IF SW-DEBUG-SWITCH = 'Y'
+              ' ' WS-ENROLLEE-SSN                                     +
+              ' ' SESSION-DATE DC-CHANGE-EVENT-DATE                   +
+              ' ' DC-CHANGE-REASON-CODE
+   END-IF
+   FAMCHG-REC = ' '
+   FAMCHG-PLAN-YEAR = DC-PLAN-YEAR
+   FAMCHG-SSN = DC-ENROLLEE-SSN
+   FAMCHG-CHANGE-DATE = SESSION-DATE
+   IF  DC-CHANGE-REASON-CODE = 'LE'
+           FAMCHG-FSC-DATE =  WS-ORIG-EVENT-DATE
+       FAMCHG-FSC-DATE =  WS-ORIG-EVENT-DATE
+   ELSE
+       IF  DC-CHANGE-REASON-CODE = 'DI' 'DS' AND  +
+           WS-EVENT-DATE-CHANGED = 'Y'
+           FAMCHG-FSC-DATE =  WS-ORIG-EVENT-DATE
+       ELSE
+           FAMCHG-FSC-DATE    = DC-CHANGE-EVENT-DATE
+       END-IF
+   END-IF
+   FAMCHG-FSC-REASON  = DC-CHANGE-REASON-CODE
+   FAMCHG-UPDATE-CODE = 'I'
+END-PROC
+
+GET-PLAN-YEAR. PROC
+ SQL OPEN CURSOR1
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ SQL FETCH CURSOR1                                     +
+ INTO                       +
+    :ANNUAL-ENROLLMENT,     +
+    :CURRENT-PLAN-YEAR,     +
+    :NEXT-PLAN-YEAR,        +
+    :PAY-PERIOD-BEGIN,      +
+    :NEXT-PAY-PERIOD-BEGIN, +
+    :CURRENT-DATE
+   IF SQLCODE = 0
+      NEXT-PLAN-YY = NEXT-PLAN-YEAR
+   END-IF
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ SQL CLOSE CURSOR1
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+END-PROC
+
+GET-ALI-DLI-AMOUNTS. PROC
+ WS-ALI-OPT-IND-TY  =  1
+ WS-ALI-OPT-IND-NY  =  1
+ WS-DLI-OPT-IND-TY  =  1
+ WS-DLI-OPT-IND-NY  =  1
+ WS-DLI-CATG-IND-TY =  1
+ WS-DLI-CATG-IND-NY =  1
+ SQL OPEN CURSOR6
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ DO WHILE SW-LOAD-ALI-DLI = 'N'
+ SQL FETCH CURSOR6                                     +
+ INTO                       +
+    :TPLAN-NAME,            +
+    :TPLAN-YEAR,            +
+    :TOPTION-CODE,          +
+    :TOPTION-AMT
+   IF SQLCODE = 0
+      PERFORM   LOAD-ALI-DLI-TABLE
+   END-IF
+   IF SQLCODE  =  100
+      SW-LOAD-ALI-DLI = 'Y'
+   END-IF
+   IF SQLCODE ^= 0  100
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ END-DO
+ SQL CLOSE CURSOR6
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+END-PROC
+
+LOAD-ALI-DLI-TABLE. PROC
+   IF  TPLAN-NAME = 'ALI' AND  TPLAN-YEAR = CURRENT-PLAN-YEAR
+       TABLE-ALI-OPT-TY (WS-ALI-OPT-IND-TY)  =  TOPTION-CODE
+       TABLE-ALI-AMT-TY (WS-ALI-OPT-IND-TY)  =  TOPTION-AMT
+       WS-ALI-OPT-IND-TY  =  WS-ALI-OPT-IND-TY + 1
+   END-IF
+   IF  TPLAN-NAME = 'ALI' AND  TPLAN-YEAR = NEXT-PLAN-YEAR
+       TABLE-ALI-OPT-NY (WS-ALI-OPT-IND-NY)  =  TOPTION-CODE
+       TABLE-ALI-AMT-NY (WS-ALI-OPT-IND-NY)  =  TOPTION-AMT
+       WS-ALI-OPT-IND-NY  =  WS-ALI-OPT-IND-NY + 1
+   END-IF
+   IF  TPLAN-NAME = 'DLI' AND  TPLAN-YEAR = CURRENT-PLAN-YEAR
+       IF  TOPTION-CODE  = 'A'  THRU 'Z'
+           TABLE-DLI-CATG-TY (WS-DLI-CATG-IND-TY)  =  TOPTION-CODE
+           TABLE-DLI-CATG-AMT-TY (WS-DLI-CATG-IND-TY)  =  TOPTION-AMT
+           WS-DLI-CATG-IND-TY  =  WS-DLI-CATG-IND-TY + 1
+       ELSE
+           TABLE-DLI-OPT-TY (WS-DLI-OPT-IND-TY)  =  TOPTION-CODE
+           TABLE-DLI-OPT-AMT-TY (WS-DLI-OPT-IND-TY)  =  TOPTION-AMT
+           WS-DLI-OPT-IND-TY  =  WS-DLI-OPT-IND-TY + 1
+       END-IF
+   END-IF
+   IF  TPLAN-NAME = 'DLI' AND  TPLAN-YEAR = NEXT-PLAN-YEAR
+       IF  TOPTION-CODE  = 'A'  THRU 'Z'
+           TABLE-DLI-CATG-NY (WS-DLI-CATG-IND-NY)  =  TOPTION-CODE
+           TABLE-DLI-CATG-AMT-NY (WS-DLI-CATG-IND-NY)  =  TOPTION-AMT
+           WS-DLI-CATG-IND-NY  =  WS-DLI-CATG-IND-NY + 1
+       ELSE
+           TABLE-DLI-OPT-NY (WS-DLI-OPT-IND-NY)  =  TOPTION-CODE
+           TABLE-DLI-OPT-AMT-NY (WS-DLI-OPT-IND-NY)  =  TOPTION-AMT
+           WS-DLI-OPT-IND-NY  =  WS-DLI-OPT-IND-NY + 1
+       END-IF
+   END-IF
+END-PROC
+
+CHECK-FOR-DENIAL-LETTER. PROC
+ SQL OPEN CURSOR4
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+   IF SW-DEBUG-SWITCH = 'Y'
+   END-IF
+ SQL FETCH CURSOR4          +
+ INTO                       +
+    :WSSN
+
+   IF SW-DEBUG-SWITCH = 'Y'
+   END-IF
+   IF SQLCODE ^= 0 +100
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+
+   IF SQLCODE = 0
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      WS-DENIAL-LETTER = 'Y'
+   END-IF
+
+ SQL CLOSE CURSOR4
+   IF SQLCODE ^= 0
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+END-PROC
+CHECK-GOOD-HEALTH-LETTER. PROC
+ SQL OPEN CURSOR4A
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+   IF SW-DEBUG-SWITCH = 'Y'
+   END-IF
+ SQL FETCH CURSOR4A         +
+ INTO                       +
+    :WSSN
+
+   IF SW-DEBUG-SWITCH = 'Y'
+   END-IF
+   IF SQLCODE ^= 0 +100
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+
+   IF SQLCODE = 0
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      WS-GOOD-HEALTH-IND = 'Y'
+   END-IF
+
+ SQL CLOSE CURSOR4A
+   IF SQLCODE ^= 0
+      IF SW-DEBUG-SWITCH = 'Y'
+      END-IF
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+END-PROC
+CALCULATE-MAX-DLI. PROC
+      PERFORM  WAGE-HISTORY-CURSOR
+      IF DC-ENROLLEE-SSN  = WS-ALI-SSN
+         WS-ALI-COVERAGE-OPTION =  WS-ALI-OPT
+      END-IF
+      WS-FOUND-SW  = 'N'
+      WS-ALI-AMT   =  0
+      IF PLAN-YEAR-O  =  CURRENT-PLAN-YEAR
+         WS-COUNTER   =  WS-ALI-OPT-IND-TY  -  1
+         DO WHILE WS-FOUND-SW = 'N'
+            IF  WS-ALI-COVERAGE-OPTION  =  TABLE-ALI-OPT-TY (WS-COUNTER)
+                WS-ALI-AMT  = TABLE-ALI-AMT-TY(WS-COUNTER)
+                WS-FOUND-SW =  'Y'
+            ELSE
+                WS-COUNTER =   WS-COUNTER - 1
+                IF WS-COUNTER =  0
+                   WS-FOUND-SW =  'Y'
+                END-IF
+            END-IF
+         END-DO
+      ELSE
+         IF PLAN-YEAR-O  =  NEXT-PLAN-YEAR
+            WS-COUNTER   =  WS-ALI-OPT-IND-NY  -  1
+            DO WHILE WS-FOUND-SW = 'N'
+              IF  WS-ALI-COVERAGE-OPTION = TABLE-ALI-OPT-NY (WS-COUNTER)
+                  WS-ALI-AMT  = TABLE-ALI-AMT-NY(WS-COUNTER)
+                  WS-FOUND-SW =  'Y'
+              ELSE
+                  WS-COUNTER =   WS-COUNTER - 1
+                  IF WS-COUNTER =  0
+                     WS-FOUND-SW =  'Y'
+                  END-IF
+              END-IF
+            END-DO
+         END-IF
+      END-IF
+
+      IF  WS-TOTAL-PAY-PERIOD  >   0   AND +
+          WS-TOTAL-PAY-PERIOD  <   26
+          WS-TOTAL-WAGES  ROUNDED INTEGER +
+                         = (WS-TOTAL-WAGES * 26 / WS-TOTAL-PAY-PERIOD)
+      END-IF
+      IF  WS-TOTAL-WAGES > 50000
+          WS-TOTAL-WAGES = 50000
+      END-IF
+
+      IF  WS-TOTAL-WAGES  < 50000
+          WS-WAGES-N  = WS-TOTAL-WAGES
+          IF WS-WAGES-X2 >= 500
+             WS-WAGES-X1  = WS-WAGES-X1  +  1
+             WS-WAGES-X2  = 0
+          ELSE
+             WS-WAGES-X2  = 0
+          END-IF
+          WS-TOTAL-WAGES  =  WS-WAGES-N
+      END-IF
+      IF  WSTATE-PROVINCE-CD  =  'MD'
+          WS-MAX-DLI-AMT  = (WS-TOTAL-WAGES + WS-ALI-AMT)
+      ELSE
+          WS-MAX-DLI-AMT  = (WS-TOTAL-WAGES + WS-ALI-AMT) / 2
+      END-IF
+      WS-FOUND-SW    = 'N'
+      WS-MAX-DLI-OPT = '1'
+      IF PLAN-YEAR-O  =  CURRENT-PLAN-YEAR
+         WS-COUNTER   =  WS-DLI-OPT-IND-TY  -  1
+         DO WHILE WS-FOUND-SW = 'N'
+            IF  WS-MAX-DLI-AMT >=  TABLE-DLI-OPT-AMT-TY (WS-COUNTER)
+                WS-MAX-DLI-OPT =   TABLE-DLI-OPT-TY(WS-COUNTER)
+                WS-FOUND-SW =  'Y'
+            ELSE
+                WS-COUNTER =   WS-COUNTER - 1
+                IF  WS-COUNTER = 0
+                    WS-FOUND-SW =  'Y'
+                END-IF
+            END-IF
+         END-DO
+      ELSE
+         IF PLAN-YEAR-O  =  NEXT-PLAN-YEAR
+            WS-COUNTER   =  WS-DLI-OPT-IND-NY  -  1
+            DO WHILE WS-FOUND-SW = 'N'
+              IF  WS-MAX-DLI-AMT >=  TABLE-DLI-OPT-AMT-NY (WS-COUNTER)
+                  WS-MAX-DLI-OPT  =  TABLE-DLI-OPT-NY(WS-COUNTER)
+                  WS-FOUND-SW =  'Y'
+              ELSE
+                  WS-COUNTER =   WS-COUNTER - 1
+                  IF  WS-COUNTER  = 0
+                      WS-FOUND-SW =  'Y'
+                  END-IF
+              END-IF
+            END-DO
+         END-IF
+      END-IF
+
+      WS-FOUND-SW     = 'N'
+      WS-MAX-DLI-CATG = 'A'
+      IF PLAN-YEAR-O  =  CURRENT-PLAN-YEAR
+         WS-COUNTER   =  WS-DLI-CATG-IND-TY  -  1
+         DO WHILE WS-FOUND-SW = 'N'
+            IF  WS-MAX-DLI-AMT >=  TABLE-DLI-CATG-AMT-TY (WS-COUNTER)
+                WS-MAX-DLI-CATG =   TABLE-DLI-CATG-TY(WS-COUNTER)
+                WS-FOUND-SW =  'Y'
+            ELSE
+                WS-COUNTER =   WS-COUNTER - 1
+                IF  WS-COUNTER = 0
+                    WS-FOUND-SW =  'Y'
+                END-IF
+            END-IF
+         END-DO
+      ELSE
+         IF PLAN-YEAR-O  =  NEXT-PLAN-YEAR
+            WS-COUNTER   =  WS-DLI-CATG-IND-NY  -  1
+            DO WHILE WS-FOUND-SW = 'N'
+              IF  WS-MAX-DLI-AMT >=  TABLE-DLI-CATG-AMT-NY (WS-COUNTER)
+                  WS-MAX-DLI-CATG =  TABLE-DLI-CATG-NY(WS-COUNTER)
+                  WS-FOUND-SW =  'Y'
+              ELSE
+                  WS-COUNTER =   WS-COUNTER - 1
+                  IF  WS-COUNTER  = 0
+                      WS-FOUND-SW =  'Y'
+                  END-IF
+              END-IF
+            END-DO
+         END-IF
+      END-IF
+END-PROC
+
+WAGE-HISTORY-CURSOR. PROC
+ SQL OPEN CURSOR5
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ WS-TOTAL-WAGES  =  0
+ SQL FETCH CURSOR5                                   +
+ INTO :WS-TOTAL-WAGES:WS-NULL-IND
+
+   IF SQLCODE ^=  0  100
+       WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+              ' PLAN YEAR = ' LOOKUP-PLAN-YEAR-N                 +
+              ' PLAN NAME = ' DC-PLAN-NAME
+      RETURN-CODE = 1
+      STOP
+   END-IF
+   SQL CLOSE CURSOR5
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ SQL OPEN CURSOR5A
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ WS-TOTAL-PAY-PERIOD = 0
+ SQL FETCH CURSOR5A                                  +
+ INTO :WS-TOTAL-PAY-PERIOD
+
+   IF SQLCODE ^=  0  100
+       WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+              ' PLAN YEAR = ' LOOKUP-PLAN-YEAR-N                 +
+              ' PLAN NAME = ' DC-PLAN-NAME
+      RETURN-CODE = 1
+      STOP
+   END-IF
+   SQL CLOSE CURSOR5A
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+END-PROC
+PROOF-OF-GOOD-HEALTH. PROC
+    WS-GOOD-HEALTH-IND = 'N'
+    WSSN = DC-ENROLLEE-SSN
+    IF SW-DEBUG-SWITCH = 'Y'
+    END-IF
+    PERFORM CHECK-GOOD-HEALTH-LETTER
+END-PROC
+GET-EVENT-DATE. PROC
+    WMD-FUNCT = 'A'
+    WMD-FORMAT = '1'
+    WMD-CAL-DATE = DC-CHANGE-EVENT-DATE
+    CALL WMDATE USING WMDATE-DATA
+    IF WMD-STAT = ' '
+    ELSE
+    END-IF
+    WMD-DAY = WMD-DAY + 1
+    WMD-FUNCT = 'B'
+    CALL WMDATE USING WMDATE-DATA
+    IF WMD-STAT = ' '
+    ELSE
+    END-IF
+    WS-DI-LE-EVENT-DATE = WMD-FORMAT-DATE
+    DC-CHANGE-EVENT-DATE = WS-DI-LE-EVENT-DATE
+END-PROC
+
+SET-LAST-CHANGE-ID. PROC
+ SQL OPEN CURSOR9
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ WS-LAST-CHANGE-ID = 'N'
+ SQL FETCH CURSOR9                                   +
+ INTO :WS-LAST-CHANGE-ID
+ *DISPLAY 'WSSN : '   WSSN
+ *DISPLAY 'DC-SESSION-TS : ' DC-SESSION-TS
+ *DISPLAY 'WS-LAST-CHANGE-ID : ' WS-LAST-CHANGE-ID
+   IF SQLCODE =  0
+      IF WS-LAST-CHANGE-ID = 'Y'
+         WS-USERID-CHG-REASON =  DC-CHANGE-REASON-CODE
+         LAST-CHANGE-ID-O   =    WS-MY-BEN-USERID
+      ELSE
+         LAST-CHANGE-ID-O   =     'WEBSITE '
+      END-IF
+   END-IF
+   IF SQLCODE ^=  0  100
+       WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+   SQL CLOSE CURSOR9
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+END-PROC
+CHECK-STP-COVERAGE. PROC
+ SQL OPEN CURSOR10
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ SQL FETCH CURSOR10                                  +
+ INTO :WS-STP-OPTION,                                +
+      :WS-STP-CATEGORY
+
+   IF SQLCODE = +100
+      WS-STP-OPTION   = ' '
+      WS-STP-CATEGORY = ' '
+   ELSE
+     IF SQLCODE ^= 0
+        WS-SQL-DISPLAY = SQLCODE
+                 WS-SQL-DISPLAY
+        RETURN-CODE = 1
+        STOP
+     END-IF
+   END-IF
+
+   SQL CLOSE CURSOR10
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+END-PROC
+
+GET-SESSION-DATE-PLUS1. PROC
+ SQL OPEN CURSOR11
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ SQL FETCH CURSOR11                                  +
+ INTO                       +
+    :SESSION-DATE-PLUS1
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ SQL CLOSE CURSOR11
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+   END-PROC
+
+GET-COVRG-DATE-NYEAR. PROC
+ SQL OPEN CURSOR2B
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ SQL FETCH CURSOR2B                                  +
+ INTO                       +
+    :COVRG-DATE-NYEAR
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ SQL CLOSE CURSOR2B
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+   END-PROC
+CREATE-TWO-DLI-COV-RECORDS. PROC
+   IF CHANGE-REASON-CD-O = 'DI' 'DS'
+         WS-SPOUSE-COV-START-DATE = DC-CHANGE-EVENT-DATE
+     ELSE
+       IF WS-NEWLY-ELIGIBLE = 'N'
+         WS-SPOUSE-COV-START-DATE = SESSION-DATE-PLUS1
+       ELSE
+         WS-SPOUSE-COV-START-DATE = WS-WAIT-PERIOD-END
+       END-IF
+   END-IF
+
+   IF DC-CATEGORY-CODE > WCOVERAGE-CATEGORY
+      WS-CHILD-COV-START-DATE = SESSION-DATE
+   ELSE
+      WS-CHILD-COV-START-DATE  = SESSION-DATE-PLUS1
+   END-IF
+
+   IF WS-CHILD-COV-START-DATE < WS-SPOUSE-COV-START-DATE
+      TWO-RECORDS-FLAG = 'Y'
+      FIRST-REC-FLAG   = 'Y'
+      COV-OPTION-O1       = WCOVERAGE-OPTION
+      COV-CATEGORY-O1     = DC-CATEGORY-CODE
+      HISTORY-TYPE-O1     = ''
+      COV-START-DATE-O1   = WS-CHILD-COV-START-DATE
+
+      COV-OPTION-O2       = DC-OPTION-CODE
+      COV-CATEGORY-O2     = DC-CATEGORY-CODE
+      HISTORY-TYPE-O2     = 'E'
+      COV-START-DATE-O2   = WS-SPOUSE-COV-START-DATE
+   ELSE
+      IF WS-CHILD-COV-START-DATE > WS-SPOUSE-COV-START-DATE
+         TWO-RECORDS-FLAG = 'Y'
+         COV-OPTION-O1       = DC-OPTION-CODE
+         COV-CATEGORY-O1     = WCOVERAGE-CATEGORY
+         HISTORY-TYPE-O1     = ''
+         COV-START-DATE-O1   = WS-SPOUSE-COV-START-DATE
+
+         COV-OPTION-O2       = DC-OPTION-CODE
+         COV-CATEGORY-O2     = DC-CATEGORY-CODE
+         HISTORY-TYPE-O2     = 'E'
+         COV-START-DATE-O2   = WS-CHILD-COV-START-DATE
+      ELSE
+         COV-OPTION-O       = DC-OPTION-CODE
+         COV-CATEGORY-O     = DC-CATEGORY-CODE
+         COV-START-DATE-O   = WS-SPOUSE-COV-START-DATE
+      END-IF
+   END-IF
+
+   IF WS-NEWLY-ELIGIBLE = 'Y'
+      IF TWO-RECORDS-FLAG = 'Y'
+         IF COV-START-DATE-O1 < WS-WAIT-PERIOD-END
+            COV-START-DATE-O1 = WS-WAIT-PERIOD-END
+         END-IF
+         IF COV-START-DATE-O2 < WS-WAIT-PERIOD-END
+            COV-START-DATE-O2 = WS-WAIT-PERIOD-END
+         END-IF
+      END-IF
+      IF TWO-RECORDS-FLAG = 'N'
+         IF COV-START-DATE-O < WS-WAIT-PERIOD-END
+            COV-START-DATE-O = WS-WAIT-PERIOD-END
+         END-IF
+      END-IF
+   END-IF
+END-PROC
+
+POPULATE-COV-START-DT. PROC
+   IF WS-NEW-PICKUP-IND = 'Y'
+      IF WS-OPT-CAT-DECREASE = 'N'
+         IF SESSION-DATE >= WCOVERAGE-START-DT
+            COV-START-DATE-O = SESSION-DATE
+            ORIG-COV-DATE-O  = SESSION-DATE
+          ELSE
+            COV-START-DATE-O = WS-WAIT-PERIOD-END
+            ORIG-COV-DATE-O  = WS-WAIT-PERIOD-END
+         END-IF
+       ELSE
+         IF SESSION-DATE >= WCOVERAGE-START-DT
+            COV-START-DATE-O = SESSION-DATE-PLUS1
+            ORIG-COV-DATE-O  = SESSION-DATE-PLUS1
+          ELSE
+            COV-START-DATE-O = WS-WAIT-PERIOD-END
+            ORIG-COV-DATE-O  = WS-WAIT-PERIOD-END
+         END-IF
+       END-IF
+   ELSE
+      IF WS-OPT-CAT-DECREASE = 'N'
+         IF SESSION-DATE >= WCOVERAGE-START-DT
+            COV-START-DATE-O = SESSION-DATE
+          ELSE
+            COV-START-DATE-O = WS-WAIT-PERIOD-END
+         END-IF
+       ELSE
+         IF SESSION-DATE >= WCOVERAGE-START-DT
+            COV-START-DATE-O = SESSION-DATE-PLUS1
+          ELSE
+            COV-START-DATE-O = WS-WAIT-PERIOD-END
+         END-IF
+       END-IF
+   END-IF
+END-PROC
+CHECK-TRANSITION-TABLE. PROC
+     IF DC-CHANGE-REASON-CODE = 'NE'
+        PERFORM GET-WIN-NBR
+        PERFORM PROCESS-TRANSITION-CSR
+     END-IF
+END-PROC
+PROCESS-TRANSITION-CSR. PROC
+     PERFORM OPEN-TRANSITION-CSR
+     PERFORM FETCH-TRANSITION-CSR
+     PERFORM CLOSE-TRANSITION-CSR
+END-PROC
+OPEN-TRANSITION-CSR. PROC
+     SQL  OPEN TRANSITION
+     CASE SQLCODE
+          WHEN +0
+               CONTINUE
+          OTHERWISE
+               RETURN-CODE = 1
+               STOP
+     END-CASE
+END-PROC
+FETCH-TRANSITION-CSR. PROC
+     SQL FETCH  TRANSITION                                      +
+         INTO  :WS-WIN                                          +
+              ,:WTRANS-DATE                                     +
+              ,:WTRANS-RSTRCT-CODE                              +
+              ,:WTRAN-CHANGE-REASON-CODE                        +
+              ,:WTRANS-TYPE-CODE
+     CASE SQLCODE
+          WHEN 0
+               IF WCOVERAGE-START-DT <= WTRANS-DATE
+                  PERFORM OVERLOAD-COVERAGE-ST-DATE
+               END-IF
+          WHEN +100
+               CONTINUE
+          OTHERWISE
+               RETURN-CODE = 1
+               STOP
+     END-CASE
+END-PROC
+CLOSE-TRANSITION-CSR. PROC
+     SQL CLOSE TRANSITION
+     CASE SQLCODE
+          WHEN +0
+               CONTINUE
+          OTHERWISE
+               RETURN-CODE = 1
+               STOP
+     END-CASE
+END-PROC
+OVERLOAD-COVERAGE-ST-DATE. PROC
+     IF SESSION-DATE        >  WCOVERAGE-START-DT
+        COV-START-DATE-O    =  WTRANS-DATE
+     ELSE
+        COV-START-DATE-O    =  WCOVERAGE-START-DT
+     END-IF
+     CASE WTRAN-CHANGE-REASON-CODE
+          WHEN 'TS'
+               IF  WTRANS-RSTRCT-CODE =  1                       +
+               AND PLAN-NAME-O        EQ 'STD' 'LTD'
+                   ENROLL-DATE-O      =  COV-START-DATE-O
+                   PERFORM CALCULATE-WAIT-DAYS
+               END-IF
+               ORIG-COV-DATE-O        =  COV-START-DATE-O
+          WHEN 'TN'
+               IF  WTRANS-RSTRCT-CODE =  1                       +
+               AND PLAN-NAME-O        EQ 'STD' 'LTD'
+                   ENROLL-DATE-O      =  COV-START-DATE-O
+                   PERFORM CALCULATE-WAIT-DAYS
+               ELSE
+                   CONTINUE
+               END-IF
+               ORIG-COV-DATE-O        =  COV-START-DATE-O
+          OTHERWISE
+               IF  (WTRANS-RSTRCT-CODE = 3                       +
+               OR  (WTRANS-RSTRCT-CODE = 1                       +
+               AND (PLAN-NAME-O        EQ 'STD' 'LTD')))
+                    ENROLL-DATE-O      = WTRANS-DATE
+                    ORIG-COV-DATE-O    = COV-START-DATE-O
+               END-IF
+               IF ((WTRAN-CHANGE-REASON-CODE = 'RS' 'RN')          +
+               AND  WCOVERAGE-OPTION   = '1'                       +
+               AND (PLAN-NAME-O        NE 'STD' 'LTD'))
+                     ORIG-COV-DATE-O   = COV-START-DATE-O
+                     ENROLL-LATE-INT-O = 'Y'
+               END-IF
+
+               IF  (PLAN-NAME-O  EQ 'DLI' AND                     +
+                   DC-OPTION-CODE GT WCOVERAGE-OPTION )
+                   IF WCOVERAGE-OPTION   = '1'
+                      COV-OPTION-O = '2'
+                   ELSE
+                      COV-OPTION-O = WCOVERAGE-OPTION
+                   END-IF
+               END-IF
+     END-CASE
+END-PROC
+CALCULATE-WAIT-DAYS. PROC
+     PERFORM OPEN-WAIT-DAYS-CURSOR
+     PERFORM FETCH-WAIT-DAYS-CURSOR
+     PERFORM CLOSE-WAIT-DAYS-CURSOR
+END-PROC
+OPEN-WAIT-DAYS-CURSOR. PROC
+     SQL  OPEN WAITDAYS
+     CASE SQLCODE
+          WHEN +0
+               CONTINUE
+          OTHERWISE
+               RETURN-CODE = 1
+               STOP
+     END-CASE
+END-PROC
+FETCH-WAIT-DAYS-CURSOR. PROC
+     SQL  FETCH WAITDAYS                                         +
+          INTO :WS-WAIT-DAYS
+     CASE SQLCODE
+          WHEN +0
+               WAIT-DAY-QTY-O = WS-WAIT-DAYS
+          WHEN +100
+               CONTINUE
+          OTHERWISE
+               RETURN-CODE = 1
+               STOP
+     END-CASE
+END-PROC
+CLOSE-WAIT-DAYS-CURSOR. PROC
+     SQL  CLOSE WAITDAYS
+     CASE SQLCODE
+          WHEN +0
+               CONTINUE
+          OTHERWISE
+               RETURN-CODE = 1
+               STOP
+     END-CASE
+END-PROC
+GET-COVERAGE-START-DT. PROC
+     PERFORM OPEN-GETCOVST-CURSOR
+     PERFORM FETCH-GETCOVST-CURSOR
+     PERFORM CLOSE-GETCOVST-CURSOR
+END-PROC
+
+OPEN-GETCOVST-CURSOR. PROC
+     SQL  OPEN GETCOVST
+     CASE SQLCODE
+          WHEN +0
+               CONTINUE
+          OTHERWISE
+               RETURN-CODE = 1
+               STOP
+     END-CASE
+END-PROC
+FETCH-GETCOVST-CURSOR. PROC
+     SQL  FETCH GETCOVST                                         +
+          INTO :WS-COVERAGE-START-DT
+     CASE SQLCODE
+          WHEN +0
+               COV-START-DATE-O = WS-COVERAGE-START-DT
+          WHEN +100
+               CONTINUE
+          OTHERWISE
+               RETURN-CODE = 1
+               STOP
+     END-CASE
+END-PROC
+CLOSE-GETCOVST-CURSOR. PROC
+     SQL  CLOSE GETCOVST
+     CASE SQLCODE
+          WHEN +0
+               CONTINUE
+          OTHERWISE
+               RETURN-CODE = 1
+               STOP
+     END-CASE
+END-PROC
+
+
+GET-ASSOC-INS-DATA. PROC
+ SQL OPEN STDLTD
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+ SQL FETCH STDLTD           +
+ INTO                                  +
+    :WS-SSN1,                          +
+    :WS-BEN-OPTION,                    +
+    :WS-PLAN-NAME,                     +
+    :WS-EFF-DT,                        +
+    :WS-ORIG-COV-DT :WS-ORIG-COV-DT-IND,   +
+    :WS-COV-END-DT :WS-COV-END-DT-IND, +
+    :WS-WAIT-DAY-QTY,                  +
+    :WS-ENROLL-LT-IND
+   IF SQLCODE = 0
+          WSSN                =  WS-SSN1
+          WCOVERAGE-OPTION    =  WS-BEN-OPTION
+          WPLAN-NAME          =  WS-PLAN-NAME
+          WCOVERAGE-END-DT    =  WS-COV-END-DT
+          WCOVERAGE-START-DT  =  WS-EFF-DT
+          WORIG-COVERAGE-DATE =  WS-ORIG-COV-DT
+          WWAIT-DAY-QTY       =  WS-WAIT-DAY-QTY
+          WENROLL-LATE-INT    =  WS-ENROLL-LT-IND
+
+   ELSE
+       IF SQLCODE = +100
+          CONTINUE
+       ELSE
+          WS-SQL-DISPLAY = SQLCODE
+                   WS-SQL-DISPLAY
+          RETURN-CODE = 1
+          STOP
+       END-IF
+   END-IF
+
+ SQL CLOSE STDLTD
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+   END-PROC
+GET-PREV-SESSION-SAME-DAY. PROC
+
+ SQL OPEN PREVSES
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+
+ SQL FETCH PREVSES                                   +
+ INTO :WS-CHANGE-REASON-CODE,                        +
+      :WS-EVENT-TYPE-CODE,                           +
+      :WS-EVENT-DATE-LD-SE :WS-EVENT-DATE-LD-SE-IND, +
+      :WS-SESSION-TS
+   IF SQLCODE ^= 0 +100
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+              ' SESSION TS= ' DC-SESSION-TS
+      RETURN-CODE = 1
+      STOP
+   END-IF
+   IF SQLCODE = +100
+      WS-CHANGE-REASON-CODE  = ' '
+      WS-EVENT-TYPE-CODE     = 0
+   END-IF
+
+   SQL CLOSE PREVSES
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+END-PROC
+
+CHECK-DISTRANS-CURSOR. PROC
+
+ SQL OPEN DISTRANS
+   IF SQLCODE  ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+
+ SQL FETCH DISTRANS                                  +
+ INTO :WS-DISTRANS-SW
+   IF SQLCODE ^= 0 +100
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+              ' --WIN NBR = ' WS-WIN-NBR
+      RETURN-CODE = 1
+      STOP
+   END-IF
+   IF SQLCODE = +100
+      WS-DISTRANS-SW = 'N'
+   END-IF
+
+ SQL CLOSE DISTRANS
+   IF SQLCODE ^= 0
+      WS-SQL-DISPLAY = SQLCODE
+               WS-SQL-DISPLAY
+      RETURN-CODE = 1
+      STOP
+   END-IF
+END-PROC
+
+PROCESS-HOUSEKEEPING.  PROC
+    GET ENRDATES
+    WS-ENR-START-DT = ENROLL-START-DATE
+    WS-ENR-END-DT   = ENROLL-END-DATE
+END-PROC
+
+DISPLAY-COUNTS. PROC
+END-PROC
